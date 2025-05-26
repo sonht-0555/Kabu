@@ -61,7 +61,7 @@ function handleVisibilityChange(event) {
                 visible = true;
             }, 400);
         }
-        if (!isRunning) {
+        if (!document.getElementById("menu-pad").classList.contains("active") || !document.getElementById("statePageButton").classList.contains("active")) {
             resumeGame();
         }
     }
@@ -223,7 +223,6 @@ export async function uploadFile(filepath) {
     });
 }
 export async function resumeGame() {
-    isRunning = true;
     await Module.resumeGame();
         if (Mode === "mGBA_1") {
         await Module.resumeAudio();
@@ -233,7 +232,6 @@ export async function resumeGame() {
     notiMessage("[_] Resumed!", 2000);
 }
 export async function pauseGame() {
-    isRunning = false;
     await Module.pauseGame();
         if (Mode === "mGBA_1") {
         await Module.pauseAudio();

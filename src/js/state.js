@@ -1,4 +1,5 @@
 import * as Main from './main.js';
+import {shaderData} from "./setting.js"
 let selectedIndex = 1;
 /* --------------- Declaration --------------- */
 const stateDivs = document.querySelectorAll('.stateDiv');
@@ -7,19 +8,17 @@ const stateList = document.getElementById("stateList");
 /* --------------- Function ------------------ */
 // Load States
 async function LoadstateInPage(saveSlot, dateState) {
+    shaderData();
     const timeData = await Main.getData(gameName, saveSlot, "saveTime");
     document.getElementById(dateState).textContent = timeData || "__";
     const base64Image = await Main.dowloadScreenShot(`/data/screenshots/${gameName.replace(/\.(zip|gb|gbc|gba)$/, "")}_${selectedIndex}.png`);
-    if (base64Image) {
-        stateList.style.backgroundImage = `url('${base64Image}')`;
-        stateList.style.backgroundSize = "cover";
-        stateList.style.backgroundRepeat = "no-repeat";
-        stateList.style.backgroundPosition = "center center";
-        stateList.style.filter = "";
-        stateList.classList.add('grayscale-bg');
-        stateList.style.imageRendering = "pixelated";
-        stateList.style.imageRendering = "crisp-edges";
-    }
+        if (base64Image) {
+            stateList.style.backgroundImage = `url('${base64Image}')`;
+            stateList.classList.add('grayscale-bg');
+        } else {
+            stateList.style.backgroundImage = ``;
+            stateList.classList.remove('grayscale-bg');
+        }
 }
 // Update State Selection
 const updateSelectionState = async () => {
@@ -64,6 +63,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         stateList.style.backgroundImage = `url('${base64Image}')`;
                         stateList.classList.add('grayscale-bg');
                     } else {
+                        stateList.style.backgroundImage = ``;
                         stateList.classList.remove('grayscale-bg');
                     }
                 }
@@ -82,6 +82,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         stateList.style.backgroundImage = `url('${base64Image}')`;
                         stateList.classList.add('grayscale-bg');
                     } else {
+                        stateList.style.backgroundImage = ``;
                         stateList.classList.remove('grayscale-bg');
                     }
                 }

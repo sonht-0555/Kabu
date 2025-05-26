@@ -1,6 +1,5 @@
 /* --------------- Declaration --------------- */
 appVer.textContent = gameVer
-let isRunning = true;
 let gameName;
 var messageTimeout;
 let stateAdj = 1;
