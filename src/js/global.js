@@ -1,5 +1,6 @@
 /* --------------- Declaration --------------- */
 appVer.textContent = gameVer
+let isRunning = true;
 let gameName;
 var messageTimeout;
 let stateAdj = 1;
@@ -439,6 +440,29 @@ function downloadFiles(fileKey, fileName) {
             };
     };
 };
+function downloadBase64(fileKey) {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open('/data');
+        request.onsuccess = ({ target: { result: db } }) => {
+            db.transaction('FILE_DATA', 'readonly')
+                .objectStore('FILE_DATA')
+                .get(fileKey).onsuccess = ({ target: { result: file } }) => {
+                    if (file) {
+                        const blob = new Blob([file.contents || file], { type: 'application/octet-stream' });
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                            resolve(reader.result);
+                        };
+                        reader.onerror = reject;
+                        reader.readAsDataURL(blob);
+                    } else {
+                        resolve(null);
+                    }
+                };
+        };
+        request.onerror = reject;
+    });
+}
 /* --------------- DOMContentLoaded ---------- */
 document.addEventListener("DOMContentLoaded", function() {
     if (savedStateAdj !== null) {

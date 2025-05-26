@@ -38,6 +38,8 @@ const loadingIcon = document.getElementById("loading-icon");
 let canSave = true;
 let canSync = true;
 let visible = true;
+let timerIntervalId = null;
+let [hours, minutes, seconds, count1, count2] = [0, 0, 0, 0, 0];
 /* --------------- Function ------------------ */
 // System Tray
 function handleVisibilityChange(event) {
@@ -59,7 +61,9 @@ function handleVisibilityChange(event) {
                 visible = true;
             }, 400);
         }
-        resumeGame();
+        if (!isRunning) {
+            resumeGame();
+        }
     }
 }
 // Status In-game
@@ -102,19 +106,32 @@ async function saveStateInCloud() {
         }
     }
 }
-// Time In-game
+// startTimer
 function startTimer() {
-    let [hours, minutes, seconds, count1, count2] = [0, 0, 0, 0, 0];
-    setInterval(() => {
+    if (timerIntervalId) return; // Nếu timer đã chạy, không khởi động lại
+    timerIntervalId = setInterval(() => {
         seconds++;
         count1++;
         count2++;
-        if (seconds === 60)[seconds, minutes] = [0, minutes + 1];
-        if (minutes === 60)[minutes, hours] = [0, hours + 1];
+        if (seconds === 60) [seconds, minutes] = [0, minutes + 1];
+        if (minutes === 60) [minutes, hours] = [0, hours + 1];
         document.getElementById("timer").textContent = `${hours}h${minutes.toString().padStart(2, '0')}.${seconds.toString().padStart(2, '0')}`;
-        if (count1 === 60) {saveStatePeriodically();count1 = 0};
-        if (count2 === 1800) {saveStateInCloud(); count2=0};
+        if (count1 === 60) {
+            saveStatePeriodically();
+            count1 = 0;
+        }
+        if (count2 === 1800) {
+            saveStateInCloud();
+            count2 = 0;
+        }
     }, 1000);
+}
+// stopTimer
+function stopTimer() {
+    if (timerIntervalId) {
+        clearInterval(timerIntervalId);
+        timerIntervalId = null; // Đặt lại ID để có thể khởi động lại sau
+    }
 }
 /* --------------- Export Function --------------- */
 export async function uploadGame(romName) {
@@ -206,18 +223,22 @@ export async function uploadFile(filepath) {
     });
 }
 export async function resumeGame() {
+    isRunning = true;
     await Module.resumeGame();
         if (Mode === "mGBA_1") {
         await Module.resumeAudio();
     }
     Module.SDL2();
+    startTimer();
     notiMessage("[_] Resumed!", 2000);
 }
 export async function pauseGame() {
+    isRunning = false;
     await Module.pauseGame();
         if (Mode === "mGBA_1") {
         await Module.pauseAudio();
     }
+    stopTimer();
     notiMessage("[_] Paused!", 2000);
 }
 export async function loadding() {
