@@ -61,7 +61,7 @@ function handleVisibilityChange(event) {
                 visible = true;
             }, 400);
         }
-        if (!document.getElementById("menu-pad").classList.contains("active") || !document.getElementById("statePageButton").classList.contains("active")) {
+        if (!document.getElementById("menu-pad").classList.contains("active") && !document.getElementById("statePageButton").classList.contains("active")) {
             resumeGame();
         }
     }
