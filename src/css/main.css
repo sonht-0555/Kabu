@@ -1171,6 +1171,6 @@ box-shadow: inset 0 1px 0 0 rgba(245, 232, 209, 0);
     width: 100%;
     height: 100%;
     background: inherit; /* Kế thừa background từ stateList */
-    filter: grayscale(100%);
+    filter: grayscale(50%);
     z-index: 0; /* Đảm bảo lớp phủ nằm dưới nội dung */
 }
