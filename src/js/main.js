@@ -17,7 +17,7 @@ document.getElementById("GBAver").addEventListener("click", () => {
     let index = versionKeys.indexOf(currentVersion);
     currentVersion = versionKeys[(index + 1) % versionKeys.length];
     localStorage.setItem("GBAver", currentVersion);
-    document.getElementById("GBAver").textContent = `Wasm_©${currentVersion}`;
+    document.getElementById("GBAver").textContent = `Wasm_${currentVersion}`;
     setTimeout(() => { window.location.reload(); }, 1000);
 });
 /*/ --------------- Initialization ----------- */
