@@ -980,10 +980,6 @@ rect {
 }
 
 #stateList {
-  background-repeat: no-repeat;
-  background-position: center center;
-  image-rendering: crisp-edges;
-  image-rendering: pixelated;
   background-color: rgba(37, 37, 37, 0);
 }
 .control-setting {
@@ -1166,15 +1162,4 @@ box-shadow: inset 0 1px 0 0 rgba(245, 232, 209, 0);
   transition: opacity 0.3s ease-in-out;
   height: 7px;
   padding: 2px;
-}
-#stateList.grayscale-bg::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: inherit;
-    filter: sepia(0.4);
-    z-index: 0;
 }
