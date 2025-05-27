@@ -1,18 +1,17 @@
-import mGBA_1 from "../core/4.0.8/mgba.js";
-import mGBA_2 from "../core/4.0.9/mgba.js";
+import stable from "../core/4.0.8/mgba.js";
+import latest from "../core/4.0.9/mgba.js";
 import * as gamepPad from './gamepad.js';
 import {localStorageFile} from "./storage.js";
 import {dpUploadFile} from "./cloud.js";
 import {shaderData} from "./setting.js"
-import {wrapContent} from "./state.js"
 /*/ ----------------- Switch Ver ------------- */
 const versions = {
-    "Stable": mGBA_1,  
-    "Lated": mGBA_2, 
+    "Stable": stable,  
+    "Latest": latest, 
 };
 let currentVersion = localStorage.getItem("GBAver") || "Stable";
 let Mode = versions[currentVersion]; 
-document.getElementById("GBAver").textContent = `Wasm_©${currentVersion}`;
+document.getElementById("GBAver").textContent = `Wasm_${currentVersion}`;
 document.getElementById("GBAver").addEventListener("click", () => {
     const versionKeys = Object.keys(versions);
     let index = versionKeys.indexOf(currentVersion);
@@ -39,6 +38,8 @@ const loadingIcon = document.getElementById("loading-icon");
 let canSave = true;
 let canSync = true;
 let visible = true;
+let timerIntervalId = null;
+let [hours, minutes, seconds, count1, count2] = [0, 0, 0, 0, 0];
 /* --------------- Function ------------------ */
 // System Tray
 function handleVisibilityChange(event) {
@@ -60,7 +61,9 @@ function handleVisibilityChange(event) {
                 visible = true;
             }, 400);
         }
-        resumeGame();
+        if (!document.getElementById("menu-pad").classList.contains("active") && !document.getElementById("statePageButton").classList.contains("active")) {
+            resumeGame();
+        }
     }
 }
 // Status In-game
@@ -81,7 +84,6 @@ async function statusShow() {
     await Module.SDL2();
     await delay(800);
     await led(parseInt(await getData(gameName, "1", "slotStateSaved")));
-    await wrapContent();
 }
 // Auto Save Every 1m
 async function saveStatePeriodically() {
@@ -104,19 +106,32 @@ async function saveStateInCloud() {
         }
     }
 }
-// Time In-game
+// startTimer
 function startTimer() {
-    let [hours, minutes, seconds, count1, count2] = [0, 0, 0, 0, 0];
-    setInterval(() => {
+    if (timerIntervalId) return; // Nếu timer đã chạy, không khởi động lại
+    timerIntervalId = setInterval(() => {
         seconds++;
         count1++;
         count2++;
-        if (seconds === 60)[seconds, minutes] = [0, minutes + 1];
-        if (minutes === 60)[minutes, hours] = [0, hours + 1];
+        if (seconds === 60) [seconds, minutes] = [0, minutes + 1];
+        if (minutes === 60) [minutes, hours] = [0, hours + 1];
         document.getElementById("timer").textContent = `${hours}h${minutes.toString().padStart(2, '0')}.${seconds.toString().padStart(2, '0')}`;
-        if (count1 === 60) {saveStatePeriodically();count1 = 0};
-        if (count2 === 1800) {saveStateInCloud(); count2=0};
+        if (count1 === 60) {
+            saveStatePeriodically();
+            count1 = 0;
+        }
+        if (count2 === 1800) {
+            saveStateInCloud();
+            count2 = 0;
+        }
     }, 1000);
+}
+// stopTimer
+function stopTimer() {
+    if (timerIntervalId) {
+        clearInterval(timerIntervalId);
+        timerIntervalId = null; // Đặt lại ID để có thể khởi động lại sau
+    }
 }
 /* --------------- Export Function --------------- */
 export async function uploadGame(romName) {
@@ -213,6 +228,7 @@ export async function resumeGame() {
         await Module.resumeAudio();
     }
     Module.SDL2();
+    startTimer();
     notiMessage("[_] Resumed!", 2000);
 }
 export async function pauseGame() {
@@ -220,6 +236,7 @@ export async function pauseGame() {
         if (Mode === "mGBA_1") {
         await Module.pauseAudio();
     }
+    stopTimer();
     notiMessage("[_] Paused!", 2000);
 }
 export async function loadding() {

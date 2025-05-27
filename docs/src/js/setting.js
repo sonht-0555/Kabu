@@ -94,6 +94,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (document.getElementById('box0').classList.contains('selected')) {
                     controlSetting.classList.add("visible");
                     menuPad.classList.remove("active");
+                    statePageButton.style.removeProperty("pointer-events");
                     await Main.resumeGame();
                     await Main.quickReload();
                 }
