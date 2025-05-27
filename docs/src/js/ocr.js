@@ -127,7 +127,7 @@ async function azureServer(base64data) {
     const ApiAzure = localStorage.getItem("ApiAzure");
     let [apiKey, endpoint] = ApiAzure.split(',');
     try {
-        const response = await fetch(`${endpoint}imageanalysis:analyze?features=caption,read&model-version=latest&api-version=2024-02-01`, {
+        const response = await fetch(`https://${endpoint}.cognitiveservices.azure.com/computervision/imageanalysis:analyze?features=caption,read&model-version=latest&api-version=2024-02-01`, {
             method: 'POST',
             headers: {
                 'Ocp-Apim-Subscription-Key': apiKey,
