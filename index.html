@@ -19,8 +19,8 @@
     <script src="/src/library/nip.js"></script>
     
     <title>Kabu</title>
-    <script>let gameVer = 'V6.89';</script>
     <script>
+    let gameVer = 'V6.90';
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
@@ -35,7 +35,10 @@
         console.log('Received message from Service Worker:', event.data);
         if (event.data.msg === "Updating...") {
             lockNoti("", event.data.msg, 1600);
-            setTimeout(() => { window.location.href = window.location.pathname + '?t=' + gameVer; }, 1400);
+            setTimeout(() => { 
+                window.location.hash = `#t=${gameVer}`;
+                const version = location.hash.includes('t=') ? location.hash.split('=')[1] : 'default';
+            }, 1400);
             }
         });
     }
