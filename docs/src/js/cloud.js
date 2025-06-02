@@ -252,12 +252,12 @@ document.addEventListener("DOMContentLoaded", function() {
             }
             let totalFilesUploaded = 0;
             for (const directory of directories) {
-                const fileList = await listFiles(`${directory}s`);
+                const fileList = await Main.listFiles(`${directory}s`);
                 totalFilesUploaded += fileList.length;
             }
             if (window.confirm(`Do you want to backup ${totalFilesUploaded} files in Kabu?`)) {
                 for (const directory of directories) {
-                    const fileList = await listFiles(`${directory}s`);
+                    const fileList = await Main.listFiles(`${directory}s`);
                     for (const fileName of fileList) {
                         const fileData = await Main.downloadFileInCloud(`/data/${directory}s/${fileName}`);
                         try {

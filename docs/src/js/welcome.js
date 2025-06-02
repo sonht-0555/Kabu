@@ -4,7 +4,7 @@ const romlist = document.getElementById("rom-list");
 const romInput = document.getElementById("fileInput");
 /* --------------- Function ------------------ */
 async function romList() {
-    const gameList = await listFiles("games");
+    const gameList = await Main.listFiles("games");
     const lastGameName = localStorage.getItem("lastGameName") || null;
     let recentGames = JSON.parse(localStorage.getItem("recentGames")) || [];
     let sortedGameList = [];
@@ -26,7 +26,7 @@ async function romList() {
         const div = document.createElement("div");
         div.classList.add("flex-1", "game-item");
         div.textContent = gameName;
-        div.onclick = async () => {
+        div.onclick = () => {
             updateRecentGames(gameName);
             Main.loadGame(gameName);
             romList();
@@ -49,7 +49,9 @@ async function inputGame(InputFile) {
 }
 /* --------------- DOMContentLoaded ---------- */
 document.addEventListener("DOMContentLoaded", function() {
-    romList();
+    setTimeout(() => {
+        romList();
+    },2000);
     romInput.addEventListener("change", function() {
         inputGame(romInput);
     })

@@ -60,7 +60,7 @@ async function createElementStorage(parent, fileName, filePart) {
         downloadButton.classList.add("download", "bc");
         actionDiv.appendChild(downloadButton);
         downloadButton.onclick = () => {
-            downloadFiles(filePart, fileName);
+            Main.downloadFiles(filePart, fileName);
         };
         const deleteButton = document.createElement("div");
         deleteButton.classList.add("delete", "bc");
@@ -68,7 +68,7 @@ async function createElementStorage(parent, fileName, filePart) {
         deleteButton.onclick = async () => {
             if (window.confirm("Delete this file?" + fileName)) {
                 const romName = fileName.replace(/\....$/, ".gba");
-                deleteFiles(filePart);
+                Main.deleteFiles(filePart);
                 localStorage.removeItem(`${romName}_dateState${fileName.slice(-1)}`);
                 localStorage.removeItem(`${romName}_imageState${fileName.slice(-1)}`);
                 localStorageFile();
@@ -83,7 +83,7 @@ async function createElementStorage(parent, fileName, filePart) {
         renameButton.onclick = async () => {
             const newFilename = window.prompt("Edit filename", fileName);
             if (newFilename !== null) {
-                editFiles(filePart, newFilename);
+                Main.editFiles(filePart, fileName, newFilename);
                 localStorageFile();
                 dialog.close();
                 dialog.remove();
@@ -93,16 +93,16 @@ async function createElementStorage(parent, fileName, filePart) {
         dialog.showModal();
     }
     const mib = document.createElement("span");
-    mib.textContent = humanFileSize(await sizeFiles(filePart));
+    mib.textContent = humanFileSize(await Main.sizeFiles(filePart));
     mib.classList.add("mib");
     Name.appendChild(mib);
 }
 export async function localStorageFile() {
-    const listRoms   = await listFiles("games");
-    const listSaves  = await listFiles("saves");
-    const listStates = await listFiles("states");
-    const listCheats = await listFiles("cheats");
-    const listScreenshots = await listFiles("screenshots");
+    const listRoms   = await Main.listFiles("games");
+    const listSaves  = await Main.listFiles("saves");
+    const listStates = await Main.listFiles("states");
+    const listCheats = await Main.listFiles("cheats");
+    const listScreenshots = await Main.listFiles("screenshots");
     const refreshList = [romsFile, savesFile, statesFile, cheatsFile, screenshotsFile];
     for (const refresh of refreshList) {
         while (refresh.firstChild) {
@@ -127,8 +127,8 @@ export async function localStorageFile() {
 }
 /* --------------- DOMContentLoaded ---------- */
 document.addEventListener("DOMContentLoaded", function() {
-    upLoadFile.addEventListener("change", function() {
-        Main.uploadFile(upLoadFile);
+    upLoadFile.addEventListener("change", async function() {
+        Main.uploadFiles(upLoadFile);
     })
     //Buton Open Local Storage
     openLocalStorage.addEventListener("click", function() {
