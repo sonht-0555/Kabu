@@ -28,6 +28,8 @@ const settingContainer = document.querySelectorAll(".setting-container")
 const messageContainer = document.querySelectorAll(".message-container")
 const stateTitle = document.querySelectorAll(".stateTitle, .stateDate")
 const textured = document.getElementById("textured")
+const originalConsoleError = console.error;
+const originalConsoleWarn = console.warn;
 /* --------------- Function ------------------ */
 // Joy Stick
 var dynamicZone = document.getElementById("dynamic");
@@ -250,6 +252,7 @@ function logMessage(type, message) {
         }, 60000);
     }
 }
+// setup Style
 function setupStyle() {
     const dpr = window.devicePixelRatio;
     clientWidth = document.documentElement.clientWidth;
@@ -296,6 +299,7 @@ function setupStyle() {
     imgShader.style.transformOrigin = "top center";
     imgShader.style.setProperty('--bg-size', `${upscaleShader}px ${upscaleShader}px`);
 }
+// On Error
 window.onerror = function (message, source, lineno) {
     const fileName = source ? source.split('/').pop() : 'unknown source';
     const cleanMessage = message.replace(/^(Uncaught\s(?:ReferenceError|Error|TypeError|SyntaxError|RangeError):?\s*)/i, '');
@@ -303,12 +307,12 @@ window.onerror = function (message, source, lineno) {
     logMessage("Error", errorMessage);
     return false;
 };
-const originalConsoleError = console.error;
+// Original Console Error
 console.error = function (...args) {
     originalConsoleError.apply(console, args);
     logMessage("Err", args.join(" "));
 };
-const originalConsoleWarn = console.warn;
+// Original Console Warn
 console.warn = function (...args) {
     originalConsoleWarn.apply(console, args);
     logMessage("Warn", args.join(" "));
@@ -329,28 +333,45 @@ function listFiles(filePart) {
             const transaction = db.transaction('FILE_DATA', 'readonly');
             const objectStore = transaction.objectStore('FILE_DATA');
             const files = [];
-            objectStore.openCursor(range).onsuccess = (e) => {
-                const cursor = e.target.result;
-                if (cursor) {
-                    const key = cursor.key;
-                    const fileName = key.substring(key.lastIndexOf('/') + 1);
-                    if (fileName && fileName !== filePart) {
-                        files.push(fileName);
+            transaction.oncomplete = () => {
+                db.close();
+                resolve(files);
+            };
+            transaction.onerror = (err) => {
+                db.close();
+                reject(err);
+            };
+            if (objectStore.getAll) {
+                objectStore.getAllKeys(range).onsuccess = (e) => {
+                    const keys = e.target.result;
+                    for (const key of keys) {
+                        const fileName = key.substring(key.lastIndexOf('/') + 1);
+                        if (fileName && fileName !== filePart) {
+                            files.push(fileName);
+                        }
                     }
-                    cursor.continue();
-                } else {
-                    resolve(files);
-                }
-            };
-            objectStore.openCursor(range).onerror = (e) => {
-                reject(e);
-            };
+                };
+            } else {
+                // Fallback nếu không có getAll
+                objectStore.openCursor(range).onsuccess = (e) => {
+                    const cursor = e.target.result;
+                    if (cursor) {
+                        const key = cursor.key;
+                        const fileName = key.substring(key.lastIndexOf('/') + 1);
+                        if (fileName && fileName !== filePart) {
+                            files.push(fileName);
+                        }
+                        cursor.continue();
+                    }
+                };
+            }
         };
         request.onerror = (e) => {
             reject(e);
         };
     });
 }
+// size Files
 function sizeFiles(filePart) {
     return new Promise((resolve, reject) => {
         const request = indexedDB.open('/data');
@@ -384,31 +405,51 @@ function sizeFiles(filePart) {
         };
     });
 }
+// Edit Files
 function editFiles(filePart, newName) {
     const lastSlash = filePart.lastIndexOf('/');
     const newKey = filePart.substring(0, lastSlash + 1) + newName;
+    
     return new Promise((resolve, reject) => {
         const dbRequest = indexedDB.open('/data');
         dbRequest.onsuccess = (e) => {
             const db = e.target.result;
             const transaction = db.transaction('FILE_DATA', 'readwrite');
             const store = transaction.objectStore('FILE_DATA');
+            transaction.oncomplete = () => {
+                db.close();
+                console.log(`File renamed: ${filePart} -> ${newKey}`);
+                resolve();
+            };
+            transaction.onerror = (err) => {
+                db.close();
+                console.error(`Error renaming file: ${filePart}`, err);
+                reject(err);
+            };   
             store.get(filePart).onsuccess = (event) => {
                 const data = event.target.result;
                 if (data) {
-                    store.put(data, newKey).onsuccess = () => {
-                        store.delete(filePart).onsuccess = () => {
-                            resolve();
-                        };
-                    };
+                    store.put(data, newKey);
+                    store.delete(filePart);
                 } else {
+                    console.warn(`File not found: ${filePart}`);
+                    db.close();
                     resolve();
                 }
             };
+            store.get(filePart).onerror = (err) => {
+                console.error(`Error getting file: ${filePart}`, err);
+                db.close();
+                reject(err);
+            };
         };
-        dbRequest.onerror = reject;
+        dbRequest.onerror = (err) => {
+            console.error("Error opening IndexedDB", err);
+            reject(err);
+        };
     });
 }
+// Delete Files
 function deleteFiles(fileKey) {
     return new Promise((resolve, reject) => {
         const dbRequest = indexedDB.open('/data');
@@ -416,12 +457,20 @@ function deleteFiles(fileKey) {
             const db = e.target.result;
             const transaction = db.transaction('FILE_DATA', 'readwrite');
             const store = transaction.objectStore('FILE_DATA');
-            store.delete(fileKey).onsuccess = () => resolve();
-            store.delete(fileKey).onerror = reject;
+            transaction.oncomplete = () => {
+                db.close();
+                resolve();
+            };
+            transaction.onerror = (err) => {
+                db.close();
+                reject(err);
+            };
+            store.delete(fileKey);
         };
         dbRequest.onerror = reject;
     });
 }
+// DownloadFiles
 function downloadFiles(fileKey, fileName) {
     const request = indexedDB.open('/data');
     request.onsuccess = ({ target: { result: db } }) => {
@@ -439,6 +488,7 @@ function downloadFiles(fileKey, fileName) {
             };
     };
 };
+// Download Base64 Files
 function downloadBase64(fileKey) {
     return new Promise((resolve, reject) => {
         const request = indexedDB.open('/data');
