@@ -20,7 +20,7 @@
     
     <title>Kabu</title>
     <script>
-    let gameVer = 'V6.89';
+    let gameVer = 'V6.90';
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
@@ -213,18 +213,12 @@
                 </div> 
                 <span class="timer" id="timer">...</span>
             </div>
-            <div class="gap-22 emu-menu" id="control-pad">
-                <div class="flex-1 gap-8" style="position:relative;">
-                    <div class="bc1 dpad-state" id="statePageButton"></div>
-                    <div class="bc1 flex-1 dpad-l" id="L"></div>
-                </div>
-                <div class="flex-1 gap-8" style="position:relative;">
-                    <div class="bc1 flex-1 dpad-r" id="R"></div>
-                    <div class="bc1 dpad-menu" id="menu-pad"></div>
-                </div>
-            </div>
             <div class="flex-1 gap-22">
-                <div class="flex-1">
+                <div class="column gap-8" id="dpadContainer">
+                    <div class="gap-8" style="position:relative; height: 26px;">
+                        <div class="bc1 dpad-state" id="statePageButton"></div>
+                        <div class="bc1 flex-1 dpad-l" id="L"></div>
+                    </div>
                     <div class="flex-1 bc1 ch cw dpad">
                         <div class="d-pad">
                             <div class="ch">
@@ -251,6 +245,10 @@
                     </div>
                 </div>
                 <div class="flex-1 column gap-8">
+                    <div class="gap-8" style="position: relative; height: 26px;">
+                        <div class="bc1 flex-1 dpad-r" id="R"></div>
+                        <div class="bc1 dpad-menu" id="menu-pad"></div>
+                    </div>
                     <div class="flex-1" style="position: relative">
                         <div class="flex-1 gap-8 bc1" id="A">
                             <div class="flex-1 dpad-a"></div>

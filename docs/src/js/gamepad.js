@@ -9,6 +9,8 @@ let volumeIndex = 0;
 const turboButton = document.getElementById("turbo");
 const saveStateButton = document.getElementById("saveStateButton");
 const loadStateButton = document.getElementById("loadStateButton");
+let i = +localStorage.padSizeIndex || 0;
+const c = ['gap-8 column padSize1', 'gap-8 column padSize2', 'gap-8 column padSize3'];
 /* --------------- Function --------------- */
 function buttonPress(buttonName, isPress) {
     if (buttonName.includes("-")) {
@@ -231,16 +233,24 @@ let lastSaveTime = 0;
         clickState++;
         clearTimeout(clickTimeout);
         clickTimeout = setTimeout(async () => {
-            if (clickState === 2) {
+            if (clickState === 3) {
                 let setApiAzure = localStorage.getItem("ApiAzure");
                 let ApiAzure = prompt("apiKey,endpoint", setApiAzure);
                 if (ApiAzure !== null && ApiAzure !== "") {
                     localStorage.setItem("ApiAzure", ApiAzure);                
                 }
+            } else if (clickState === 2) {
+                const padSize = () => {
+                i++;
+                localStorage.padSizeIndex = i;
+                document.getElementById('dpadContainer').className = c[i % c.length];
+                };
+                padSize();
             }
             clickState = 0;
         }, 300);
     });
+    document.getElementById('dpadContainer').className = c[i % c.length];
     // Turbo Button
     turboButton.addEventListener(eventType, async () => {
         clickTurbo++;
