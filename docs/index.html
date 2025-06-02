@@ -19,26 +19,27 @@
     <script src="/src/library/nip.js"></script>
     
     <title>Kabu</title>
-      <script>
-       if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(registration => {
-                        console.log('Service Worker registered!', registration.scope);
-                    })
-                    .catch(error => {
-                        console.log('Service Worker registration failed:', error);
-                    });
-            });
-            navigator.serviceWorker.addEventListener('message', function (event) {
-            console.log('Received message from Service Worker:', event.data);
-            if (event.data.msg === "Updating...") {
-                lockNoti("", event.data.msg, 1600);
-                setTimeout(() => { window.location.href = window.location.pathname + '?t=' + Date.now(); }, 1400);
-                }
-            });
-        }
-      </script>
+    <script>let gameVer = 'V6.89';</script>
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+                .then(registration => {
+                    console.log('Service Worker registered!', registration.scope);
+                })
+                .catch(error => {
+                    console.log('Service Worker registration failed:', error);
+                });
+        });
+        navigator.serviceWorker.addEventListener('message', function (event) {
+        console.log('Received message from Service Worker:', event.data);
+        if (event.data.msg === "Updating...") {
+            lockNoti("", event.data.msg, 1600);
+            setTimeout(() => { window.location.href = window.location.pathname + '?t=' + gameVer; }, 1400);
+            }
+        });
+    }
+    </script>
   </head>
 <body>
     <!-- Layer Ingame -->
@@ -353,7 +354,6 @@
         <span class="" id="notiDetail" style="opacity: 0.4"></span>
         <div class="flex-1"></div>
     </div>
-    <script>let gameVer = 'V6.88';</script>
     <script type="" src="./src/js/global.js"></script> 
     <script type="module" src="./src/js/main.js"></script> 
     <script type="module" src="./src/js/welcome.js"></script> 
