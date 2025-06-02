@@ -268,11 +268,11 @@ label {
 /*in-game-open*/
 .dpad-l {
   height: 26px;
-  background: url("data:image/svg+xml,%3Csvg width='124' height='26' viewBox='0 0 124 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='0.4'%3E%3Cpath d='M56 16V8H54V16H56Z' fill='%23F5E8D1'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M58 16H66V10H60V8H58V16ZM60 14V12H64V14H60Z' fill='%23F5E8D1'/%3E%3Cpath d='M68 16H70V14H68V16Z' fill='%23F5E8D1'/%3E%3C/g%3E%3C/svg%3E%0A");
+  background: url("data:image/svg+xml,%3Csvg width='124' height='26' viewBox='0 0 124 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='0.4'%3E%3Cpath d='M58 16V8H56V16H58Z' fill='%23F5E8D1'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M60 16H68V10H62V8H60V16ZM62 14V12H66V14H62Z' fill='%23F5E8D1'/%3E%3Cpath d='M70 16H72V14H70V16Z' fill='%23F5E8D1'/%3E%3C/g%3E%3C/svg%3E%0A");
 }
 .dpad-r {
   height: 26px;
-  background: url("data:image/svg+xml,%3Csvg width='124' height='26' viewBox='0 0 124 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='0.4'%3E%3Cpath d='M54 12V16H52V10H58V12H54Z' fill='%23F5E8D1'/%3E%3Cpath d='M68 16H60V8H62V10H68V16ZM62 12V14H66V12H62Z' fill='%23F5E8D1'/%3E%3Cpath d='M70 16H72V14H70V16Z' fill='%23F5E8D1'/%3E%3C/g%3E%3C/svg%3E%0A");
+  background: url("data:image/svg+xml,%3Csvg width='124' height='26' viewBox='0 0 124 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='0.4'%3E%3Cpath d='M56 12V16H54V10H60V12H56Z' fill='%23F5E8D1'/%3E%3Cpath d='M70 16H62V8H64V10H70V16ZM64 12V14H68V12H64Z' fill='%23F5E8D1'/%3E%3Cpath d='M72 16H74V14H72V16Z' fill='%23F5E8D1'/%3E%3C/g%3E%3C/svg%3E%0A");
 }
 .canvas-container {
   background-repeat: no-repeat;
@@ -410,11 +410,11 @@ label {
 
 .dpad-select {
   height: 26px;
-  background: url("data:image/svg+xml,%3Csvg width='84' height='26' viewBox='0 0 84 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='0.4'%3E%3Cpath d='M32 10H40V12H36V14H40V16H32V14H34V12H32V10Z' fill='%23F5E8D1'/%3E%3Cpath d='M48 16H42V10H48V12H44V14H48V16Z' fill='%23F5E8D1'/%3E%3Cpath d='M50 16V14H52V16H50Z' fill='%23F5E8D1'/%3E%3C/g%3E%3C/svg%3E%0A");
+  background: url("data:image/svg+xml,%3Csvg width='84' height='26' viewBox='0 0 84 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath opacity='0.4' d='M34 10H42V12H39V14H42V16H34V14H37V12H34V10Z' fill='%23F5E8D1'/%3E%3Cpath opacity='0.4' d='M50 16H44V10H48V12H46V14H50V16Z' fill='%23F5E8D1'/%3E%3Cpath opacity='0.4' d='M52 14H54V16H52V14Z' fill='%23F5E8D1'/%3E%3C/svg%3E%0A");
 }
 .dpad-start {
   height: 26px;
-  background: url("data:image/svg+xml,%3Csvg width='84' height='26' viewBox='0 0 84 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='0.4'%3E%3Cpath d='M32 10H40V12H36V14H40V16H32V14H34V12H32V10Z' fill='%23F5E8D1'/%3E%3Cpath d='M46 16H42V8H44V10H46V12H44V14H46V16Z' fill='%23F5E8D1'/%3E%3Cpath d='M48 16V14H50V16H48Z' fill='%23F5E8D1'/%3E%3C/g%3E%3C/svg%3E%0A");
+  background: url("data:image/svg+xml,%3Csvg width='84' height='26' viewBox='0 0 84 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath opacity='0.4' d='M34 11H42V13H39V15H42V17H34V15H37V13H34V11Z' fill='%23F5E8D1'/%3E%3Cpath opacity='0.4' d='M50 17H44V9H46V11H47H48V13H46V15H50V17Z' fill='%23F5E8D1'/%3E%3Cpath opacity='0.4' d='M52 15H54V17H52V15Z' fill='%23F5E8D1'/%3E%3C/svg%3E%0A");
 }
 .dpad-menu {
   width: 44px;
@@ -433,7 +433,7 @@ label {
 .dpad-a {
   background-position: center !important;
   background-repeat: no-repeat !important;
-  background: url("data:image/svg+xml,%3Csvg width='124' height='67' viewBox='0 0 124 67' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M52.2 26.5C52.0895 26.5 52 26.5895 52 26.7V40.3C52 40.4105 52.0895 40.5 52.2 40.5H53.8C53.9105 40.5 54 40.4105 54 40.3V34.7C54 34.5895 54.0895 34.5 54.2 34.5H59.8C59.9105 34.5 60 34.5895 60 34.7V40.3C60 40.4105 60.0895 40.5 60.2 40.5H61.8C61.9105 40.5 62 40.4105 62 40.3V26.7C62 26.5895 61.9105 26.5 61.8 26.5H52.2ZM60 28.7C60 28.5895 59.9105 28.5 59.8 28.5H54.2C54.0895 28.5 54 28.5895 54 28.7V32.3C54 32.4105 54.0895 32.5 54.2 32.5H59.8C59.9105 32.5 60 32.4105 60 32.3V28.7Z' fill='%23F5E8D1'/%3E%3C/svg%3E%0A");
+  background: url("data:image/svg+xml,%3Csvg width='124' height='67' viewBox='0 0 124 67' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M54.2 26.5C54.0895 26.5 54 26.5895 54 26.7V40.3C54 40.4105 54.0895 40.5 54.2 40.5H55.8C55.9105 40.5 56 40.4105 56 40.3V34.7C56 34.5895 56.0895 34.5 56.2 34.5H61.8C61.9105 34.5 62 34.5895 62 34.7V40.3C62 40.4105 62.0895 40.5 62.2 40.5H63.8C63.9105 40.5 64 40.4105 64 40.3V26.7C64 26.5895 63.9105 26.5 63.8 26.5H54.2ZM62 28.7C62 28.5895 61.9105 28.5 61.8 28.5H56.2C56.0895 28.5 56 28.5895 56 28.7V32.3C56 32.4105 56.0895 32.5 56.2 32.5H61.8C61.9105 32.5 62 32.4105 62 32.3V28.7Z' fill='%23F5E8D1'/%3E%3C/svg%3E%0A");
 }
 .dpad-turbo {
   width: 44px;
@@ -452,7 +452,7 @@ label {
 .dpad-b {
   background-position: center !important;
   background-repeat: no-repeat !important;
-  background: url("data:image/svg+xml,%3Csvg width='124' height='67' viewBox='0 0 124 67' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M52 26.7C52 26.5895 52.0895 26.5 52.2 26.5H61.8C61.9105 26.5 62 26.5895 62 26.7V40.3C62 40.4105 61.9105 40.5 61.8 40.5H52.2C52.0895 40.5 52 40.4105 52 40.3V26.7ZM59.8 38.5C59.9105 38.5 60 38.4105 60 38.3V34.7C60 34.5895 59.9105 34.5 59.8 34.5H54.2C54.0895 34.5 54 34.5895 54 34.7V38.3C54 38.4105 54.0895 38.5 54.2 38.5H59.8ZM59.8 32.5C59.9105 32.5 60 32.4105 60 32.3V28.7C60 28.5895 59.9105 28.5 59.8 28.5H54.2C54.0895 28.5 54 28.5895 54 28.7V32.3C54 32.4105 54.0895 32.5 54.2 32.5H59.8Z' fill='%23F5E8D1'/%3E%3C/svg%3E%0A");
+  background: url("data:image/svg+xml,%3Csvg width='124' height='67' viewBox='0 0 124 67' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M54 26.7C54 26.5895 54.0895 26.5 54.2 26.5H63.8C63.9105 26.5 64 26.5895 64 26.7V40.3C64 40.4105 63.9105 40.5 63.8 40.5H54.2C54.0895 40.5 54 40.4105 54 40.3V26.7ZM61.8 38.5C61.9105 38.5 62 38.4105 62 38.3V34.7C62 34.5895 61.9105 34.5 61.8 34.5H56.2C56.0895 34.5 56 34.5895 56 34.7V38.3C56 38.4105 56.0895 38.5 56.2 38.5H61.8ZM61.8 32.5C61.9105 32.5 62 32.4105 62 32.3V28.7C62 28.5895 61.9105 28.5 61.8 28.5H56.2C56.0895 28.5 56 28.5895 56 28.7V32.3C56 32.4105 56.0895 32.5 56.2 32.5H61.8Z' fill='%23F5E8D1'/%3E%3C/svg%3E%0A");
 }
 .dpad-blank {
   width: 44px;
