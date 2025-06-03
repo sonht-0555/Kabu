@@ -11,6 +11,7 @@ const saveStateButton = document.getElementById("saveStateButton");
 const loadStateButton = document.getElementById("loadStateButton");
 let i = +localStorage.padSizeIndex || 0;
 const c = ['gap-8 column padSize1', 'gap-8 column padSize2', 'gap-8 column padSize3'];
+const sizeSteps = [48, 40, 44];
 /* --------------- Function --------------- */
 function buttonPress(buttonName, isPress) {
     if (buttonName.includes("-")) {
@@ -243,14 +244,28 @@ let lastSaveTime = 0;
                 const padSize = () => {
                 i++;
                 localStorage.padSizeIndex = i;
-                document.getElementById('dpadContainer').className = c[i % c.length];
+                updatePadSize();
                 };
                 padSize();
             }
             clickState = 0;
         }, 300);
     });
-    document.getElementById('dpadContainer').className = c[i % c.length];
+     function updatePadSize() {
+        document.getElementById('dpadContainer').className = c[i % c.length];
+        i = (i + 1) % sizeSteps.length;
+        const newSize = sizeSteps[i]; 
+        const elements1 = document.querySelectorAll(".pad-ul, .pad-dr");
+        const elements2 = document.querySelectorAll(".pad-ur, .pad-dl");
+        elements1.forEach((el) => {
+            el.style.width = `${newSize}px`;
+        });
+        elements2.forEach((el) => {
+            el.style.height = `${newSize}px`;
+        });
+        console.log(`Updated pad size to: ${newSize}px`);
+    }
+    updatePadSize();
     // Turbo Button
     turboButton.addEventListener(eventType, async () => {
         clickTurbo++;
