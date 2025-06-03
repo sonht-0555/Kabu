@@ -11,7 +11,7 @@ const saveStateButton = document.getElementById("saveStateButton");
 const loadStateButton = document.getElementById("loadStateButton");
 let i = +localStorage.padSizeIndex || 0;
 const c = ['gap-8 column padSize1', 'gap-8 column padSize2', 'gap-8 column padSize3'];
-const sizeSteps = [48, 40, 44];
+const sizeSteps = [46, 38, 42];
 /* --------------- Function --------------- */
 function buttonPress(buttonName, isPress) {
     if (buttonName.includes("-")) {
