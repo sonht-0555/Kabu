@@ -10,8 +10,8 @@ const turboButton = document.getElementById("turbo");
 const saveStateButton = document.getElementById("saveStateButton");
 const loadStateButton = document.getElementById("loadStateButton");
 let i = +localStorage.padSizeIndex || 0;
-const c = ['gap-8 column padSize1', 'gap-8 column padSize2', 'gap-8 column padSize3'];
-const sizeSteps = [46, 38, 42];
+const c = ['gap-8 column padSize2', 'gap-8 column padSize1', 'gap-8 column padSize3'];
+const s = [ 46, 42, 38];
 /* --------------- Function --------------- */
 function buttonPress(buttonName, isPress) {
     if (buttonName.includes("-")) {
@@ -253,8 +253,8 @@ let lastSaveTime = 0;
     });
      function updatePadSize() {
         document.getElementById('dpadContainer').className = c[i % c.length];
-        i = (i + 1) % sizeSteps.length;
-        const newSize = sizeSteps[i]; 
+        i = (i + 1) % s.length;
+        const newSize = s[i]; 
         const elements1 = document.querySelectorAll(".pad-ul, .pad-dr");
         const elements2 = document.querySelectorAll(".pad-ur, .pad-dl");
         elements1.forEach((el) => {
