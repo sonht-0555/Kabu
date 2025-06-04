@@ -51,8 +51,6 @@ async function inputGame(InputFile) {
 document.addEventListener("DOMContentLoaded", function() {
     setTimeout(() => {
         romList();
-        Main.setCoreSettings("threadedVideo", true);
-        Main.setCoreSettings("rewindEnable", false);
     },2000);
     romInput.addEventListener("change", function() {
         inputGame(romInput);
