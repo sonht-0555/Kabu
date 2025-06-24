@@ -86,10 +86,8 @@ var ENVIRONMENT_IS_PTHREAD = ENVIRONMENT_IS_WORKER && self.name == "em-pthread";
   const arr = romPath.split(".");
   arr.pop();
   const saveName = arr.join(".") + ".sav";
-  const autoSaveStateName = arr.join(".") + "_auto.ss";
   Module.gameName = romPath;
   Module.saveName = savePathOverride ?? saveName.replace("/data/games/", "/data/saves/");
-  Module.autoSaveStateName = autoSaveStateName.replace("/data/games/", "/autosave/");
   return true;
  }
  return false;
@@ -118,10 +116,6 @@ Module.listSaves = () => FS.readdir("/data/saves/");
 Module.FSInit = () => new Promise((resolve, reject) => {
  FS.mkdir("/data");
  FS.mount(FS.filesystems.IDBFS, {}, "/data");
- FS.mkdir("/autosave");
- FS.mount(FS.filesystems.IDBFS, {
-  autoPersist: true
- }, "/autosave");
  FS.syncfs(true, err => {
   if (err) {
    reject(new Error(`Error syncing app data from IndexedDB: ${err}`));
@@ -300,16 +294,6 @@ Module.resumeGame = () => {
  resumeGame();
 };
 
-Module.pauseAudio = () => {
- const pauseAudio = cwrap("pauseAudio", null, []);
- pauseAudio();
-};
-
-Module.resumeAudio = () => {
- const resumeAudio = cwrap("resumeAudio", null, []);
- resumeAudio();
-};
-
 Module.getVolume = () => {
  const getVolume = cwrap("getVolume", "number", []);
  return getVolume();
@@ -370,39 +354,6 @@ Module.loadState = slot => {
  return loadState(slot);
 };
 
-Module.forceAutoSaveState = () => {
- const autoSaveState = cwrap("autoSaveState", "boolean", []);
- return autoSaveState();
-};
-
-Module.loadAutoSaveState = () => {
- const loadAutoSaveState = cwrap("loadAutoSaveState", "boolean", []);
- return loadAutoSaveState();
-};
-
-Module.getAutoSaveState = () => ({
- autoSaveStateName: Module.autoSaveStateName,
- data: FS.readFile(Module.autoSaveStateName)
-});
-
-Module.uploadAutoSaveState = async (autoSaveStateName, data) => new Promise((resolve, reject) => {
- try {
-  if (!(data instanceof Uint8Array)) {
-   console.warn("Auto save state data must be a Uint8Array");
-   return;
-  }
-  if (!autoSaveStateName.length) {
-   console.warn("Auto save state file name invalid");
-   return;
-  }
-  const path = `${autoSaveStateName}`;
-  FS.writeFile(path, data);
-  resolve();
- } catch (err) {
-  reject(err);
- }
-});
-
 Module.saveStateSlot = (slot, flags) => {
  var saveStateSlot = cwrap("saveStateSlot", "number", [ "number", "number" ]);
  Module.saveStateSlot = (slot, flags) => {
@@ -446,9 +397,7 @@ const coreCallbackStore = {
  keysReadCallbackPtr: null,
  saveDataUpdatedCallbackPtr: null,
  videoFrameEndedCallbackPtr: null,
- videoFrameStartedCallbackPtr: null,
- autoSaveStateCapturedCallbackPtr: null,
- autoSaveStateLoadedCallbackPtr: null
+ videoFrameStartedCallbackPtr: null
 };
 
 Module.addCoreCallbacks = callbacks => {
@@ -462,7 +411,7 @@ Module.addCoreCallbacks = callbacks => {
   }
   if (!!callback) coreCallbackStore[callbackKey] = addFunction(callback, "vi");
  });
- addCoreCallbacks(coreCallbackStore.alarmCallbackPtr, coreCallbackStore.coreCrashedCallbackPtr, coreCallbackStore.keysReadCallbackPtr, coreCallbackStore.saveDataUpdatedCallbackPtr, coreCallbackStore.videoFrameEndedCallbackPtr, coreCallbackStore.videoFrameStartedCallbackPtr, coreCallbackStore.autoSaveStateCapturedCallbackPtr, coreCallbackStore.autoSaveStateLoadedCallbackPtr);
+ addCoreCallbacks(coreCallbackStore.alarmCallbackPtr, coreCallbackStore.coreCrashedCallbackPtr, coreCallbackStore.keysReadCallbackPtr, coreCallbackStore.saveDataUpdatedCallbackPtr, coreCallbackStore.videoFrameEndedCallbackPtr, coreCallbackStore.videoFrameStartedCallbackPtr);
 };
 
 Module.toggleRewind = toggle => {
@@ -482,12 +431,6 @@ Module.setCoreSettings = coreSettings => {
  if (coreSettings.audioSync !== undefined) setIntegerCoreSetting("audioSync", coreSettings.audioSync);
  if (coreSettings.threadedVideo !== undefined) setIntegerCoreSetting("threadedVideo", coreSettings.threadedVideo);
  if (coreSettings.rewindEnable !== undefined) setIntegerCoreSetting("rewindEnable", coreSettings.rewindEnable);
- if (coreSettings.baseFpsTarget !== undefined) setIntegerCoreSetting("baseFpsTarget", coreSettings.baseFpsTarget);
- if (coreSettings.timestepSync !== undefined) setIntegerCoreSetting("timestepSync", coreSettings.timestepSync);
- if (coreSettings.showFpsCounter !== undefined) setIntegerCoreSetting("showFpsCounter", coreSettings.showFpsCounter);
- if (coreSettings.autoSaveStateTimerIntervalSeconds !== undefined) setIntegerCoreSetting("autoSaveStateTimerIntervalSeconds", coreSettings.autoSaveStateTimerIntervalSeconds);
- if (coreSettings.autoSaveStateEnable !== undefined) setIntegerCoreSetting("autoSaveStateEnable", coreSettings.autoSaveStateEnable);
- if (coreSettings.restoreAutoSaveStateOnLoad !== undefined) setIntegerCoreSetting("restoreAutoSaveStateOnLoad", coreSettings.restoreAutoSaveStateOnLoad);
 };
 
 var moduleOverrides = Object.assign({}, Module);
@@ -943,14 +886,14 @@ function createWasm() {
 }
 
 var ASM_CONSTS = {
- 367768: ($0, $1) => {
+ 367592: () => {
+  console.error("thread instantiation failed");
+ },
+ 367641: ($0, $1) => {
   Module.canvas.width = $0;
   Module.canvas.height = $1;
  },
- 367825: () => {
-  console.error("thread instantiation failed");
- },
- 367874: ($0, $1, $2, $3, $4, $5, $6) => {
+ 367698: ($0, $1, $2, $3, $4, $5, $6) => {
   Module.version = {
    gitCommit: UTF8ToString($0),
    gitShort: UTF8ToString($1),
@@ -961,48 +904,48 @@ var ASM_CONSTS = {
    projectVersion: UTF8ToString($6)
   };
  },
- 368106: ($0, $1) => {
+ 367930: ($0, $1) => {
   const funcPtr = $0;
   const ctx = $1;
   const func = wasmTable.get(funcPtr);
   if (func) func(ctx);
  },
- 368204: ($0, $1) => {
+ 368028: ($0, $1) => {
   const funcPtr = $0;
   const ctx = $1;
   const func = wasmTable.get(funcPtr);
   if (func) func(ctx);
  },
- 368302: ($0, $1) => {
+ 368126: ($0, $1) => {
   const funcPtr = $0;
   const ctx = $1;
   const func = wasmTable.get(funcPtr);
   if (func) func(ctx);
  },
- 368400: ($0, $1) => {
+ 368224: ($0, $1) => {
   const funcPtr = $0;
   const ctx = $1;
   const func = wasmTable.get(funcPtr);
   if (func) func(ctx);
  },
- 368498: ($0, $1) => {
+ 368322: ($0, $1) => {
   const funcPtr = $0;
   const ctx = $1;
   const func = wasmTable.get(funcPtr);
   if (func) func(ctx);
  },
- 368596: ($0, $1) => {
+ 368420: ($0, $1) => {
   const funcPtr = $0;
   const ctx = $1;
   const func = wasmTable.get(funcPtr);
   if (func) func(ctx);
  },
- 368694: () => {
+ 368518: () => {
   FS.syncfs(function(err) {
    assert(!err);
   });
  },
- 368738: $0 => {
+ 368562: $0 => {
   var str = UTF8ToString($0) + "\n\n" + "Abort/Retry/Ignore/AlwaysIgnore? [ariA] :";
   var reply = window.prompt(str, "i");
   if (reply === null) {
@@ -1010,7 +953,7 @@ var ASM_CONSTS = {
   }
   return allocate(intArrayFromString(reply), "i8", ALLOC_NORMAL);
  },
- 368963: () => {
+ 368787: () => {
   if (typeof (AudioContext) !== "undefined") {
    return true;
   } else if (typeof (webkitAudioContext) !== "undefined") {
@@ -1018,7 +961,7 @@ var ASM_CONSTS = {
   }
   return false;
  },
- 369110: () => {
+ 368934: () => {
   if ((typeof (navigator.mediaDevices) !== "undefined") && (typeof (navigator.mediaDevices.getUserMedia) !== "undefined")) {
    return true;
   } else if (typeof (navigator.webkitGetUserMedia) !== "undefined") {
@@ -1026,7 +969,7 @@ var ASM_CONSTS = {
   }
   return false;
  },
- 369344: $0 => {
+ 369168: $0 => {
   if (typeof (Module["SDL2"]) === "undefined") {
    Module["SDL2"] = {};
   }
@@ -1048,11 +991,11 @@ var ASM_CONSTS = {
   }
   return SDL2.audioContext === undefined ? -1 : 0;
  },
- 369837: () => {
+ 369661: () => {
   var SDL2 = Module["SDL2"];
   return SDL2.audioContext.sampleRate;
  },
- 369905: ($0, $1, $2, $3) => {
+ 369729: ($0, $1, $2, $3) => {
   var SDL2 = Module["SDL2"];
   var have_microphone = function(stream) {
    if (SDL2.capture.silenceTimer !== undefined) {
@@ -1093,7 +1036,7 @@ var ASM_CONSTS = {
    }, have_microphone, no_microphone);
   }
  },
- 371557: ($0, $1, $2, $3) => {
+ 371381: ($0, $1, $2, $3) => {
   var SDL2 = Module["SDL2"];
   SDL2.audio.scriptProcessorNode = SDL2.audioContext["createScriptProcessor"]($1, 0, $0);
   SDL2.audio.scriptProcessorNode["onaudioprocess"] = function(e) {
@@ -1105,7 +1048,7 @@ var ASM_CONSTS = {
   };
   SDL2.audio.scriptProcessorNode["connect"](SDL2.audioContext["destination"]);
  },
- 371967: ($0, $1) => {
+ 371791: ($0, $1) => {
   var SDL2 = Module["SDL2"];
   var numChannels = SDL2.capture.currentCaptureBuffer.numberOfChannels;
   for (var c = 0; c < numChannels; ++c) {
@@ -1124,7 +1067,7 @@ var ASM_CONSTS = {
    }
   }
  },
- 372572: ($0, $1) => {
+ 372396: ($0, $1) => {
   var SDL2 = Module["SDL2"];
   var numChannels = SDL2.audio.currentOutputBuffer["numberOfChannels"];
   for (var c = 0; c < numChannels; ++c) {
@@ -1137,7 +1080,7 @@ var ASM_CONSTS = {
    }
   }
  },
- 373052: $0 => {
+ 372876: $0 => {
   var SDL2 = Module["SDL2"];
   if ($0) {
    if (SDL2.capture.silenceTimer !== undefined) {
@@ -1175,7 +1118,7 @@ var ASM_CONSTS = {
    SDL2.audioContext = undefined;
   }
  },
- 374224: ($0, $1, $2) => {
+ 374048: ($0, $1, $2) => {
   var w = $0;
   var h = $1;
   var pixels = $2;
@@ -1246,7 +1189,7 @@ var ASM_CONSTS = {
   }
   SDL2.ctx.putImageData(SDL2.image, 0, 0);
  },
- 375693: ($0, $1, $2, $3, $4) => {
+ 375517: ($0, $1, $2, $3, $4) => {
   var w = $0;
   var h = $1;
   var hot_x = $2;
@@ -1283,18 +1226,18 @@ var ASM_CONSTS = {
   stringToUTF8(url, urlBuf, url.length + 1);
   return urlBuf;
  },
- 376682: $0 => {
+ 376506: $0 => {
   if (Module["canvas"]) {
    Module["canvas"].style["cursor"] = UTF8ToString($0);
   }
  },
- 376765: () => {
+ 376589: () => {
   if (Module["canvas"]) {
    Module["canvas"].style["cursor"] = "none";
   }
  },
- 376834: () => window.innerWidth,
- 376864: () => window.innerHeight
+ 376658: () => window.innerWidth,
+ 376688: () => window.innerHeight
 };
 
 /** @constructor */ function ExitStatus(status) {
@@ -1435,7 +1378,7 @@ var PThread = {
   }
  },
  initMainThread() {
-  var pthreadPoolSize = 5;
+  var pthreadPoolSize = 2;
   while (pthreadPoolSize--) {
    PThread.allocateUnusedWorker();
   }
@@ -9646,19 +9589,11 @@ var _free = a0 => (_free = wasmExports["free"])(a0);
 
 var _quitMgba = Module["_quitMgba"] = () => (_quitMgba = Module["_quitMgba"] = wasmExports["quitMgba"])();
 
-var _autoSaveState = Module["_autoSaveState"] = () => (_autoSaveState = Module["_autoSaveState"] = wasmExports["autoSaveState"])();
-
-var _loadAutoSaveState = Module["_loadAutoSaveState"] = () => (_loadAutoSaveState = Module["_loadAutoSaveState"] = wasmExports["loadAutoSaveState"])();
-
 var _quickReload = Module["_quickReload"] = () => (_quickReload = Module["_quickReload"] = wasmExports["quickReload"])();
 
 var _pauseGame = Module["_pauseGame"] = () => (_pauseGame = Module["_pauseGame"] = wasmExports["pauseGame"])();
 
 var _resumeGame = Module["_resumeGame"] = () => (_resumeGame = Module["_resumeGame"] = wasmExports["resumeGame"])();
-
-var _pauseAudio = Module["_pauseAudio"] = () => (_pauseAudio = Module["_pauseAudio"] = wasmExports["pauseAudio"])();
-
-var _resumeAudio = Module["_resumeAudio"] = () => (_resumeAudio = Module["_resumeAudio"] = wasmExports["resumeAudio"])();
 
 var _setEventEnable = Module["_setEventEnable"] = a0 => (_setEventEnable = Module["_setEventEnable"] = wasmExports["setEventEnable"])(a0);
 
@@ -9676,7 +9611,7 @@ var _saveStateSlot = Module["_saveStateSlot"] = (a0, a1) => (_saveStateSlot = Mo
 
 var _loadStateSlot = Module["_loadStateSlot"] = (a0, a1) => (_loadStateSlot = Module["_loadStateSlot"] = wasmExports["loadStateSlot"])(a0, a1);
 
-var _addCoreCallbacks = Module["_addCoreCallbacks"] = (a0, a1, a2, a3, a4, a5, a6, a7) => (_addCoreCallbacks = Module["_addCoreCallbacks"] = wasmExports["addCoreCallbacks"])(a0, a1, a2, a3, a4, a5, a6, a7);
+var _addCoreCallbacks = Module["_addCoreCallbacks"] = (a0, a1, a2, a3, a4, a5) => (_addCoreCallbacks = Module["_addCoreCallbacks"] = wasmExports["addCoreCallbacks"])(a0, a1, a2, a3, a4, a5);
 
 var _setIntegerCoreSetting = Module["_setIntegerCoreSetting"] = (a0, a1) => (_setIntegerCoreSetting = Module["_setIntegerCoreSetting"] = wasmExports["setIntegerCoreSetting"])(a0, a1);
 
@@ -9720,35 +9655,35 @@ var __emscripten_stack_alloc = a0 => (__emscripten_stack_alloc = wasmExports["_e
 
 var _emscripten_stack_get_current = () => (_emscripten_stack_get_current = wasmExports["emscripten_stack_get_current"])();
 
-var _GBAInputInfo = Module["_GBAInputInfo"] = 183552;
+var _GBAInputInfo = Module["_GBAInputInfo"] = 183376;
 
-var _binaryName = Module["_binaryName"] = 259568;
+var _binaryName = Module["_binaryName"] = 259392;
 
-var _projectName = Module["_projectName"] = 259572;
+var _projectName = Module["_projectName"] = 259396;
 
-var _projectVersion = Module["_projectVersion"] = 259576;
+var _projectVersion = Module["_projectVersion"] = 259400;
 
-var _gitCommit = Module["_gitCommit"] = 259552;
+var _gitCommit = Module["_gitCommit"] = 259376;
 
-var _gitCommitShort = Module["_gitCommitShort"] = 259556;
+var _gitCommitShort = Module["_gitCommitShort"] = 259380;
 
-var _gitBranch = Module["_gitBranch"] = 259560;
+var _gitBranch = Module["_gitBranch"] = 259384;
 
-var _gitRevision = Module["_gitRevision"] = 259564;
+var _gitRevision = Module["_gitRevision"] = 259388;
 
-var _GBIORegisterNames = Module["_GBIORegisterNames"] = 121936;
+var _GBIORegisterNames = Module["_GBIORegisterNames"] = 121760;
 
-var _GBSavestateMagic = Module["_GBSavestateMagic"] = 137200;
+var _GBSavestateMagic = Module["_GBSavestateMagic"] = 137024;
 
-var _GBSavestateVersion = Module["_GBSavestateVersion"] = 137204;
+var _GBSavestateVersion = Module["_GBSavestateVersion"] = 137028;
 
-var _GBA_LUX_LEVELS = Module["_GBA_LUX_LEVELS"] = 166656;
+var _GBA_LUX_LEVELS = Module["_GBA_LUX_LEVELS"] = 166480;
 
-var _GBAVideoObjSizes = Module["_GBAVideoObjSizes"] = 210976;
+var _GBAVideoObjSizes = Module["_GBAVideoObjSizes"] = 210800;
 
-var _GBASavestateMagic = Module["_GBASavestateMagic"] = 210752;
+var _GBASavestateMagic = Module["_GBASavestateMagic"] = 210576;
 
-var _GBASavestateVersion = Module["_GBASavestateVersion"] = 210756;
+var _GBASavestateVersion = Module["_GBASavestateVersion"] = 210580;
 
 function invoke_iiiii(index, a1, a2, a3, a4) {
  var sp = stackSave();

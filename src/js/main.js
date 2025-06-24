@@ -117,7 +117,7 @@ function startTimer() {
         if (minutes === 60) [minutes, hours] = [0, hours + 1];
         document.getElementById("timer").textContent = `${hours}h${minutes.toString().padStart(2, '0')}.${seconds.toString().padStart(2, '0')}`;
         if (count1 === 60) {
-            saveStatePeriodically();
+            //saveStatePeriodically();
             count1 = 0;
         }
         if (count2 === 1800) {
@@ -141,21 +141,11 @@ export async function uploadGame(romName) {
     });
 }
 export async function loadGame(romName) {
-    const stateName = romName.replace(/\.(gba|gbc|gb|zip)$/, ".ss1");
-    const statesList = await listFiles("states");
     intro.classList.add("disable");
     errorLogElements[0].style.bottom = "0";
     ingame.classList.remove("disable");
     // check save state in local
-    if (statesList.includes(stateName)) {
-        await Module.loadGame(`/data/games/${romName}`);
-        if (confirm("Do you want to load save state?")) {
-            await delay(100);
-            await Module.loadState(1);
-        }
-    } else {
-        await Module.loadGame(`/data/games/${romName}`);
-    }
+    await Module.loadGame(`/data/games/${romName}`);
     // show status ingame
         if (romName.endsWith(".gbc") || romName.endsWith(".gb")) {
             document.querySelectorAll(".stateImg").forEach(function(element) {
@@ -170,6 +160,7 @@ export async function loadGame(romName) {
             });
         }
     await statusShow();
+    Module.addCoreCallbacks(callbacks);
 }
 export async function saveState(slot) {
     if (!canSave) return;
@@ -240,34 +231,26 @@ export function sizeFiles(filePart) {
 }
 export async function resumeGame() {
     await Module.resumeGame();
-        if (Mode === "mGBA_1") {
-        await Module.resumeAudio();
-    }
+    await Module.resumeAudio();
     Module.SDL2();
     startTimer();
     notiMessage("[_] Resumed!", 2000);
 }
 export async function pauseGame() {
     await Module.pauseGame();
-        if (Mode === "mGBA_1") {
-        await Module.pauseAudio();
-    }
+    await Module.pauseAudio();
     stopTimer();
     notiMessage("[_] Paused!", 2000);
 }
 export async function loadding() {
     await Module.pauseGame();
-    if (Mode === "mGBA_1") {
-        await Module.pauseAudio();
-    }
+    await Module.pauseAudio();
     loadingIcon.classList.remove("visible");
     await delay(1000);
     loadingIcon.classList.add("visible");
     await delay(200);
     await Module.resumeGame();
-    if (Mode === "mGBA_1") {
-        await Module.resumeAudio();
-    }
+    await Module.resumeAudio();
 }
 export async function buttonPress(key) {
     Module.buttonPress(key)
@@ -439,3 +422,8 @@ export function setCoreSettings(type, number) {
         return null;
     }
 }
+const callbacks = {
+  autoSaveStateCapturedCallback: (param) => {
+    console.log("Auto save state captured with param:", param);
+  },
+};
