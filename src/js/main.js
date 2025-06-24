@@ -27,6 +27,12 @@ function initializeCore(coreInitFunction) {
     return coreInitFunction(coreInstance).then((core) => {
         core.FSInit();
         Module = core;
+        Module.setCoreSettings({
+            rewindEnable: false,
+            timestepSync: false,     
+            videoSync: true, 
+            autoSaveStateTimerIntervalSeconds: 30,        
+        });
     });
 }    
 initializeCore(Mode);
@@ -146,6 +152,7 @@ export async function loadGame(romName) {
     ingame.classList.remove("disable");
     // check save state in local
     await Module.loadGame(`/data/games/${romName}`);
+    await Module.loadAutoSaveState();
     // show status ingame
         if (romName.endsWith(".gbc") || romName.endsWith(".gb")) {
             document.querySelectorAll(".stateImg").forEach(function(element) {
@@ -423,7 +430,8 @@ export function setCoreSettings(type, number) {
     }
 }
 const callbacks = {
-  autoSaveStateCapturedCallback: (param) => {
-    console.log("Auto save state captured with param:", param);
+  autoSaveStateCapturedCallback: () => {
+    ledSave("#20A5A6");
+    console.log(`Auto save ${++countAutoSave} time(s)`);
   },
 };
