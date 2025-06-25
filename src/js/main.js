@@ -4,7 +4,7 @@ import * as gamepPad from './gamepad.js';
 import {localStorageFile} from "./storage.js";
 import {dpUploadFile} from "./cloud.js";
 import {shaderData} from "./setting.js"
-/*/ ----------------- Switch Ver ------------- */
+/* ----------------- Switch Ver ------------- */
 const versions = {
     "Stable": stable,  
     "Latest": latest, 
@@ -20,7 +20,7 @@ document.getElementById("GBAver").addEventListener("click", () => {
     document.getElementById("GBAver").textContent = `Wasm_${currentVersion}`;
     setTimeout(() => { window.location.reload(); }, 1000);
 });
-/*/ --------------- Initialization ----------- */
+/* --------------- Initialization ----------- */
 let Module = null;
 function initializeCore(coreInitFunction) {
     const coreInstance = { canvas: document.getElementById("canvas") };
@@ -31,7 +31,10 @@ function initializeCore(coreInitFunction) {
             rewindEnable: false,
             timestepSync: false,     
             videoSync: true, 
-            autoSaveStateTimerIntervalSeconds: 30,        
+            autoSaveStateEnable: false,
+            restoreAutoSaveStateOnLoad: false,
+            autoSaveStateTimerIntervalSeconds: 60, 
+            audioBufferSize: 2048,      
         });
     });
 }    
@@ -123,7 +126,7 @@ function startTimer() {
         if (minutes === 60) [minutes, hours] = [0, hours + 1];
         document.getElementById("timer").textContent = `${hours}h${minutes.toString().padStart(2, '0')}.${seconds.toString().padStart(2, '0')}`;
         if (count1 === 60) {
-            //saveStatePeriodically();
+            saveStatePeriodically();
             count1 = 0;
         }
         if (count2 === 1800) {
@@ -147,12 +150,22 @@ export async function uploadGame(romName) {
     });
 }
 export async function loadGame(romName) {
+    const stateName = romName.replace(/\.(gba|gbc|gb|zip)$/, ".ss1");
+    const statesList = await listFiles("states");
     intro.classList.add("disable");
     errorLogElements[0].style.bottom = "0";
     ingame.classList.remove("disable");
     // check save state in local
+    if (statesList.includes(stateName)) {
+        await Module.loadGame(`/data/games/${romName}`);
+        if (confirm("Do you want to load save state?")) {
+            await delay(100);
+            await Module.loadState(1);
+        }
+    } else {
+        await Module.loadGame(`/data/games/${romName}`);
+    }
     await Module.loadGame(`/data/games/${romName}`);
-    await Module.loadAutoSaveState();
     // show status ingame
         if (romName.endsWith(".gbc") || romName.endsWith(".gb")) {
             document.querySelectorAll(".stateImg").forEach(function(element) {
@@ -167,7 +180,6 @@ export async function loadGame(romName) {
             });
         }
     await statusShow();
-    Module.addCoreCallbacks(callbacks);
 }
 export async function saveState(slot) {
     if (!canSave) return;
@@ -429,9 +441,10 @@ export function setCoreSettings(type, number) {
         return null;
     }
 }
+/*Module.addCoreCallbacks(callbacks);
 const callbacks = {
   autoSaveStateCapturedCallback: () => {
     ledSave("#20A5A6");
-    console.log(`Auto save ${++countAutoSave} time(s)`);
+    console.log(`Auto save state captured`);
   },
-};
+};*/
