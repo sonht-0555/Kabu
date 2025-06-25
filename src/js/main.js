@@ -165,20 +165,19 @@ export async function loadGame(romName) {
     } else {
         await Module.loadGame(`/data/games/${romName}`);
     }
-    await Module.loadGame(`/data/games/${romName}`);
     // show status ingame
-        if (romName.endsWith(".gbc") || romName.endsWith(".gb")) {
-            document.querySelectorAll(".stateImg").forEach(function(element) {
-                element.classList.add("gbcs")
-                console.log("element.style.aspectRatio");
-            });
-        } else if (romName.endsWith(".gba") || romName.endsWith(".zip")) {
-            document.getElementById("state-container").style.paddingRight = `54px`;
-            document.getElementById("state-container").style.gap = `2px`;
-            document.querySelectorAll(".stateInfo").forEach(function(element) {
-                element.style.padding = `4px 5px 2px 5px`;
-            });
-        }
+    if (romName.endsWith(".gbc") || romName.endsWith(".gb")) {
+        document.querySelectorAll(".stateImg").forEach(function(element) {
+            element.classList.add("gbcs")
+            console.log("element.style.aspectRatio");
+        });
+    } else if (romName.endsWith(".gba") || romName.endsWith(".zip")) {
+        document.getElementById("state-container").style.paddingRight = `54px`;
+        document.getElementById("state-container").style.gap = `2px`;
+        document.querySelectorAll(".stateInfo").forEach(function(element) {
+            element.style.padding = `4px 5px 2px 5px`;
+        });
+    }
     await statusShow();
 }
 export async function saveState(slot) {
