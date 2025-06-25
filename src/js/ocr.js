@@ -3,13 +3,15 @@ import * as Main from './main.js';
 var scrollAmount = 0;
 var scrollSpeed = 0.5;
 var runCount = 0;
-let isFunctionARunning = false;
+let isRunning = false;
+let isOn = false;
 var maxRunCount = 2;
 let clickTurbo = 0
 let clickTimeout;
 const inputText = document.getElementById("inputText");
 const turbo = document.getElementById("turbo");
 const ID = ['A', 'B', 'R', 'L'];
+const AButton = document.getElementById("A");
 /* --------------- Function ------------------ */
 async function getImage() {
     turbo.classList.add('turbo-ocr');
@@ -118,7 +120,7 @@ async function freeServer(base64data) {
         inputText.textContent = error.message;
     } finally {
         clearInterval(interval);
-        isFunctionARunning = false;
+        isRunning = false;
     }
 }
 async function azureServer(base64data) {
@@ -147,7 +149,8 @@ async function azureServer(base64data) {
     } catch (error) {
         inputText.textContent = error.message;
     } finally {
-        isFunctionARunning = false;
+        isRunning = false;
+        AButton.style.pointerEvents = 'auto'
     }
 }
 async function translateText(textContent, sourceLang, targetLang) {
@@ -243,22 +246,35 @@ document.addEventListener("DOMContentLoaded", function() {
         const button = document.getElementById(id);
         if (button) {
             button.addEventListener("touchstart", function() {
-                if (!isFunctionARunning) {
+                if (!isRunning) {
                     turbo.classList.remove('turbo-ocr');
                 }
             });
         }
     });
     ["touchend"].forEach(eventType => {
+        AButton.addEventListener(eventType, () => {
+            if (isOn) {
+                AButton.style.pointerEvents = 'none'
+                isRunning = true;
+                setTimeout(() => {
+                    getImage();
+                },2000);
+            }
+        });
         turbo.addEventListener(eventType, () => {
             clickTurbo++;
             clearTimeout(clickTimeout);
             clickTimeout = setTimeout(() => {
                 if (clickTurbo === 1) {
-                    if (!isFunctionARunning) {
-                        isFunctionARunning = true;
+                   if (isOn) {
+                        isOn = false;
+                        turbo.classList.remove('turbo-ocr');
+                   } else {
+                        isOn = true;
+                        turbo.classList.add('turbo-ocr');
                         getImage();
-                    }
+                   }
                 }
                 clickTurbo = 0;
             }, 300);
