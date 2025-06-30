@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function() {
     ["touchend"].forEach(eventType => {
         //Buton Open Save States Page
         statePageButton.addEventListener(eventType, async() => {
-            selectedIndex = parseInt(Main.getData(gameName, "1", "slotStateSaved")) || 1;
+            selectedIndex = parseInt(localStorage.getItem("slotStateSaved")) || 1;
             updateSelectionState(); 
             for (let i = 1; i <= 3; i++) {
                 LoadstateInPage(i, `dateState0${i}`);
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     selectedIndex--;
                     updateSelectionState();
                     led(selectedIndex);
-                    Main.setData(gameName, "1", "slotStateSaved", selectedIndex);
+                    localStorage.setItem("slotStateSaved",selectedIndex);
                     const base64Image = await Main.dowloadScreenShot(`/data/screenshots/${gameName.replace(/\.(zip|gb|gbc|gba)$/, "")}_${selectedIndex}.png`);
                     if (base64Image) {
                         stateList.style.backgroundImage = `url('${base64Image}')`;
@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     selectedIndex++;
                     updateSelectionState();
                     led(selectedIndex);
-                    Main.setData(gameName, "1", "slotStateSaved", selectedIndex);
+                    localStorage.setItem("slotStateSaved",selectedIndex);
                     const base64Image = await Main.dowloadScreenShot(`/data/screenshots/${gameName.replace(/\.(zip|gb|gbc|gba)$/, "")}_${selectedIndex}.png`);
                     if (base64Image) {
                         stateList.style.backgroundImage = `url('${base64Image}')`;
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     document.getElementById("menu-pad").style.removeProperty("pointer-events");
                     led(selectedIndex);
                     await Main.loadState(selectedIndex);
-                    Main.setData(gameName, "1", "slotStateSaved", selectedIndex);
+                    localStorage.setItem("slotStateSaved",selectedIndex);
                     await Main.resumeGame();
                     await delay(100);
                     await Main.notiMessage(`[${selectedIndex}] Loaded State`, 1500);

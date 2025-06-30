@@ -92,7 +92,7 @@ async function statusShow() {
     await delay(200);
     await Module.SDL2();
     await delay(800);
-    await led(parseInt(await getData(gameName, "1", "slotStateSaved")));
+    await led(parseInt(localStorage.getItem("slotStateSaved")));
 }
 // Auto Save Every 1m
 async function saveStatePeriodically() {
@@ -371,7 +371,7 @@ export async function getData(romName, slot, type) {
     }
 }
 export async function ledSave(color) {
-    const slotState = parseInt(await getData(gameName, "1", "slotStateSaved"));
+    const slotState = parseInt(localStorage.getItem("slotStateSaved"));
     const ledId = slotState === 2 ? "led02" : slotState === 3 ? "led03" : "led01";
     try {
         for (let i = 1; i <= 3; i++) {
@@ -389,7 +389,7 @@ export async function ledSave(color) {
 export async function notiMessage(messageContent, second, showCanvas = false) {
     var message = document.getElementById("noti-mess");
     document.getElementById("inputText").textContent = ""
-    const slotState = parseInt(await getData(gameName, "1", "slotStateSaved")) || 0;
+    const slotState = parseInt(localStorage.getItem("slotStateSaved")) || 1;
     if (message.style.opacity === "0.4") {
         clearTimeout(messageTimeout);
         message.style.opacity = "0";
