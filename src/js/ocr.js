@@ -272,8 +272,10 @@ document.addEventListener("DOMContentLoaded", function() {
                         isOn = false;
                         turbo.classList.remove('turbo-ocr');
                    } else {
-                        isOn = true;
-                        turbo.classList.add('turbo-ocr');
+                        if (ApiAzure && ApiAzure.trim() !== "") {
+                            isOn = true;
+                            turbo.classList.add('turbo-ocr');
+                        } 
                         getImage();
                    }
                 }
