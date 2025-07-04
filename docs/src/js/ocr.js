@@ -57,10 +57,11 @@ async function getImage() {
             const base64data = canvas.toDataURL("image/png").split(',')[1];
             const ApiAzure = localStorage.getItem("ApiAzure");
             console.log(ApiAzure);
-            if (ApiAzure) {
+            if (ApiAzure && ApiAzure.trim() !== "") {
                 azureServer(base64data);
             } else {
-                freeServer(base64data);
+                //freeServer(base64data);
+                notiMessage(`Please input API key.`, 2000);
             }
         };
     } catch (error) {
