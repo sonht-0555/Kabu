@@ -8,6 +8,7 @@ let isOn = false;
 var maxRunCount = 2;
 let clickTurbo = 0
 let clickTimeout;
+let ApiAzure;
 const inputText = document.getElementById("inputText");
 const turbo = document.getElementById("turbo");
 const ID = ['A', 'B', 'R', 'L'];
@@ -55,14 +56,8 @@ async function getImage() {
                 cropHeight * generalRatio * resolutionFactor        
             );
             const base64data = canvas.toDataURL("image/png").split(',')[1];
-            const ApiAzure = localStorage.getItem("ApiAzure");
-            console.log(ApiAzure);
-            if (ApiAzure && ApiAzure.trim() !== "") {
-                azureServer(base64data);
-            } else {
-                //freeServer(base64data);
-                notiMessage(`Please input API key.`, 2000);
-            }
+            azureServer(base64data);
+            //freeServer(base64data);
         };
     } catch (error) {
         inputText.textContent = error.message;
@@ -267,6 +262,8 @@ document.addEventListener("DOMContentLoaded", function() {
             clickTurbo++;
             clearTimeout(clickTimeout);
             clickTimeout = setTimeout(() => {
+                ApiAzure = localStorage.getItem("ApiAzure");
+                console.log(ApiAzure);
                 if (clickTurbo === 1) {
                    if (isOn) {
                         isOn = false;
@@ -275,8 +272,10 @@ document.addEventListener("DOMContentLoaded", function() {
                         if (ApiAzure && ApiAzure.trim() !== "") {
                             isOn = true;
                             turbo.classList.add('turbo-ocr');
-                        } 
-                        getImage();
+                            getImage();
+                        } else {
+                            Main.notiMessage(`Please input API key.`, 2000);
+                        }
                    }
                 }
                 clickTurbo = 0;
