@@ -8,7 +8,7 @@ let isOn = false;
 var maxRunCount = 2;
 let clickTurbo = 0
 let clickTimeout;
-let ApiAzure = 2000;
+let ApiAzure;
 const inputText = document.getElementById("inputText");
 const turbo = document.getElementById("turbo");
 const ID = ['A', 'B', 'R', 'L'];
@@ -250,9 +250,9 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     ["touchend"].forEach(eventType => {
         ApiAzure = localStorage.getItem("ApiAzure");
-        let [apiKey, endpoint, wait] = ApiAzure.split(',');
         AButton.addEventListener(eventType, () => {
             if (isOn) {
+                let [apiKey, endpoint, wait] = localStorage.getItem("ApiAzure").split(',');
                 AButton.style.pointerEvents = 'none'
                 isRunning = true;
                 setTimeout(() => {
