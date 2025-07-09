@@ -8,7 +8,7 @@ let isOn = false;
 var maxRunCount = 2;
 let clickTurbo = 0
 let clickTimeout;
-let ApiAzure;
+let ApiAzure = 2000;
 const inputText = document.getElementById("inputText");
 const turbo = document.getElementById("turbo");
 const ID = ['A', 'B', 'R', 'L'];
@@ -249,20 +249,21 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
     ["touchend"].forEach(eventType => {
+        ApiAzure = localStorage.getItem("ApiAzure");
+        let [apiKey, endpoint, wait] = ApiAzure.split(',');
         AButton.addEventListener(eventType, () => {
             if (isOn) {
                 AButton.style.pointerEvents = 'none'
                 isRunning = true;
                 setTimeout(() => {
                     getImage();
-                },2000);
+                },wait);
             }
         });
         turbo.addEventListener(eventType, () => {
             clickTurbo++;
             clearTimeout(clickTimeout);
             clickTimeout = setTimeout(() => {
-                ApiAzure = localStorage.getItem("ApiAzure");
                 console.log(ApiAzure);
                 if (clickTurbo === 1) {
                    if (isOn) {
