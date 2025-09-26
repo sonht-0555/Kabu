@@ -43,23 +43,19 @@ var dynamic = nipplejs.create(nippleOptions);
 function positionAdjustment(stateAdj) {
     const states = [{
             paddingTop: "0px",
-            rectOpacity: [1, 1, 1],
-            GOpacity: [0, 0, 0, 1]
+            rectOpacity: [0.98, 0.98, 0.98],
         },
         {
             paddingTop: "60px",
-            rectOpacity: [0.4, 1, 1],
-            GOpacity: [0, 0, 1, 0]
+            rectOpacity: [0.4, 0.98, 0.98],
         },
         {
             paddingTop: "120px",
-            rectOpacity: [0.4, 0.4, 1],
-            GOpacity: [0, 1, 0, 0]
+            rectOpacity: [0.4, 0.4, 0.98],
         },
         {
             paddingTop: "180px",
             rectOpacity: [0.4, 0.4, 0.4],
-            GOpacity: [1, 0, 0, 0]
         }
     ];
     if (stateAdj >= 1 && stateAdj <= 4) {
@@ -70,9 +66,6 @@ function positionAdjustment(stateAdj) {
         document.getElementById("rect1").style.setProperty("opacity", state.rectOpacity[0]);
         document.getElementById("rect2").style.setProperty("opacity", state.rectOpacity[1]);
         document.getElementById("rect3").style.setProperty("opacity", state.rectOpacity[2]);
-        for (let i = 0; i < 4; i++) {
-            document.getElementById(`G${i}`).style.setProperty("opacity", state.GOpacity[i]);
-        }
     }
 }
 // Disable Touched
@@ -256,6 +249,7 @@ function logMessage(type, message) {
 function setupStyle() {
     const dpr = window.devicePixelRatio;
     clientWidth = document.documentElement.clientWidth;
+    console.log("gameName",gameName)
     if (gameName.slice(-3) === "gbc") {
         gameWidth = 160;
         gameHeight = 144;
@@ -333,7 +327,7 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         romList.addEventListener(eventType, (event) => {
             const clickedElement = event.target;
-            if (clickedElement.classList.contains("game-item")) {
+            if (clickedElement.classList.contains("s-rom_name")) {
             gameName = clickedElement.textContent;
             console.log(gameName);
             localStorage.setItem("lastGameName",gameName)
