@@ -1285,19 +1285,19 @@ box-shadow: inset 0 1px 0 0 rgba(245, 232, 209, 0);
   overflow: hidden;
 }
 .scl5 {
-  background-color: rgba(245, 232, 209, 0.02);
-  box-shadow: inset 0 0 0 1.6px rgba(245, 232, 209, 0.06); 
+  background-color: #191715;
+  box-shadow: inset 0 0 0 1.6px #262420;
   border-radius: 2px;
   overflow: hidden;
 }
 .scl6 {
-  background-color: rgba(245, 232, 209, 0.02);
+  background-color: #191715;
   box-shadow: inset 0 0 0 1.6px #262420; 
   border-radius: 0px 2px 2px 0px;
   overflow: hidden;
 }
 .scl7 {
-  background-color: rgba(245, 232, 209, 0.02);
+  background-color: #191715;
   box-shadow: inset 0 0 0 1.6px #262420; 
   border-radius: 2px 0px 0px 2px;
   overflow: hidden;
