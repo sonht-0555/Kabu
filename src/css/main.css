@@ -695,7 +695,7 @@ dialog .rom-item {
   background-color: #f5e8d1;
 }
 .notification-container {
-  border-radius: 0px 0px 2px 2px;
+  border-radius: 0px 0px 1px 1px !important;
   font-size: 8px;
   color: rgba(245, 232, 209, 1);
   transition: color 0.4s ease-in-out;
@@ -946,17 +946,17 @@ rect {
 }
 .canvas-top {
   height: 8px;
-  border-radius: 2px 2px 0px 0px!important;
+  border-radius: 1px 1px 0px 0px!important;
 }
 .canvas-top::before {
-  border-radius: 2px 2px 0px 0px!important;
+  border-radius: 1px 1px 0px 0px!important;
 }
 .canvas-bot {
   height: 8px;
-  border-radius: 0px 0px 2px 2px !important;
+  border-radius: 0px 0px 1px 1px !important;
 }
 .canvas-bot::before {
-  border-radius: 0px 0px 2px 2px !important;
+  border-radius: 0px 0px 1px 1px !important;
 }
 .inputContainer {
   height: 20px;
@@ -1072,7 +1072,7 @@ box-shadow: inset 0 1px 0 0 rgba(245, 232, 209, 0);
 }
 .s-line {
   height: 20px;
-  background-color: rgba(24, 24, 24, 1);
+  background-color: #141414;
   width: 2px;
   justify-content: center;
   margin: 10px 0px;
@@ -1178,8 +1178,8 @@ box-shadow: inset 0 1px 0 0 rgba(245, 232, 209, 0);
   height: 100%;
   background: linear-gradient(
     225deg,
-    rgba(18, 18, 18, 0) 20%,
-    rgba(18, 18, 18, 1) 100%
+    rgba(16, 16, 16, 0) 20%,
+    rgba(16, 16, 16, 1) 100%
   );
 }
 .pad-r::after {
@@ -1196,8 +1196,8 @@ box-shadow: inset 0 1px 0 0 rgba(245, 232, 209, 0);
   height: 100%;
   background: linear-gradient(
     135deg,
-    rgba(18, 18, 18, 0) 20%,
-    rgba(18, 18, 18, 1) 100%
+    rgba(16, 16, 16, 0) 20%,
+    rgba(16, 16, 16, 1) 100%
   );
 }
 .pad-u::after {
@@ -1215,8 +1215,8 @@ box-shadow: inset 0 1px 0 0 rgba(245, 232, 209, 0);
   height: 100%;
   background: linear-gradient(
     45deg,
-    rgba(18, 18, 18, 0) 20%,
-    rgba(18, 18, 18, 1) 100%
+    rgba(16, 16, 16, 0) 20%,
+    rgba(16, 16, 16, 1) 100%
   );
 }
 .pad-l::after {
@@ -1234,8 +1234,8 @@ box-shadow: inset 0 1px 0 0 rgba(245, 232, 209, 0);
   height: 100%;
   background: linear-gradient(
     315deg,
-    rgba(18, 18, 18, 0) 20%,
-    rgba(18, 18, 18, 1) 100%
+    rgba(16, 16, 16, 0) 20%,
+    rgba(16, 16, 16, 1) 100%
   );
 }
 .pad-d::after {
@@ -1258,24 +1258,23 @@ box-shadow: inset 0 1px 0 0 rgba(245, 232, 209, 0);
 
 
 .scl {
-  background: #121212;
+  background: #101010;
   border-radius: 1px;
   overflow: hidden;
 }
 .scl1 {
-  background-color:#121212;
+  background-color:#101010;
   box-shadow: inset 0 0 0 2px #181818; 
   border-radius: 1px;
   overflow: hidden;
 }
 .scl2 {
-  background-color: #121212;
+  background-color: #101010;
   border-radius: 1px;
   overflow: hidden;
 }
 .scl3 {
-  background-color:#121212;
-  box-shadow: inset 0 0 0 2px #181818; 
+  box-shadow: inset 0 0 0 2px #141414; 
   border-radius: 1px;
   overflow: hidden;
 }
@@ -1285,7 +1284,7 @@ box-shadow: inset 0 1px 0 0 rgba(245, 232, 209, 0);
   overflow: hidden;
 }
 .scl5 {
-  background-color: #121212;
+  background-color: #101010;
   box-shadow: inset 0 0 0 2px #181818; 
   border-radius: 1px;
   overflow: hidden;
