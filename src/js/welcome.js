@@ -24,7 +24,7 @@ async function romList() {
     romlist.innerHTML = "";
     sortedGameList.forEach(gameName => {
         const sList = document.createElement("div");
-        sList.classList.add("s-rom_list", "scl3");
+        sList.classList.add("s-rom_list", "br1");
         romlist.appendChild(sList);
 
         const sRomeName = document.createElement("div");
