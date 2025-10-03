@@ -178,9 +178,9 @@ async function delay(ms) {
 async function led(slotStateNumbers) {
     try {
         const ledInfo = [
-            { id: "led01", color: "rgba(245, 232, 209, 0.14)" },
-            { id: "led02", color: "rgba(245, 232, 209, 0.14)" },
-            { id: "led03", color: "rgba(245, 232, 209, 0.14)" },
+            { id: "led01", color: "var(--profile-3)" },
+            { id: "led02", color: "var(--profile-3)" },
+            { id: "led03", color: "var(--profile-3)" },
         ];
 
         if (slotStateNumbers >= 1 && slotStateNumbers <= ledInfo.length) {

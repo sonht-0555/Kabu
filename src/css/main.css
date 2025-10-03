@@ -689,7 +689,7 @@ dialog .rom-item {
 .notification-container {
   border-radius: 0px 0px 1px 1px !important;
   font-size: 8px;
-  color: rgba(245, 232, 209, 1);
+  color: var(--profile-3);
   transition: color 0.4s ease-in-out;
   gap:4px;
 }
@@ -698,7 +698,6 @@ dialog .rom-item {
 }
 .notification-container span {
   padding: 3px 0px 0px 0px;
-  opacity: 0.4;
 }
 rect {
   transition: fill 0.4s ease-in-out;
@@ -750,7 +749,6 @@ rect {
   transition: opacity 0.0s ease-in-out;
 }
 .timer {
-  opacity: 0.4;
   font-family: "04bf" !important;
 }
 .stateDiv {
@@ -1091,7 +1089,7 @@ box-shadow: inset 0 1px 0 0 rgba(245, 232, 209, 0);
 }
 .dpad-state {
   width: 45px;
-  border-right: 1px solid var(--profile-6);
+  outline: 1px solid var(--profile-6);
   transition: background-image 0.2s ease-in-out;
   background: url("data:image/svg+xml,%3Csvg width='45' height='26' viewBox='0 0 45 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='20' y='12' width='5' height='2' rx='0.2' fill='%2348484A'/%3E%3C/svg%3E%0A");
 }
@@ -1107,14 +1105,14 @@ box-shadow: inset 0 1px 0 0 rgba(245, 232, 209, 0);
 }
 .dpad-start {
   height: 26px;
-  border-left: 1px solid var(--profile-6);
+  outline: 1px solid var(--profile-6);
   background-position: center !important;
   background-repeat: no-repeat !important;
   background: url("data:image/svg+xml,%3Csvg width='88' height='26' viewBox='0 0 88 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M35.4 16C35.2114 16 35.1172 16 35.0586 15.9414C35 15.8828 35 15.7886 35 15.6V14.4C35 14.2114 35 14.1172 35.0586 14.0586C35.1172 14 35.2114 14 35.4 14H36.6C36.7886 14 36.8828 14 36.9414 13.9414C37 13.8828 37 13.7886 37 13.6V10.4C37 10.2114 37 10.1172 37.0586 10.0586C37.1172 10 37.2114 10 37.4 10H40.6C40.7886 10 40.8828 10 40.9414 10.0586C41 10.1172 41 10.2114 41 10.4V11.6C41 11.7886 41 11.8828 40.9414 11.9414C40.8828 12 40.7886 12 40.6 12H39.4C39.2114 12 39.1172 12 39.0586 12.0586C39 12.1172 39 12.2114 39 12.4V15.6C39 15.7886 39 15.8828 38.9414 15.9414C38.8828 16 38.7886 16 38.6 16H35.4Z' fill='%2348484A'/%3E%3Cpath d='M45.4 16C45.2114 16 45.1172 16 45.0586 15.9414C45 15.8828 45 15.7886 45 15.6V12.4C45 12.2114 45 12.1172 44.9414 12.0586C44.8828 12 44.7886 12 44.6 12H43.4C43.2114 12 43.1172 12 43.0586 11.9414C43 11.8828 43 11.7886 43 11.6V10.4C43 10.2114 43 10.1172 43.0586 10.0586C43.1172 10 43.2114 10 43.4 10H48.6C48.7886 10 48.8828 10 48.9414 10.0586C49 10.1172 49 10.2114 49 10.4V11.6C49 11.7886 49 11.8828 48.9414 11.9414C48.8828 12 48.7886 12 48.6 12H47.4C47.2114 12 47.1172 12 47.0586 12.0586C47 12.1172 47 12.2114 47 12.4V15.6C47 15.7886 47 15.8828 46.9414 15.9414C46.8828 16 46.7886 16 46.6 16H45.4Z' fill='%2348484A'/%3E%3Cpath d='M51.4 16C51.2114 16 51.1172 16 51.0586 15.9414C51 15.8828 51 15.7886 51 15.6V14.4C51 14.2114 51 14.1172 51.0586 14.0586C51.1172 14 51.2114 14 51.4 14H52.6C52.7886 14 52.8828 14 52.9414 14.0586C53 14.1172 53 14.2114 53 14.4V15.6C53 15.7886 53 15.8828 52.9414 15.9414C52.8828 16 52.7886 16 52.6 16H51.4Z' fill='%2348484A'/%3E%3C/svg%3E%0A");
 }
 .dpad-menu {
   width: 45px;
-  border-left: 1px solid var(--profile-6);
+  outline: 1px solid var(--profile-6);
   transition: background-image 0.2s ease-in-out;
   background: url("data:image/svg+xml,%3Csvg width='45' height='26' viewBox='0 0 45 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='20' y='12' width='5' height='2' rx='0.2' fill='%2348484A'/%3E%3C/svg%3E%0A");
 }
@@ -1134,7 +1132,7 @@ box-shadow: inset 0 1px 0 0 rgba(245, 232, 209, 0);
 }
 .dpad-turbo {
   width: 45px;
-  border-left: 1px solid var(--profile-6);
+  outline: 1px solid var(--profile-6);
   background: url("data:image/svg+xml,%3Csvg width='45' height='75' viewBox='0 0 45 75' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M18.4 42C18.1791 42 18 41.8209 18 41.6V33.4C18 33.1791 18.1791 33 18.4 33H26.6C26.8209 33 27 33.1791 27 33.4V35.6C27 35.8209 26.8209 36 26.6 36H24.4C24.1791 36 24 36.1791 24 36.4V38.6C24 38.8209 23.8209 39 23.6 39H21.4C21.1791 39 21 39.1791 21 39.4V41.6C21 41.8209 20.8209 42 20.6 42H18.4Z' fill='%238E8E93'/%3E%3C/svg%3E%0A");
   background-position: center !important;
   background-repeat: no-repeat !important;
@@ -1287,7 +1285,7 @@ box-shadow: inset 0 1px 0 0 rgba(245, 232, 209, 0);
   height: 100%;
 }
 .br {
-  border: 1px solid var(--profile-6);
+  outline: 1px solid var(--profile-6);
   overflow: hidden;
 }
 .br1 {

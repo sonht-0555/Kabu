@@ -375,11 +375,11 @@ export async function ledSave(color) {
     const ledId = slotState === 2 ? "led02" : slotState === 3 ? "led03" : "led01";
     try {
         for (let i = 1; i <= 3; i++) {
-            document.getElementById("led0" + i).style.fill = "rgba(245, 232, 209, 0.14)";
+            document.getElementById("led0" + i).style.fill = "var(--profile-3)";
         }
         await delay(1000);
         for (let i = 1; i <= 3; i++) {
-            document.getElementById("led0" + i).style.fill = "rgba(245, 232, 209, 0.14)";
+            document.getElementById("led0" + i).style.fill = "var(--profile-3)";
         }
         document.getElementById(ledId).style.fill = color;
     } catch (error) {
@@ -390,15 +390,15 @@ export async function notiMessage(messageContent, second, showCanvas = false) {
     var message = document.getElementById("noti-mess");
     document.getElementById("inputText").textContent = ""
     const slotState = parseInt(localStorage.getItem("slotStateSaved")) || 1;
-    if (message.style.opacity === "0.4") {
+    if (message.style.opacity === "1") {
         clearTimeout(messageTimeout);
         message.style.opacity = "0";
     }
     message.textContent = messageContent;
-    message.style.opacity = "0.4";
+    message.style.opacity = "1";
     messageTimeout = setTimeout(() => {
         message.textContent = `[${slotState}] ${gameName.substring(0, gameName.lastIndexOf('.'))}`;
-        message.style.opacity = "0.4";
+        message.style.opacity = "1";
     }, second);
     if (showCanvas) {
         canvas.classList.add("visible");

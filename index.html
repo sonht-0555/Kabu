@@ -20,7 +20,7 @@
     
     <title>Kabu</title>
     <script>
-    let gameVer = 'V6.93';
+    let gameVer = 'V6.94';
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
@@ -190,7 +190,7 @@
                           </div>
                     </div>
                 </div>
-                <div class="canvas-bot Gt-5">
+                <div class="canvas-bot Gt-5 shu">
                     <div>                    
                         <svg width="14" height="11" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect id ="led01" y="6" width="2" height="3.0001" rx="0.2" fill="#48484A"/>
@@ -257,13 +257,13 @@
                             </div>
                             <div class="rewind" id="rewind"></div>
                         </div>
-                        <div class="flex-1" style="border-top: 1px solid var(--profile-6);">
+                        <div class="flex-1" style="outline: 1px solid var(--profile-6);">
                             <div class="dpad-b flex-1" id="B"></div>
                             <div class="dpad-turbo" id="turbo"></div>
                         </div>
-                        <div style="border-top: 1px solid var(--profile-6);">
-                            <div class="flex-1 dpad-select" id="Select"></div>
-                            <div class="flex-1 dpad-start" id="Start">
+                        <div style="outline: 1px solid var(--profile-6);">
+                            <div class="flex-1 bg dpad-select" id="Select"></div>
+                            <div class="flex-1 bg dpad-start" id="Start">
                         </div>
                     </div>
                     </div>
