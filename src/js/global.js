@@ -43,19 +43,19 @@ var dynamic = nipplejs.create(nippleOptions);
 function positionAdjustment(stateAdj) {
     const states = [{
             paddingTop: "0px",
-            rectOpacity: [0.98, 0.98, 0.98],
+            fill: ["#F5E8D1", "#F5E8D1", "#F5E8D1"],
         },
         {
             paddingTop: "60px",
-            rectOpacity: [0.4, 0.98, 0.98],
+            fill: ["#48484A", "#F5E8D1", "#F5E8D1"],
         },
         {
             paddingTop: "120px",
-            rectOpacity: [0.4, 0.4, 0.98],
+            fill: ["#48484A", "#48484A", "#F5E8D1"],
         },
         {
             paddingTop: "180px",
-            rectOpacity: [0.4, 0.4, 0.4],
+            fill: ["#48484A", "#48484A", "#48484A"],
         }
     ];
     if (stateAdj >= 1 && stateAdj <= 4) {
@@ -63,9 +63,9 @@ function positionAdjustment(stateAdj) {
         document.querySelectorAll(".target-boxes").forEach(function(element, index) {
             element.style.setProperty("padding-top", state.paddingTop);
         });
-        document.getElementById("rect1").style.setProperty("opacity", state.rectOpacity[0]);
-        document.getElementById("rect2").style.setProperty("opacity", state.rectOpacity[1]);
-        document.getElementById("rect3").style.setProperty("opacity", state.rectOpacity[2]);
+        document.getElementById("rect1").style.setProperty("fill", state.fill[0]);
+        document.getElementById("rect2").style.setProperty("fill", state.fill[1]);
+        document.getElementById("rect3").style.setProperty("fill", state.fill[2]);
     }
 }
 // Disable Touched

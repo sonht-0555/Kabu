@@ -617,10 +617,10 @@ dialog .rom-item {
 #rect1,
 #rect2,
 #rect3 {
-  transition: opacity 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
 }
 #setAdjustment {
-  transition: margin-top 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
 }
 .slot-1,
 .slot-2,
@@ -814,7 +814,6 @@ rect {
 .control-setting {
   font-size: 8px;
   border-radius: 0px 0px 0px 0px;
-  background-color: #000;
   padding: 7px 8px 6px 8px;
   gap: 5px;
   z-index: 23;
