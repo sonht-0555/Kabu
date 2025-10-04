@@ -43,19 +43,19 @@ var dynamic = nipplejs.create(nippleOptions);
 function positionAdjustment(stateAdj) {
     const states = [{
             paddingTop: "0px",
-            fill: ["#F5E8D1", "#F5E8D1", "#F5E8D1"],
+            fill: ["var(--profile-3)", "var(--profile-3)", "var(--profile-3)"],
         },
         {
             paddingTop: "60px",
-            fill: ["#48484A", "#F5E8D1", "#F5E8D1"],
+            fill: ["var(--profile-3)", "var(--profile-3)", "var(--profile-1)"],
         },
         {
             paddingTop: "120px",
-            fill: ["#48484A", "#48484A", "#F5E8D1"],
+            fill: ["var(--profile-3)", "var(--profile-1)", "var(--profile-1)"],
         },
         {
             paddingTop: "180px",
-            fill: ["#48484A", "#48484A", "#48484A"],
+            fill: ["var(--profile-1)", "var(--profile-1)", "var(--profile-1)"],
         }
     ];
     if (stateAdj >= 1 && stateAdj <= 4) {
