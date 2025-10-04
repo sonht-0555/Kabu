@@ -20,7 +20,7 @@
     
     <title>Kabu</title>
     <script>
-    let gameVer = 'V8.09';
+    let gameVer = 'V8.10';
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
@@ -310,7 +310,7 @@
      <div class="between column intro gap-8" id="intro">
         <div class="s-list flex-1 column">
             <div class="s-scroll column" id="rom-list">
-                <div class="s-rom_list br bg">
+                <div class="s-rom_list br bg" style="height:40px;">
                     <div class="s-rom_name flex-1" id="appVer" style="color: var(--profile-3);">...</div>
                 </div>
             </div>
