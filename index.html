@@ -20,7 +20,7 @@
     
     <title>Kabu</title>
     <script>
-    let gameVer = 'V8.04';
+    let gameVer = 'V8.03';
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
@@ -91,7 +91,7 @@
                         </div>
                     </div>
                     <div class="setting-container visible" id="control-setting">
-                        <div class="flex-1 gap-8 column control-setting shu Gt-5">
+                        <div class="flex-1 gap-8 column control-setting shu Union">
                             <div class="">
                                 <div class="flex-1 cs-name">Q.Reload</div>
                                 <div class="flex-1 cs-detail">
@@ -190,7 +190,7 @@
                           </div>
                     </div>
                 </div>
-                <div class="canvas-bot shu Gt-5">
+                <div class="canvas-bot shu Union">
                     <div>                    
                         <svg width="14" height="11" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect id ="led01" y="6" width="2" height="3.0001" rx="0.2" fill="#48484A"/>
@@ -309,7 +309,11 @@
     <!-- New Layer-->
      <div class="between column intro gap-8" id="intro">
         <div class="s-list flex-1 column">
-            <div class="s-scroll column" id="rom-list"></div>
+            <div class="s-scroll column" id="rom-list">
+                <div class="s-rom_list br bg">
+                    <div class="s-rom_name flex-1" id="appVer"></div>
+                </div>
+            </div>
             <div class="s-scroll column gap-8" id="rom-detail"></div>
         </div>
         <div class="action-button gap-8">
@@ -317,7 +321,7 @@
             <div class="s-setting bg br" id="sSetting"></div>
             <div class="s-layout bg br" id="sLayout">
                 <svg id="setAdjustment" width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect id="rect1" x="22" y="18" width="6" height="2" rx="0.2" fill="#F5E8D1" opacity="0.98"/>
+                    <rect id="rect1" x="22" y="18" width="6" height="2" rx="0.2" fill="#48484A"/>
                     <rect id="rect2" x="22" y="24" width="6" height="2" rx="0.2" fill="#48484A"/>
                     <rect id="rect3" x="22" y="30" width="6" height="2" rx="0.2" fill="#48484A"/>
                 </svg>
@@ -328,22 +332,6 @@
         </div>
      </div>
     <!-- New Layer-->
-
-    <div class="firstLoading column cw ch">
-        <div class="flex-1"></div>
-        <span class=""></span></br>
-        <div class="">
-            <span style="opacity: 0.4" id="appVer"></span>
-            <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path id="path-1" opacity="0.4" d="M0 12V10H2V12H0Z" fill="#F5E8D1"/>
-                <path id="path-2" opacity="0.4" d="M4 12V10H6V12H4Z" fill="#F5E8D1"/>
-                <path id="path-3" opacity="0.4" d="M8 12V10H10V12H8Z" fill="#F5E8D1"/>
-            </svg>
-        </div>
-        <div class="flex-1">                        
-            <canvas width="240" height="160" class="canvas display-none" id="canvas-1"></canvas>
-        </div>
-    </div>
 
     <div class="lockNoti column cw ch visible" id="lockNoti">
         <div class="flex-1"></div>
