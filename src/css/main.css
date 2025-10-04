@@ -817,7 +817,9 @@ rect {
 .control-setting {
   font-size: 8px;
   border-radius: 0px 0px 0px 0px;
-  padding: 7px 8px 6px 8px;
+  padding: 4px 8px 0px 0px;
+  gap: 8px;
+  background-color: var(--profile-black);
   z-index: 23;
 }
 .control-setting div div {
