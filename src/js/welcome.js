@@ -24,7 +24,7 @@ async function romList() {
     romlist.innerHTML = "";
     sortedGameList.forEach(gameName => {
         const sList = document.createElement("div");
-        sList.classList.add("s-rom_list", "br1");
+        sList.classList.add("s-rom_list", "br", "bg");
         romlist.appendChild(sList);
 
         const sRomeName = document.createElement("div");
@@ -36,9 +36,6 @@ async function romList() {
             romList();
         };
         sList.appendChild(sRomeName);
-        const sLine = document.createElement("div");
-        sLine.classList.add("s-line");
-        sList.appendChild(sLine);
         const sRomDot = document.createElement("div");
         sRomDot.classList.add("s-rom_dot");
         sRomDot.onclick = () => {

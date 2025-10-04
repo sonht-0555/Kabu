@@ -20,7 +20,7 @@
     
     <title>Kabu</title>
     <script>
-    let gameVer = 'V6.94';
+    let gameVer = 'V6.95';
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
@@ -200,7 +200,7 @@
                     </div>
                     <div class="flex-1">
                          <div class="notification-container flex-1"> 
-                            <span id="noti-mess" style="">[_]...</span>
+                            <span id="noti-mess">[_]...</span>
                             <div class="flex-1 inputContainer">
                                 <div id="inputText" class="inputText"></div>
                             </div> 
@@ -309,7 +309,7 @@
     <!-- New Layer-->
      <div class="between column intro gap-8" id="intro">
         <div class="s-list flex-1 column">
-            <div class="s-scroll column gap-8" id="rom-list"></div>
+            <div class="s-scroll column" id="rom-list"></div>
             <div class="s-scroll column gap-8" id="rom-detail"></div>
         </div>
         <div class="action-button gap-8">
