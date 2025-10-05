@@ -20,7 +20,7 @@
     
     <title>Kabu</title>
     <script>
-    let gameVer = 'Ver_8.38';
+    let gameVer = 'Ver_8.39';
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
@@ -257,11 +257,11 @@
                             </div>
                             <div class="rewind" id="rewind"></div>
                         </div>
-                        <div class="flex-1" style="outline: 1px solid var(--profile-6);">
+                        <div class="flex-1 br">
                             <div class="dpad-b flex-1" id="B"></div>
                             <div class="dpad-turbo" id="turbo"></div>
                         </div>
-                        <div style="outline: 1px solid var(--profile-6);">
+                        <div class="br">
                             <div class="flex-1 dpad-select" id="Select"></div>
                             <div class="flex-1 dpad-start" id="Start">
                         </div>
