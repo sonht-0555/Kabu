@@ -20,7 +20,7 @@
     
     <title>Kabu</title>
     <script>
-    let gameVer = 'Ver_8.41';
+    let gameVer = 'Ver_8.42';
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
@@ -227,10 +227,10 @@
                             <pattern id="s-hover" patternUnits="userSpaceOnUse" width="1" height="1">
                                 <image href="data:image/svg+xml,%3Csvg width='1' height='1' viewBox='0 0 1 1' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.333333 0.333333H0.666667V0.666667H0.333333V0.333333Z' fill='%231D1B18'/%3E%3Cpath d='M0.666667 0H1V0.333333H0.666667V0Z' fill='%231D1B18'/%3E%3Cpath d='M0 0.666667H0.333333V1H0V0.666667Z' fill='%231D1B18'/%3E%3C/svg%3E%0A" width="1" height="1" />
                             </pattern>
-                            <path d="M176 7.6932e-06L0 0L88 88L176 7.6932e-06Z"      fill="url(#s-default)" id="Up" class="spad"/>
-                            <path d="M176 0V176L88 88L176 0Z"                        fill="url(#s-default)" id="Right" class="spad"/>
-                            <path d="M0 0V176L88 88L0 0Z"                            fill="url(#s-default)" id="Left" class="spad"/>
-                            <path d="M176 176L0 176L88 88L176 176Z"                  fill="url(#s-default)" id="Down" class="spad"/>
+                            <path d="M176 7.6932e-06L0 0L88 88L176 7.6932e-06Z" fill-opacity="0.01" fill="var(--profile-bg)" id="Up" class="spad"/>
+                            <path d="M176 0V176L88 88L176 0Z" fill-opacity="0.01"                   fill="var(--profile-bg)" id="Right" class="spad"/>
+                            <path d="M0 0V176L88 88L0 0Z" fill-opacity="0.01"                       fill="var(--profile-bg)" id="Left" class="spad"/>
+                            <path d="M176 176L0 176L88 88L176 176Z" fill-opacity="0.01"             fill="var(--profile-bg)" id="Down" class="spad"/>
                             <path d="M132 0H176V44L132 0Z" fill-opacity="0.01"       fill="var(--profile-bg)" id="Up-right" class="spad"/>
                             <path d="M132 176H176V132L132 176Z" fill-opacity="0.01"  fill="var(--profile-bg)" id="Down-right" class="spad"/>
                             <path d="M44 0H0V44L44 0Z" fill-opacity="0.01"           fill="var(--profile-bg)" id="Up-left" class="spad"/>
