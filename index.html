@@ -20,7 +20,7 @@
     
     <title>Kabu</title>
     <script>
-    let gameVer = 'Ver_8.40';
+    let gameVer = 'Ver_8.41';
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
@@ -220,28 +220,29 @@
                         <div class="flex-1 dpad-l" id="L"></div>
                     </div>
                     <div class="flex-1 bg br ch cw dpad">
-                        <div class="d-pad">
-                            <div class="ch">
-                                <div class="pad-ul" id="Up-left"></div>
-                            </div>
-                            <div class="flex-1 column">
-                                <div class="pad-ur" id="Up-right"></div>
-                                <div class="flex-1 column">
-                                    <div class="flex-1">
-                                        <div class="flex-1 ch cw pad-u" id="Up"></div>
-                                        <div class="flex-1 ch cw pad-r" id="Right"></div>
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="flex-1 ch cw pad-l" id="Left"></div>
-                                        <div class="flex-1 ch cw pad-d" id="Down"></div>
-                                    </div>
-                                </div>
-                                <div class="pad-dl" id="Down-left"></div>
-                            </div>
-                            <div class="ch">
-                                <div class="pad-dr" id="Down-right"></div>
-                            </div>
-                        </div>
+                        <svg width="100%" height="100%" viewBox="0 0 176 176" fill="none">
+                            <pattern id="s-default" patternUnits="userSpaceOnUse" width="1" height="1">
+                                <image href="data:image/svg+xml,%3Csvg width='1' height='1' viewBox='0 0 1 1' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.333333 0.333333H0.666667V0.666667H0.333333V0.333333Z' fill='%230A0908'/%3E%3Cpath d='M0.666667 0H1V0.333333H0.666667V0Z' fill='%230A0908'/%3E%3Cpath d='M0 0.666667H0.333333V1H0V0.666667Z' fill='%230A0908'/%3E%3C/svg%3E%0A" width="1" height="1" />
+                            </pattern>
+                            <pattern id="s-hover" patternUnits="userSpaceOnUse" width="1" height="1">
+                                <image href="data:image/svg+xml,%3Csvg width='1' height='1' viewBox='0 0 1 1' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.333333 0.333333H0.666667V0.666667H0.333333V0.333333Z' fill='%231D1B18'/%3E%3Cpath d='M0.666667 0H1V0.333333H0.666667V0Z' fill='%231D1B18'/%3E%3Cpath d='M0 0.666667H0.333333V1H0V0.666667Z' fill='%231D1B18'/%3E%3C/svg%3E%0A" width="1" height="1" />
+                            </pattern>
+                            <path d="M176 7.6932e-06L0 0L88 88L176 7.6932e-06Z"      fill="url(#s-default)" id="Up" class="spad"/>
+                            <path d="M176 0V176L88 88L176 0Z"                        fill="url(#s-default)" id="Right" class="spad"/>
+                            <path d="M0 0V176L88 88L0 0Z"                            fill="url(#s-default)" id="Left" class="spad"/>
+                            <path d="M176 176L0 176L88 88L176 176Z"                  fill="url(#s-default)" id="Down" class="spad"/>
+                            <path d="M132 0H176V44L132 0Z" fill-opacity="0.01"       fill="var(--profile-bg)" id="Up-right" class="spad"/>
+                            <path d="M132 176H176V132L132 176Z" fill-opacity="0.01"  fill="var(--profile-bg)" id="Down-right" class="spad"/>
+                            <path d="M44 0H0V44L44 0Z" fill-opacity="0.01"           fill="var(--profile-bg)" id="Up-left" class="spad"/>
+                            <path d="M44 176H0V132L44 176Z" fill-opacity="0.01"      fill="var(--profile-bg)" id="Down-left" class="spad"/>
+                        </svg>
+                        <svg style="position: absolute; pointer-events: none;" width="136" height="136" viewBox="0 0 136 136" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="130" y="66.5" width="6" height="3" rx="0.4" fill="#F5E8D1"/>
+                            <rect y="66.5" width="6" height="3" rx="0.4" fill="#F5E8D1"/>
+                            <rect x="66.5" width="3" height="6" rx="0.4" fill="#F5E8D1"/>
+                            <rect x="66.5" y="130" width="3" height="6" rx="0.4" fill="#F5E8D1"/>
+                        </svg>
+
                     </div>
                 </div>
                 <div class="flex-1 column gap-8">
