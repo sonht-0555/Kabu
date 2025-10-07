@@ -314,7 +314,8 @@ console.warn = function (...args) {
 // Dark-mode after 8PM
 function darkMode() {
     const now = new Date();
-    if (now.getHours() >= 22) {
+    const hour = now.getHours();
+    if (hour >= 22 || hour < 6) {
         document.querySelectorAll('.bgp').forEach(div => {
             div.classList.add('op4');
         });
@@ -340,7 +341,6 @@ function setIdleOp0() {
 });
 /* --------------- DOMContentLoaded ---------- */
 document.addEventListener("DOMContentLoaded", function() {
-    darkMode();
     setIdleOp0();
     if (savedStateAdj !== null) {
         stateAdj = parseInt(savedStateAdj);

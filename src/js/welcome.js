@@ -28,7 +28,7 @@ async function romList() {
         romlist.appendChild(sList);
 
         const sRomeName = document.createElement("div");
-        sRomeName.classList.add("s-rom_name", "flex-1");
+        sRomeName.classList.add("s-rom_name", "flex-1", "bgp");
         sRomeName.textContent = gameName;
         sRomeName.onclick = () => {
             updateRecentGames(gameName);
@@ -63,6 +63,9 @@ document.addEventListener("DOMContentLoaded", function() {
     setTimeout(() => {
         romList();
     },2000);
+    setTimeout(() => {
+        darkMode();
+    },2200);
     romInput.addEventListener("change", function() {
         inputGame(romInput);
     })
