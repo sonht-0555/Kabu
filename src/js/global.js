@@ -311,8 +311,37 @@ console.warn = function (...args) {
     originalConsoleWarn.apply(console, args);
     logMessage("Warn", args.join(" "));
 };
+// Dark-mode after 8PM
+function darkMode() {
+    const now = new Date();
+    if (now.getHours() >= 22) {
+        document.querySelectorAll('.bgp').forEach(div => {
+            div.classList.add('op4');
+        });
+    }
+}
+let idleTimeout;
+
+function setIdleOp0() {
+    clearTimeout(idleTimeout);
+    document.querySelectorAll('.bgp').forEach(div => {
+        div.classList.remove('op0');
+    });
+    idleTimeout = setTimeout(() => {
+        document.querySelectorAll('.bgp').forEach(div => {
+            div.classList.add('op0');
+        });
+    }, 10000);
+}
+
+// Lắng nghe các sự kiện tương tác
+['mousemove', 'mousedown', 'touchstart', 'keydown', 'scroll'].forEach(eventType => {
+    window.addEventListener(eventType, setIdleOp0, true);
+});
 /* --------------- DOMContentLoaded ---------- */
 document.addEventListener("DOMContentLoaded", function() {
+    darkMode();
+    setIdleOp0();
     if (savedStateAdj !== null) {
         stateAdj = parseInt(savedStateAdj);
         positionAdjustment(stateAdj);

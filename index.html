@@ -20,7 +20,7 @@
     
     <title>Kabu</title>
     <script>
-    let gameVer = 'Ver_8.43';
+    let gameVer = 'Ver_8.44';
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
@@ -215,9 +215,9 @@
         <div class="between column emu-control gap-8" id="emu-control">
             <div class="flex-1 gap-22">
                 <div class="column gap-8" id="dpadContainer">
-                    <div class="bg br" style="position:relative; height: 26px;">
-                        <div class="dpad-state" id="statePageButton"></div>
-                        <div class="flex-1 dpad-l" id="L"></div>
+                    <div class="bg br" style="height: 26px;">
+                        <div class="dpad-state bgp op4 br" id="statePageButton"></div>
+                        <div class="flex-1 dpad-l op4 bgp" id="L"></div>
                     </div>
                     <div class="flex-1 bg br ch cw dpad">
                         <svg width="100%" height="100%" viewBox="0 0 176 176" fill="none">
@@ -236,35 +236,31 @@
                             <path d="M44 0H0V44L44 0Z" fill-opacity="0.01"           fill="var(--profile-bg)" id="Up-left" class="spad"/>
                             <path d="M44 176H0V132L44 176Z" fill-opacity="0.01"      fill="var(--profile-bg)" id="Down-left" class="spad"/>
                         </svg>
-                        <svg style="position: absolute; pointer-events: none;" width="136" height="136" viewBox="0 0 136 136" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="130" y="66.5" width="6" height="3" rx="0.4" fill="#F5E8D1"/>
-                            <rect y="66.5" width="6" height="3" rx="0.4" fill="#F5E8D1"/>
-                            <rect x="66.5" width="3" height="6" rx="0.4" fill="#F5E8D1"/>
-                            <rect x="66.5" y="130" width="3" height="6" rx="0.4" fill="#F5E8D1"/>
+                        <svg class="bgp" style="position: absolute; pointer-events: none;" width="136" height="136" viewBox="0 0 136 136" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M69.0996 130C69.3205 130 69.5 130.179 69.5 130.4V135.6C69.5 135.821 69.3205 136 69.0996 136H66.9004C66.6795 136 66.5 135.821 66.5 135.6V130.4C66.5 130.179 66.6795 130 66.9004 130H69.0996ZM5.59961 66.5C5.82052 66.5 6 66.6795 6 66.9004V69.0996C6 69.3205 5.82052 69.5 5.59961 69.5H0.400391C0.179477 69.5 0 69.3205 0 69.0996V66.9004C0 66.6795 0.179477 66.5 0.400391 66.5H5.59961ZM135.6 66.5C135.821 66.5 136 66.6795 136 66.9004V69.0996C136 69.3205 135.821 69.5 135.6 69.5H130.4C130.179 69.5 130 69.3205 130 69.0996V66.9004C130 66.6795 130.179 66.5 130.4 66.5H135.6ZM69.0996 0C69.3205 0 69.5 0.179477 69.5 0.400391V5.59961C69.5 5.82052 69.3205 6 69.0996 6H66.9004C66.6795 6 66.5 5.82052 66.5 5.59961V0.400391C66.5 0.179477 66.6795 0 66.9004 0H69.0996Z" fill="#F5E8D1"/>
                         </svg>
-
                     </div>
                 </div>
                 <div class="flex-1 column gap-8">
-                    <div class="bg br" style="position: relative; height: 26px;">
-                        <div class="flex-1 dpad-r" id="R"></div>
-                        <div class="dpad-menu" id="menu-pad"></div>
+                    <div class="bg br" style="height: 26px;">
+                        <div class="flex-1 dpad-r op4 bgp" id="R"></div>
+                        <div class="dpad-menu bgp op4 br" id="menu-pad"></div>
                     </div>
                     <div class="flex-1 column bg br" style="gap: 1px;">
                         <div class="flex-1" style="position: relative;">
                             <div class="flex-1" id="A">
-                                <div class="flex-1 dpad-a"></div>
+                                <div class="flex-1 dpad-a bgp"></div>
                                 <div class="dpad-blank"></div>
                             </div>
                             <div class="rewind" id="rewind"></div>
                         </div>
                         <div class="flex-1 br">
-                            <div class="dpad-b flex-1" id="B"></div>
-                            <div class="dpad-turbo" id="turbo"></div>
+                            <div class="flex-1 dpad-b bgp" id="B"></div>
+                            <div class="dpad-turbo br bgp" id="turbo"></div>
                         </div>
-                        <div class="br">
-                            <div class="flex-1 dpad-select" id="Select"></div>
-                            <div class="flex-1 dpad-start" id="Start">
+                        <div class="br" style="height:26px;">
+                            <div class="flex-1 dpad-select bgp op4" id="Select"></div>
+                            <div class="flex-1 dpad-start bgp op4 br" id="Start">
                         </div>
                     </div>
                     </div>
