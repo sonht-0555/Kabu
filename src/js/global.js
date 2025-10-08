@@ -334,14 +334,11 @@ function setIdleOp0() {
         });
     }, 10000);
 }
-
-// Lắng nghe các sự kiện tương tác
-['mousemove', 'mousedown', 'touchstart', 'keydown', 'scroll'].forEach(eventType => {
-    window.addEventListener(eventType, setIdleOp0, true);
-});
 /* --------------- DOMContentLoaded ---------- */
 document.addEventListener("DOMContentLoaded", function() {
-    setIdleOp0();
+    ['mousemove', 'mousedown', 'touchstart', 'keydown', 'scroll'].forEach(eventType => {
+        window.addEventListener(eventType, setIdleOp0, true);
+    });
     if (savedStateAdj !== null) {
         stateAdj = parseInt(savedStateAdj);
         positionAdjustment(stateAdj);
