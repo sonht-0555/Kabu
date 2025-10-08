@@ -334,23 +334,6 @@ function setIdleOp0() {
         });
     }, 10000);
 }
-   const card = document.querySelector('.card');
-    const controller = document.querySelector('.controller');
-function applyTilt(clientX, clientY, ref){
-      const r = ref.getBoundingClientRect();
-      const cx = r.left + r.width/2;
-      const cy = r.top + r.height/2;
-      const dx = (clientX - cx) / (r.width/2);
-      const dy = (clientY - cy) / (r.height/2);
-      const rotX = Math.max(-1, Math.min(1, dy)) * 10;
-      const rotY = Math.max(-1, Math.min(1, dx)) * 10;
-      card.style.transition = 'transform .05s linear';
-      card.style.transform = `perspective(700px) rotateX(${ -rotX }deg) rotateY(${ rotY }deg) scale(.98)`;
-    }
-    function reset(){
-      card.style.transition = 'transform .35s cubic-bezier(.2,.9,.3,1)';
-      card.style.transform = 'perspective(700px) rotateX(0deg) rotateY(0deg) scale(1)';
-    }
 /* --------------- DOMContentLoaded ---------- */
 document.addEventListener("DOMContentLoaded", function() {
     ['mousemove', 'mousedown', 'touchstart', 'keydown', 'scroll'].forEach(eventType => {
@@ -377,7 +360,4 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         })
     });
-     controller.addEventListener('pointermove', e => applyTilt(e.clientX, e.clientY, controller));
-     controller.addEventListener('pointerdown', e => { controller.setPointerCapture(e.pointerId); applyTilt(e.clientX, e.clientY, controller); });
-     ['pointerup','pointerleave','pointercancel'].forEach(ev => controller.addEventListener(ev, reset));
 })
