@@ -62,10 +62,13 @@ document.addEventListener("DOMContentLoaded", function() {
         buttonPress(buttonId, isPressed);
         const element = document.getElementById(buttonId);
         if (element) {
+            const cls = buttonId.toLowerCase(); // use the id (string) as class name
             if (isPressed) {
                 element.classList.add('touched');
+                bgs.classList.add(cls);
             } else {
                 element.classList.remove('touched');
+                bgs.classList.remove(cls);
             }
         }
     }
