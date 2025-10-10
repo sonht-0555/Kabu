@@ -1,61 +1,90 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>3D Card Tilt Effect</title>
+  <meta charset="UTF-8">
+  <title>SVG Path → clip-path: polygon()</title>
   <style>
-    :root{--size:136px}
-    html,body{height:100%;margin:0}
-    body{
-      display:flex;align-items:center;justify-content:center;
-      background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+    body {
+      font-family: sans-serif;
+      max-width: 700px;
+      margin: 40px auto;
+      line-height: 1.5;
     }
-    .card{
-      width:var(--size);height:var(--size);
-      background:url("data:image/svg+xml,%3Csvg width='136' height='136' viewBox='0 0 136 136' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M69.0996 130C69.3205 130 69.5 130.179 69.5 130.4V135.6C69.5 135.821 69.3205 136 69.0996 136H66.9004C66.6795 136 66.5 135.821 66.5 135.6V130.4C66.5 130.179 66.6795 130 66.9004 130H69.0996ZM5.59961 66.5C5.82052 66.5 6 66.6795 6 66.9004V69.0996C6 69.3205 5.82052 69.5 5.59961 69.5H0.400391C0.179477 69.5 0 69.3205 0 69.0996V66.9004C0 66.6795 0.179477 66.5 0.400391 66.5H5.59961ZM135.6 66.5C135.821 66.5 136 66.6795 136 66.9004V69.0996C136 69.3205 135.821 69.5 135.6 69.5H130.4C130.179 69.5 130 69.3205 130 69.0996V66.9004C130 66.6795 130.179 66.5 130.4 66.5H135.6ZM69.0996 0C69.3205 0 69.5 0.179477 69.5 0.400391V5.59961C69.5 5.82052 69.3205 6 69.0996 6H66.9004C66.6795 6 66.5 5.82052 66.5 5.59961V0.400391C66.5 0.179477 66.6795 0 66.9004 0H69.0996Z' fill='%23F5E8D1'/%3E%3C/svg%3E%0A");
-      display:flex;align-items:center;justify-content:center;
-      transform-style:preserve-3d;
-      transition:transform 0.25s cubic-bezier(.2,.9,.3,1),box-shadow .25s;
-      will-change:transform;
-      box-shadow:0 8px 20px rgba(0,0,0,.35);
-      border-radius:8px;overflow:hidden;
+    textarea, input {
+      width: 100%;
+      font-family: monospace;
+      font-size: 14px;
+      padding: 8px;
+      margin: 6px 0;
+      box-sizing: border-box;
     }
-    .controller{
-      width:160px;height:160px;position:fixed;right:20px;bottom:20px;
-      opacity:.18;touch-action:none;pointer-events:auto;border-radius:10px;
-      background:rgba(255,255,255,.02);
-      display:block;
+    button {
+      padding: 8px 14px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    pre {
+      background: #f6f6f6;
+      padding: 10px;
+      border-radius: 6px;
+      white-space: pre-wrap;
+      word-break: break-all;
     }
   </style>
 </head>
 <body>
-  <div class="card" aria-hidden="true"></div>
-  <div class="controller" aria-hidden="true"></div>
+  <h2>SVG Path → clip-path: polygon()</h2>
+  <label>Path SVG (thuộc tính <code>d</code>):</label>
+  <textarea id="path" rows="6" placeholder='Ví dụ: M176 0V175H175V174H174Z'></textarea>
+
+  <label>Chiều rộng gốc (width):</label>
+  <input id="w" type="number" value="176">
+
+  <label>Chiều cao gốc (height):</label>
+  <input id="h" type="number" value="175">
+
+  <button id="convert">Convert</button>
+
+  <h3>Kết quả:</h3>
+  <pre id="output"></pre>
 
   <script>
-    const card = document.querySelector('.card');
-    const controller = document.querySelector('.controller');
+    document.getElementById("convert").onclick = () => {
+      const path = document.getElementById("path").value.trim();
+      const width = parseFloat(document.getElementById("w").value);
+      const height = parseFloat(document.getElementById("h").value);
+      if (!path || !width || !height) {
+        alert("Hãy nhập đủ path, width, height!");
+        return;
+      }
 
-    function applyTilt(clientX, clientY, ref){
-      const r = ref.getBoundingClientRect();
-      const cx = r.left + r.width/2;
-      const cy = r.top + r.height/2;
-      const dx = (clientX - cx) / (r.width/2);
-      const dy = (clientY - cy) / (r.height/2);
-      const rotX = Math.max(-1, Math.min(1, dy)) * 10;
-      const rotY = Math.max(-1, Math.min(1, dx)) * 10;
-      card.style.transition = 'transform .05s linear';
-      card.style.transform = `perspective(700px) rotateX(${ -rotX }deg) rotateY(${ rotY }deg) scale(.98)`;
-    }
-    function reset(){
-      card.style.transition = 'transform .35s cubic-bezier(.2,.9,.3,1)';
-      card.style.transform = 'perspective(700px) rotateX(0deg) rotateY(0deg) scale(1)';
-    }
-    controller.addEventListener('pointermove', e => applyTilt(e.clientX, e.clientY, controller));
-    controller.addEventListener('pointerdown', e => { controller.setPointerCapture(e.pointerId); applyTilt(e.clientX, e.clientY, controller); });
-    ['pointerup','pointerleave','pointercancel'].forEach(ev => controller.addEventListener(ev, reset));
+      let x = 0, y = 0;
+      const coords = [];
+      path.replace(/([MLHVZ])([^MLHVZ]*)/gi, (_, cmd, args) => {
+        const nums = args.trim().split(/[\s,]+/).filter(Boolean).map(Number);
+        switch (cmd.toUpperCase()) {
+          case "M":
+          case "L":
+            for (let i = 0; i < nums.length; i += 2) {
+              x = nums[i];
+              y = nums[i + 1];
+              coords.push([x, y]);
+            }
+            break;
+          case "H":
+            nums.forEach(n => { x = n; coords.push([x, y]); });
+            break;
+          case "V":
+            nums.forEach(n => { y = n; coords.push([x, y]); });
+            break;
+        }
+      });
+
+      const polygon = coords
+        .map(([px, py]) => `${(px / width * 100)}% ${(py / height * 100)}%`)
+        .join(", ");
+      document.getElementById("output").textContent = `clip-path: polygon(${polygon});`;
+    };
   </script>
 </body>
 </html>

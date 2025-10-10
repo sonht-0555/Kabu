@@ -1,4 +1,4 @@
-let revision = 'V8.57';
+let revision = 'V8.58';
 var urlsToCache = [
     '/',
     './README.md',
@@ -13,7 +13,6 @@ var urlsToCache = [
     './src/font/04b.ttf',
     './src/font/04bf.woff',
     './src/font/mother.ttf',
-    './src/img/favi.png',
     './src/img/icon.png',
     './src/js/cloud.js',
     './src/js/gamepad.js',
