@@ -20,7 +20,7 @@
     
     <title>Kabu</title>
     <script>
-    let gameVer = 'Ver_8.61';
+    let gameVer = 'Ver_8.62';
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
@@ -233,7 +233,7 @@
                             <path fill-opacity="0.01" fill="var(--profile-bg)" id="Up-left" class="spad ul" d="M0 44H1V43H2V42H3V41H4V40H5V39H6V38H7V37H8V36H9V35H10V34H11V33H12V32H13V31H14V30H15V29H16V28H17V27H18V26H19V25H20V24H21V23H22V22H23V21H24V20H25V19H26V18H27V17H28V16H29V15H30V14H31V13H32V12H33V11H34V10H35V9H36V8H37V7H38V6H39V5H40V4H41V3H42V2H43V1H44V0H0V44Z"/>
                             <path fill-opacity="0.01" fill="var(--profile-bg)" id="Up-right" class="spad ur" d="M176 44H175V43H174V42H173V41H172V40H171V39H170V38H169V37H168V36H167V35H166V34H165V33H164V32H163V31H162V30H161V29H160V28H159V27H158V26H157V25H156V24H155V23H154V22H153V21H152V20H151V19H150V18H149V17H148V16H147V15H146V14H145V13H144V12H143V11H142V10H141V9H140V8H139V7H138V6H137V5H136V4H135V3H134V2H133V1H132V0H176V44Z"/>
                         </svg>
-                        <div id="bgs" class="bgs" style="position: absolute; pointer-events: none; height:100%; width:100%;"></div>
+                        <div id="bgs" class="bgs" style="position: absolute; pointer-events: none; height:100%; width:100%;  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);"></div>
                         <svg class="bgp" style="position: absolute; pointer-events: none;" width="136" height="136" viewBox="0 0 136 136" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M69.0996 130C69.3205 130 69.5 130.179 69.5 130.4V135.6C69.5 135.821 69.3205 136 69.0996 136H66.9004C66.6795 136 66.5 135.821 66.5 135.6V130.4C66.5 130.179 66.6795 130 66.9004 130H69.0996ZM5.59961 66.5C5.82052 66.5 6 66.6795 6 66.9004V69.0996C6 69.3205 5.82052 69.5 5.59961 69.5H0.400391C0.179477 69.5 0 69.3205 0 69.0996V66.9004C0 66.6795 0.179477 66.5 0.400391 66.5H5.59961ZM135.6 66.5C135.821 66.5 136 66.6795 136 66.9004V69.0996C136 69.3205 135.821 69.5 135.6 69.5H130.4C130.179 69.5 130 69.3205 130 69.0996V66.9004C130 66.6795 130.179 66.5 130.4 66.5H135.6ZM69.0996 0C69.3205 0 69.5 0.179477 69.5 0.400391V5.59961C69.5 5.82052 69.3205 6 69.0996 6H66.9004C66.6795 6 66.5 5.82052 66.5 5.59961V0.400391C66.5 0.179477 66.6795 0 66.9004 0H69.0996Z" fill="var(--profile-cream)"/>
                         </svg>
