@@ -968,19 +968,19 @@ box-shadow: inset 0 1px 0 0 rgba(245, 232, 209, 0);
 }
 .bgs.right {
   clip-path: polygon(50% 50%, 100% 100%, 100% 0);
-  mask-image: linear-gradient(90deg,  rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 1) 100%);
+  mask-image: linear-gradient(90deg,  rgba(0, 0, 0, 0) 85%, rgba(0, 0, 0, 1) 100%);
 }
 .bgs.left {
   clip-path: polygon(0 0, 0 100%, 50% 50%);
-  mask-image: linear-gradient(270deg,  rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 1) 100%);
+  mask-image: linear-gradient(270deg,  rgba(0, 0, 0, 0) 85%, rgba(0, 0, 0, 1) 100%);
 }
 .bgs.up {
   clip-path: polygon(0 0, 100% 0, 50% 50%);
-  mask-image: linear-gradient(0deg,  rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 1) 100%);
+  mask-image: linear-gradient(0deg,  rgba(0, 0, 0, 0) 85%, rgba(0, 0, 0, 1) 100%);
 }
 .bgs.down {
   clip-path: polygon(0 100%, 100% 100%, 50% 50%);
-  mask-image: linear-gradient(180deg,  rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 1) 100%);
+  mask-image: linear-gradient(180deg,  rgba(0, 0, 0, 0) 85%, rgba(0, 0, 0, 1) 100%);
 }
 .bgs.up-left {
   clip-path: polygon(0 0, 25% 0, 0 25%);
