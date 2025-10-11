@@ -20,7 +20,7 @@
     
     <title>Kabu</title>
     <script>
-    let gameVer = 'Ver_8.62';
+    let gameVer = 'Ver_8.63';
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('./sw.js')
@@ -93,10 +93,10 @@
                     <div class="setting-container visible" id="control-setting">
                         <div class="flex-1 gap-8 column control-setting">
                             <div class="">
-                                <div class="flex-1 cs-name">Q.Reload</div>
+                                <div class="flex-1 cs-name">Reload</div>
                                 <div class="flex-1 cs-detail">
                                     <div class="cs-blank"></div>
-                                    <div id="box0" class="flex-1 box">G.Now!</div>
+                                    <div id="box0" class="flex-1 box">Restart</div>
                                     <div class="cs-next"></div>
                                 </div>
                             </div>
@@ -125,7 +125,7 @@
                                 </div>
                             </div>
                             <div class="">
-                                <div class="flex-1 cs-name">Shader Op</div>
+                                <div class="flex-1 cs-name">Opacity</div>
                                 <div class="flex-1 cs-detail">
                                     <div class="cs-minus"></div>
                                     <div id="box4" class="flex-1 box"></div>
@@ -149,7 +149,7 @@
                                 </div>
                             </div>
                             <div class="">
-                                <div class="flex-1 cs-name">Brightness</div>
+                                <div class="flex-1 cs-name">Bright</div>
                                 <div class="flex-1 cs-detail">
                                     <div class="cs-minus"></div>
                                     <div id="box7" class="flex-1 box"></div>
@@ -181,6 +181,7 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="flex-1"></div>
                         <div class="flex-1"></div>
                     </div>
                     <div class="setting-container column visible" id="areaTrans">
@@ -312,7 +313,7 @@
             <div class="s-scroll column gap-8" id="rom-detail"></div>
         </div>
         <div class="action-button gap-8">
-            <div class="flex-1 s-logo bg br" id="openLocalStorage"></div>
+            <div class="flex-1 s-logo bg bgp br" id="openLocalStorage"></div>
             <div class="s-setting bg br" id="sSetting"></div>
             <div class="s-layout bg br" id="sLayout">
                 <svg id="setAdjustment" width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
