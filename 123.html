@@ -1,90 +1,44 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
   <title>SVG Path → clip-path: polygon()</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      max-width: 700px;
-      margin: 40px auto;
-      line-height: 1.5;
-    }
-    textarea, input {
-      width: 100%;
-      font-family: monospace;
-      font-size: 14px;
-      padding: 8px;
-      margin: 6px 0;
-      box-sizing: border-box;
-    }
-    button {
-      padding: 8px 14px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    pre {
-      background: #f6f6f6;
-      padding: 10px;
-      border-radius: 6px;
-      white-space: pre-wrap;
-      word-break: break-all;
-    }
-  </style>
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin">
+    <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+    
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Kabu" />
+  <link rel="stylesheet" type="text/css" href="/src/css/new.css" />
 </head>
 <body>
-  <h2>SVG Path → clip-path: polygon()</h2>
-  <label>Path SVG (thuộc tính <code>d</code>):</label>
-  <textarea id="path" rows="6" placeholder='Ví dụ: M176 0V175H175V174H174Z'></textarea>
+  <div class="page01 container-gird gap-8">
+    <div class="p01-list">
+      <rom>
+        <name>008 Pokemon Mystery Dungeon.gba</name>
+        <more></more>
+      </rom>
+      <rom>
+        <name>006 Metal Slug Advance.gba</name>
+        <more></more>
+      </rom>
+    </div>
+    <div class="p01-cta gap-8">
+      <logo></logo>
+      <setting></setting>
+      <vertical>
+        <svg width="50" height="50" viewBox="0 0 50 50" fill="none">
+          <rect x="22" y="18" width="6" height="2" rx="0.3" fill="var(--profile-3)"/>
+          <rect x="22" y="24" width="6" height="2" rx="0.3" fill="var(--profile-3)"/>
+          <rect x="22" y="30" width="6" height="2" rx="0.3" fill="var(--profile-3)"/>
+          </svg>
+        </vertical>
+      <upload></upload>
+    </div>
+  </div>
+  <div class="page02 container-gird gap-8">
 
-  <label>Chiều rộng gốc (width):</label>
-  <input id="w" type="number" value="176">
-
-  <label>Chiều cao gốc (height):</label>
-  <input id="h" type="number" value="175">
-
-  <button id="convert">Convert</button>
-
-  <h3>Kết quả:</h3>
-  <pre id="output"></pre>
-
-  <script>
-    document.getElementById("convert").onclick = () => {
-      const path = document.getElementById("path").value.trim();
-      const width = parseFloat(document.getElementById("w").value);
-      const height = parseFloat(document.getElementById("h").value);
-      if (!path || !width || !height) {
-        alert("Hãy nhập đủ path, width, height!");
-        return;
-      }
-
-      let x = 0, y = 0;
-      const coords = [];
-      path.replace(/([MLHVZ])([^MLHVZ]*)/gi, (_, cmd, args) => {
-        const nums = args.trim().split(/[\s,]+/).filter(Boolean).map(Number);
-        switch (cmd.toUpperCase()) {
-          case "M":
-          case "L":
-            for (let i = 0; i < nums.length; i += 2) {
-              x = nums[i];
-              y = nums[i + 1];
-              coords.push([x, y]);
-            }
-            break;
-          case "H":
-            nums.forEach(n => { x = n; coords.push([x, y]); });
-            break;
-          case "V":
-            nums.forEach(n => { y = n; coords.push([x, y]); });
-            break;
-        }
-      });
-
-      const polygon = coords
-        .map(([px, py]) => `${(px / width * 100)}% ${(py / height * 100)}%`)
-        .join(", ");
-      document.getElementById("output").textContent = `clip-path: polygon(${polygon});`;
-    };
-  </script>
+  </div>
 </body>
 </html>
