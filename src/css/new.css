@@ -84,16 +84,19 @@
     height: 100vh;
     padding: 20px;
     box-sizing: border-box;
+  } 
+  .gap-1 {
+    gap: 1px
   }
   .gap-8 {
     gap: 8px
   }
-  .brc {
-
+   .gap-20 {
+    gap: 20px
   }
-  .noRepeat {
-    background-position: center;
-    background-repeat: no-repeat;
+  .st {
+    background: url("data:image/svg+xml,%3Csvg width='1' height='1' viewBox='0 0 1 1' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.333333 0.333333H0.666667V0.666667H0.333333V0.333333Z' fill='%230A0908'/%3E%3Cpath d='M0.666667 0H1V0.333333H0.666667V0Z' fill='%230A0908'/%3E%3Cpath d='M0 0.666667H0.333333V1H0V0.666667Z' fill='%230A0908'/%3E%3C/svg%3E%0A");
+    outline: 1px solid var(--profile-6);
   }
 }
 @layer page-1 {
@@ -117,9 +120,6 @@
     display: grid; 
     grid-template-areas: "name more ";
     grid-template-columns: auto 40px;
-    background-color: var(--profile-bg);
-    outline: 1px solid var(--profile-6);
-    overflow: hidden;
     transform: rotate(180deg);
   }
   .p01-list name {
@@ -146,24 +146,46 @@
   .p01-cta upload::after { 
     background: url("data:image/svg+xml,%3Csvg width='90' height='50' viewBox='0 0 90 50' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M29.3 24C29.1343 24 29 23.8657 29 23.7V22.3C29 22.1343 29.1343 22 29.3 22H30.7C30.8657 22 31 21.8657 31 21.7V18.3C31 18.1343 31.1343 18 31.3 18H34.7C34.8657 18 35 18.1343 35 18.3V19.7C35 19.8657 34.8657 20 34.7 20H33.3C33.1343 20 33 20.1343 33 20.3V23.7C33 23.8657 32.8657 24 32.7 24H29.3Z' fill='%23DD5639'/%3E%3Cpath d='M37.3 24C37.1343 24 37 23.8657 37 23.7V18.3C37 18.1343 37.1343 18 37.3 18H42.7C42.8657 18 43 18.1343 43 18.3V19.7C43 19.8657 42.8657 20 42.7 20H41.3C41.1343 20 41 20.1343 41 20.3V21.7C41 21.8657 41.1343 22 41.3 22H42.7C42.8657 22 43 22.1343 43 22.3V23.7C43 23.8657 42.8657 24 42.7 24H37.3Z' fill='%23DD5639'/%3E%3Cpath d='M45.3 24C45.1343 24 45 23.8657 45 23.7V18.3C45 18.1343 45.1343 18 45.3 18H46.7C46.8657 18 47 18.1343 47 18.3V21.7C47 21.8657 47.1343 22 47.3 22H50.7C50.8657 22 51 22.1343 51 22.3V23.7C51 23.8657 50.8657 24 50.7 24H45.3Z' fill='%23DD5639'/%3E%3Cpath d='M29.3 32C29.1343 32 29 31.8657 29 31.7V26.3C29 26.1343 29.1343 26 29.3 26H34.7C34.8657 26 35 26.1343 35 26.3V27.7C35 27.8657 34.8657 28 34.7 28H33.3C33.1343 28 33 28.1343 33 28.3V29.7C33 29.8657 33.1343 30 33.3 30H34.7C34.8657 30 35 30.1343 35 30.3V31.7C35 31.8657 34.8657 32 34.7 32H29.3Z' fill='%23F5E8D1'/%3E%3Cpath d='M37.3 32C37.1343 32 37 31.8657 37 31.7V26.3C37 26.1343 37.1343 26 37.3 26H42.7C42.8657 26 43 26.1343 43 26.3V27.7C43 27.8657 42.8657 28 42.7 28H39.3C39.1343 28 39 28.1343 39 28.3V29.7C39 29.8657 39.1343 30 39.3 30H42.7C42.8657 30 43 30.1343 43 30.3V31.7C43 31.8657 42.8657 32 42.7 32H37.3Z' fill='%23F5E8D1'/%3E%3Cpath d='M47.3 32C47.1343 32 47 31.8657 47 31.7V28.3C47 28.1343 46.8657 28 46.7 28H45.3C45.1343 28 45 27.8657 45 27.7V26.3C45 26.1343 45.1343 26 45.3 26H50.7C50.8657 26 51 26.1343 51 26.3V27.7C51 27.8657 50.8657 28 50.7 28H49.3C49.1343 28 49 28.1343 49 28.3V31.7C49 31.8657 48.8657 32 48.7 32H47.3Z' fill='%23F5E8D1'/%3E%3Cpath d='M55 19.7C55 19.8657 55.1343 20 55.3 20H56.7C56.8657 20 57 20.1343 57 20.3V21.7C57 21.8657 57.1343 22 57.3 22H58.7C58.8657 22 59 22.1343 59 22.3V23.7C59 23.8657 59.1343 24 59.3 24H60.7C60.8657 24 61 24.1343 61 24.3V25.7C61 25.8657 60.8657 26 60.7 26H59.3C59.1343 26 59 26.1343 59 26.3V27.7C59 27.8657 58.8657 28 58.7 28H57.3C57.1343 28 57 28.1343 57 28.3V29.7C57 29.8657 56.8657 30 56.7 30H55.3C55.1343 30 55 30.1343 55 30.3V31.7C55 31.8657 54.8657 32 54.7 32H53.3C53.1343 32 53 31.8657 53 31.7V18.3C53 18.1343 53.1343 18 53.3 18H54.7C54.8657 18 55 18.1343 55 18.3V19.7Z' fill='%23F5E8D1'/%3E%3C/svg%3E%0A");
   }
-  .p01-cta > :is(logo, setting, vertical, upload) {
-    background-size: 1px 1px;
-    background: url("data:image/svg+xml,%3Csvg width='1' height='1' viewBox='0 0 1 1' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.333333 0.333333H0.666667V0.666667H0.333333V0.333333Z' fill='%230A0908'/%3E%3Cpath d='M0.666667 0H1V0.333333H0.666667V0Z' fill='%230A0908'/%3E%3Cpath d='M0 0.666667H0.333333V1H0V0.666667Z' fill='%230A0908'/%3E%3C/svg%3E%0A");
-    outline: 1px solid var(--profile-6);
-    overflow: hidden;
-  }
-    .p01-cta > :is(logo, setting, vertical, upload)::after {
+  .p01-cta > :is(logo, setting, vertical, upload)::after {
     content: "";
     display: block;
     width: 100%;
     height: 100%;
     background-position: center;
     background-repeat: no-repeat;
-    overflow: hidden;
   }
 }
 @layer page-2 {
-  
+  .page02 {
+    display: grid;    
+    grid-template-rows: auto calc((100vw + 8px) / 2) auto;
+  }
+  /* layer display */
+  .page02 display {
+
+  }
+  /* layer gamepad */
+  .page02 gamepad, right, left, function, dpad, action, wrap {
+    display: grid;
+  }
+  .page02 gamepad {
+    grid-template-columns: calc((100vw - 60px) / 2) auto;
+  }
+  .page02 gamepad right, .page02 gamepad left{
+    grid-template-rows: 26px auto;
+  }
+  .page02 gamepad left function {
+    grid-template-columns: 45px auto;
+  }
+  .page02 gamepad right function {
+    grid-template-columns: auto 45px;
+  }
+  .page02 gamepad right action {
+    grid-template-rows: auto auto 26px;
+  }
+  .page02 gamepad right action wrap {
+    grid-template-columns: auto 45px;
+  }
 }
 @layer page-3 {
   
