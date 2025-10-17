@@ -158,34 +158,42 @@
 @layer page-2 {
   .page02 {
     display: grid;    
-    grid-template-rows: auto calc((100vw + 8px) / 2) auto;
+    padding :8px;
+    grid-template-rows: auto calc((100vw + 34px) / 2) auto;
   }
   /* layer display */
   .page02 display {
 
   }
   /* layer gamepad */
-  .page02 gamepad, right, left, function, dpad, action, wrap {
-    display: grid;
-  }
-  .page02 gamepad {
-    grid-template-columns: calc((100vw - 60px) / 2) auto;
-  }
-  .page02 gamepad right, .page02 gamepad left{
-    grid-template-rows: 26px auto;
-  }
-  .page02 gamepad left function {
-    grid-template-columns: 45px auto;
-  }
-  .page02 gamepad right function {
-    grid-template-columns: auto 45px;
-  }
-  .page02 gamepad right action {
-    grid-template-rows: auto auto 26px;
-  }
-  .page02 gamepad right action wrap {
-    grid-template-columns: auto 45px;
-  }
+.page02 gamepad {
+  display: grid;
+  grid-template:
+    "state-button l-button . r-button menu-button" 26px
+    ". . . . ." 8px
+    "dpad-section dpad-section . action-section action-section" 1fr
+    / calc(100vw / 10 + 6px) 1fr 20px 1fr calc(100vw / 10 + 6px);
+}
+.page02 gamepad action-section {
+  display: grid;
+  grid-template:
+    "a-button a-button a-button a-button" 1fr
+    "b-button b-button b-button f-button" 1fr
+    "select-button select-button start-button start-button" 26px
+    / calc(100vw / 10 + 6px) 1fr 1fr calc(100vw / 10 + 6px);
+}
+.page02 gamepad 
+state-button    { grid-area: state-button }
+l-button        { grid-area: l-button }
+r-button        { grid-area: r-button }
+menu-button     { grid-area: menu-button }
+dpad-section    { grid-area: dpad-section }
+action-section  { grid-area: action-section }
+a-button        { grid-area: a-button }
+b-button        { grid-area: b-button }
+f-button        { grid-area: f-button }
+select-button   { grid-area: select-button }
+start-button    { grid-area: start-button }
 }
 @layer page-3 {
   
