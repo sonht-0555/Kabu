@@ -91,7 +91,10 @@
   .gap-8 {
     gap: 8px
   }
-   .gap-20 {
+  .gap-16 {
+    gap: 16px
+  }
+  .gap-20 {
     gap: 20px
   }
   .st {
@@ -159,7 +162,7 @@
   .page02 {
     display: grid;    
     padding :8px;
-    grid-template-rows: 200px calc((100vw + 34px) / 2) 1fr;
+    grid-template-rows: 200px calc((100vw + 38px) / 2) 1fr;
   }
   /* layer display */
   .page02 display {
@@ -169,7 +172,7 @@
   .page02 gamepad {
     gap: 1px;
     display: grid;
-    grid-template-columns: calc(100vw / 10 + 6px) 1fr 1fr calc(100vw / 10 + 6px) 20px calc(100vw / 10 + 6px) 1fr 1fr calc(100vw / 10 + 6px);
+    grid-template-columns: calc(100vw / 10 + 6px) 1fr 1fr calc(100vw / 10 + 6px) 16px calc(100vw / 10 + 6px) 1fr 1fr calc(100vw / 10 + 6px);
     grid-template-rows: 26px 8px 1fr 1fr 26px;
   }
 
