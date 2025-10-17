@@ -159,17 +159,17 @@
   .page02 {
     display: grid;    
     padding :8px;
-    grid-template-rows: 200px calc((100vw + 34px) / 2) auto;
+    grid-template-rows: 200px calc((100vw + 34px) / 2) 1fr;
   }
   /* layer display */
   .page02 display {
-
+    display: grid; 
   }
   /* layer gamepad */
   .page02 gamepad {
     gap: 1px;
     display: grid;
-    grid-template-columns: calc(100vw / 10 + 6px) 1fr 1fr 45px 20px 45px 1fr 1fr calc(100vw / 10 + 6px);
+    grid-template-columns: calc(100vw / 10 + 6px) 1fr 1fr calc(100vw / 10 + 6px) 20px calc(100vw / 10 + 6px) 1fr 1fr calc(100vw / 10 + 6px);
     grid-template-rows: 26px 8px 1fr 1fr 26px;
   }
 
