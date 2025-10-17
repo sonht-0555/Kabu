@@ -159,7 +159,7 @@
   .page02 {
     display: grid;    
     padding :8px;
-    grid-template-rows: auto calc((100vw + 34px) / 2) auto;
+    grid-template-rows: 100px calc((100vw + 34px) / 2) auto;
   }
   /* layer display */
   .page02 display {
