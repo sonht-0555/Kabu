@@ -101,6 +101,9 @@
     background: url("data:image/svg+xml,%3Csvg width='1' height='1' viewBox='0 0 1 1' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.333333 0.333333H0.666667V0.666667H0.333333V0.333333Z' fill='%230A0908'/%3E%3Cpath d='M0.666667 0H1V0.333333H0.666667V0Z' fill='%230A0908'/%3E%3Cpath d='M0 0.666667H0.333333V1H0V0.666667Z' fill='%230A0908'/%3E%3C/svg%3E%0A");
     outline: 1px solid var(--profile-6);
   }
+  .page01, .page02, .page02 display, .page02 gamepad {
+    display: grid; 
+  }
 }
 @layer page-1 {
   .page01 {
@@ -160,8 +163,7 @@
 }
 @layer page-2 {
   .page02 {
-    display: grid;    
-    padding :8px;
+    padding :6px;
     grid-template-rows: 200px calc((100vw + 38px) / 2) 1fr;
   }
   /* layer display */
@@ -171,22 +173,19 @@
   /* layer gamepad */
   .page02 gamepad {
     gap: 1px;
-    display: grid;
-    grid-template-columns: calc(100vw / 10 + 6px) 1fr 1fr calc(100vw / 10 + 6px) 16px calc(100vw / 10 + 6px) 1fr 1fr calc(100vw / 10 + 6px);
+    grid-template-columns: calc(100vw / 10 + 6px) 1fr 1fr calc(100vw / 10 + 6px) 20px calc(100vw / 10 + 6px) 1fr 1fr calc(100vw / 10 + 6px);
     grid-template-rows: 26px 8px 1fr 1fr 26px;
   }
-
-.page02 gamepad 
-state-button    {grid-area: state-button;    grid-row: 1 / 1; grid-column: 1 / 1}
-l-button        {grid-area: l-button;        grid-row: 1 / 1; grid-column: 2 / 5}
-r-button        {grid-area: r-button;        grid-row: 1 / 1; grid-column: 6 / 9}
-menu-button     {grid-area: menu-button;     grid-row: 1 / 1; grid-column: 9 / 10}
-dpad-section    {grid-area: dpad-section;    grid-row: 3 / 6; grid-column: 1 / 5}
-a-button        {grid-area: a-button;        grid-row: 3 / 3; grid-column: 6 / 10}
-b-button        {grid-area: b-button;        grid-row: 4 / 4; grid-column: 6 / 9}
-f-button        {grid-area: f-button;        grid-row: 4 / 4; grid-column: 9 / 10}
-select-button   {grid-area: select-button;   grid-row: 5 / 5; grid-column: 6 / 8}
-start-button    {grid-area: start-button;    grid-row: 5 / 5; grid-column: 8 / 10}
+  .page02 gamepad state-button  {grid-area: state-button;  grid-row: 1 / 1; grid-column: 1 / 1}
+  .page02 gamepad l-button      {grid-area: l-button;      grid-row: 1 / 1; grid-column: 2 / 5}
+  .page02 gamepad r-button      {grid-area: r-button;      grid-row: 1 / 1; grid-column: 6 / 9}
+  .page02 gamepad menu-button   {grid-area: menu-button;   grid-row: 1 / 1; grid-column: 9 / 10}
+  .page02 gamepad dpad-section  {grid-area: dpad-section;  grid-row: 3 / 6; grid-column: 1 / 5}
+  .page02 gamepad a-button      {grid-area: a-button;      grid-row: 3 / 3; grid-column: 6 / 10}
+  .page02 gamepad b-button      {grid-area: b-button;      grid-row: 4 / 4; grid-column: 6 / 9}
+  .page02 gamepad f-button      {grid-area: f-button;      grid-row: 4 / 4; grid-column: 9 / 10}
+  .page02 gamepad select-button {grid-area: select-button; grid-row: 5 / 5; grid-column: 6 / 8}
+  .page02 gamepad start-button  {grid-area: start-button;  grid-row: 5 / 5; grid-column: 8 / 10}
 }
 @layer page-3 {
   
