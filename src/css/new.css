@@ -75,7 +75,6 @@
     --profile-orange: #DD5639;
     --profile-cyan: #20A5A6;
     --profile-cream: #F5E8D1;
-    --gba-weight: 4;
   }
 }
 @layer base {
@@ -102,7 +101,7 @@
     background: url("data:image/svg+xml,%3Csvg width='1' height='1' viewBox='0 0 1 1' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.333333 0.333333H0.666667V0.666667H0.333333V0.333333Z' fill='%230A0908'/%3E%3Cpath d='M0.666667 0H1V0.333333H0.666667V0Z' fill='%230A0908'/%3E%3Cpath d='M0 0.666667H0.333333V1H0V0.666667Z' fill='%230A0908'/%3E%3C/svg%3E%0A");
     outline: 1px solid var(--profile-6);
   }
-  .page01, .page02, .page02 display, .page02 gamepad {
+  .page01, .page02, .page02 display, .page02 gamepad, .page02 display {
     display: grid; 
   }
 }
@@ -165,17 +164,26 @@
 @layer page-2 {
   .page02 {
     padding :6px;
-    grid-template-rows: 200px calc((100vw + 38px) / 2) 1fr;
+    grid-template-rows: auto calc((100vw + 38px) / 2) 1fr;
   }
-  @media (min-width: 400px) { :root { --gba-weight: 5 } }
-  @media (min-width: 480px) { :root { --gba-weight: 6 } }
-  @media (min-width: 560px) { :root { --gba-weight: 7 } }
   /* layer display */
+  @media (min-width: calc(240px * 1 / 3 + 12px)) { .page02 display[tag="gba"] { --gba-weight: 1 }}
+  @media (min-width: calc(240px * 2 / 3 + 12px)) { .page02 display[tag="gba"] { --gba-weight: 2 }}
+  @media (min-width: calc(240px * 3 / 3 + 12px)) { .page02 display[tag="gba"] { --gba-weight: 3 }}
+  @media (min-width: calc(240px * 4 / 3 + 12px)) { .page02 display[tag="gba"] { --gba-weight: 4 }}
+  @media (min-width: calc(240px * 5 / 3 + 12px)) { .page02 display[tag="gba"] { --gba-weight: 5 }}
+  @media (min-width: calc(240px * 6 / 3 + 12px)) { .page02 display[tag="gba"] { --gba-weight: 6 }}
+  @media (min-width: calc(240px * 7 / 3 + 12px)) { .page02 display[tag="gba"] { --gba-weight: 7 }}
   .page02 display {
-    width: clamp(240px, 100vw, calc(240px * (var(--gba-weight))/3));
+    grid-template-rows: 1fr;
+    place-self: center;
+    width: calc(240px * (var(--gba-weight))/3);
     aspect-ratio: 3/2;
     max-width: 100%;
     box-sizing: border-box;
+  }
+  .page02 display[tag="gba"] {
+    background-image: url('gba.png');
   }
   /* layer gamepad */
   .page02 gamepad {

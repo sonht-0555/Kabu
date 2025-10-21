@@ -1,0 +1,75 @@
+@layer common, base, components, utilities;
+
+// Layer common
+@layer common {
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  @font-face {
+    font-family: "04b";
+    src: url("/src/font/04b.ttf");
+  }
+
+  body, html {
+    font-size: 16px;
+    color: #f5e8d1;
+    font-family: "04b";
+    text-align: center;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: black;
+  }
+
+  :root {
+    --profile-1: #F5E8D1;
+    --profile-2: #636366;
+    --profile-3: #555048;
+    --profile-4: #3A3A3C;
+    --profile-5: #2C2C2E;
+    --profile-6: #1D1B18;
+    --profile-bg: #0A0908;
+  }
+}
+
+// Layer base
+@layer base {
+  .container-gird {
+    display: grid;
+    grid-template-rows: auto 50px 60px;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .gap-1 { gap: 1px; }
+  .gap-8 { gap: 8px; }
+  .gap-16 { gap: 16px; }
+  .gap-20 { gap: 20px; }
+}
+
+// Layer page-2
+@layer page-2 {
+  .page02 {
+    padding: 6px;
+    grid-template-rows: auto calc((100vw + 38px) / 2) 1fr;
+  }
+
+  // Media queries for --gba-weight
+  @for $i from 1 through 7 {
+    @media (min-width: calc(240px * #{$i} / 3 + 12px)) {
+      .page02 display[tag="gba"] {
+        --gba-weight: #{$i};
+      }
+    }
+  }
+
+  .page02 display {
+    width: calc(240px * var(--gba-weight) / 3);
+    aspect-ratio: 3/2;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
