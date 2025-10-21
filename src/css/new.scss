@@ -1,5 +1,5 @@
 @layer common, base, components, utilities;
-
+//sass --watch src/css/new.scss:src/css/new.css
 @layer common {
   * {
     margin: 0;
@@ -150,31 +150,30 @@
   }
 }
 @layer page-2 {
-  .page02 {
-    padding :6px;
-    grid-template-rows: auto calc((100vw + 38px) / 2) 1fr;
-  }
   /* layer display */
+
+  @for $dpr from 1 through 4 {
     @for $i from 1 through 20 {
-    @media (min-width: calc(240px * #{$i} / 3 + 12px)) {
-      .page02 display[tag="gba"] {
-        --gba-weight: #{$i};
+    @media (min-resolution: #{$dpr}dppx) and (min-width: calc(240px * #{$i} / 3 + 12px)) {
+      .page02 {
+        padding:6px;
+        grid-template-rows: ceil(160px * $i / $dpr) 20px calc((100vw + 38px) / 2) 1fr;
+      }
+        .page02 display {
+        grid-row: 1;
+        place-self: center;
+        width: calc(240px * #{$i} / #{$dpr});
+        aspect-ratio: 3/2;
+        max-width: 100%;
+        box-sizing: border-box;
       }
     }
   }
-  .page02 display {
-    grid-template-rows: 1fr;
-    place-self: center;
-    width: calc(240px * (var(--gba-weight))/3);
-    aspect-ratio: 3/2;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-  .page02 display[tag="gba"] {
-    background-image: url('gba.png');
-  }
+}
+
   /* layer gamepad */
   .page02 gamepad {
+    grid-row: 3;
     gap: 1px;
     grid-template-columns: calc(100vw / 10 + 6px) 1fr 1fr calc(100vw / 10 + 6px) 20px calc(100vw / 10 + 6px) 1fr 1fr calc(100vw / 10 + 6px);
     grid-template-rows: 26px 8px 1fr 1fr 26px;
