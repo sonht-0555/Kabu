@@ -68,7 +68,6 @@
     gap:8px;
     padding-bottom: 40px;
   }
-/* layer list */
   list {
     grid-template-rows: repeat(12, 40px);
     grid-template-areas: "rom";
@@ -84,7 +83,6 @@
   list name {
     padding: 17px;
   }
-/* layer cta */
   cta {
     grid-template-columns: auto 50px 50px 90px;
     gap: 8px; 
