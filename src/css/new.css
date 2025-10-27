@@ -30,11 +30,10 @@
     --profile-black: #000000;
     --profile-orange: #DD5639;
     --profile-cyan: #20A5A6;
-    --profile-cream: #F5E8D1;
   }
   body {
     font-size: 8px;
-    color: var(--profile-cream);
+    color: var(--profile-1);
     font-family: "3x3";
     text-align: center;
     width: 100vw;
@@ -44,35 +43,38 @@
   }
 }
 @layer base {
-  .container-gird {
-    display: grid;    
+  page01, list, rom, cta, 
+  page02, display, gamepad {
+    display: grid; 
+  }
+  page01, page02 {
     grid-template-rows: auto 50px 60px;
     height: 100vh;
     padding: 20px;
     box-sizing: border-box;
   }
-  .st {
+  rom, logo, setting, vertical, upload, 
+  display, state-button, l-button, r-button, menu-button, dpad-section, a-button, b-button, f-button, select-button, start-button {
     background: url("data:image/svg+xml,%3Csvg width='1' height='1' viewBox='0 0 1 1' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.333333 0.333333H0.666667V0.666667H0.333333V0.333333Z' fill='%230A0908'/%3E%3Cpath d='M0.666667 0H1V0.333333H0.666667V0Z' fill='%230A0908'/%3E%3Cpath d='M0 0.666667H0.333333V1H0V0.666667Z' fill='%230A0908'/%3E%3C/svg%3E%0A");
     outline: 1px solid var(--profile-6);
   }
-  .page01, list, rom, cta, 
-  .page02, display, gamepad {
-    display: grid; 
-  }
+  [hidden] {
+    display: none !important;
+}
 }
 @layer page-1 {
-  .page01 {
-    grid-template-rows: 1fr 8px 50px;
+  page01 {
+    grid-template-rows: 1fr 50px;
+    gap:8px;
     padding-bottom: 40px;
   }
 /* layer list */
   list {
-    color: var(--profile-1);
-    grid-template-areas: "rom";
     grid-template-rows: repeat(12, 40px);
+    grid-template-areas: "rom";
     text-align: left;
-    transform: rotate(180deg);
     align-content: start;
+    transform: rotate(180deg);
     gap:1px;
   }
   list rom {
@@ -84,8 +86,8 @@
   }
 /* layer cta */
   cta {
-    gap: 8px; 
     grid-template-columns: auto 50px 50px 90px;
+    gap: 8px; 
   }
   cta logo::after { 
     background: url("data:image/svg+xml,%3Csvg width='144' height='50' viewBox='0 0 144 50' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50.64 31C50.416 31 50.304 31 50.2184 30.9564C50.1431 30.9181 50.0819 30.8569 50.0436 30.7816C50 30.696 50 30.584 50 30.36V27H53.36C53.584 27 53.696 27 53.7816 27.0436C53.8569 27.0819 53.9181 27.1431 53.9564 27.2184C54 27.304 54 27.416 54 27.64V30.36C54 30.584 54 30.696 53.9564 30.7816C53.9181 30.8569 53.8569 30.9181 53.7816 30.9564C53.696 31 53.584 31 53.36 31H50.64ZM42.64 31C42.416 31 42.304 31 42.2184 30.9564C42.1431 30.9181 42.0819 30.8569 42.0436 30.7816C42 30.696 42 30.584 42 30.36V19.64C42 19.416 42 19.304 42.0436 19.2184C42.0819 19.1431 42.1431 19.0819 42.2184 19.0436C42.304 19 42.416 19 42.64 19H45.36C45.584 19 45.696 19 45.7816 19.0436C45.8569 19.0819 45.9181 19.1431 45.9564 19.2184C46 19.304 46 19.416 46 19.64V22.36C46 22.584 46 22.696 46.0436 22.7816C46.0819 22.8569 46.1431 22.9181 46.2184 22.9564C46.304 23 46.416 23 46.64 23H50V27H46.64C46.416 27 46.304 27 46.2184 27.0436C46.1431 27.0819 46.0819 27.1431 46.0436 27.2184C46 27.304 46 27.416 46 27.64V30.36C46 30.584 46 30.696 45.9564 30.7816C45.9181 30.8569 45.8569 30.9181 45.7816 30.9564C45.696 31 45.584 31 45.36 31H42.64ZM50 23V19.64C50 19.416 50 19.304 50.0436 19.2184C50.0819 19.1431 50.1431 19.0819 50.2184 19.0436C50.304 19 50.416 19 50.64 19H53.36C53.584 19 53.696 19 53.7816 19.0436C53.8569 19.0819 53.9181 19.1431 53.9564 19.2184C54 19.304 54 19.416 54 19.64V22.36C54 22.584 54 22.696 53.9564 22.7816C53.9181 22.8569 53.8569 22.9181 53.7816 22.9564C53.696 23 53.584 23 53.36 23H50Z' fill='%23F5E8D1'/%3E%3Cpath d='M58.64 31C58.416 31 58.304 31 58.2184 30.9564C58.1431 30.9181 58.0819 30.8569 58.0436 30.7816C58 30.696 58 30.584 58 30.36V23.64C58 23.416 58 23.304 58.0436 23.2184C58.0819 23.1431 58.1431 23.0819 58.2184 23.0436C58.304 23 58.416 23 58.64 23H61.36C61.584 23 61.696 23 61.7816 22.9564C61.8569 22.9181 61.9181 22.8569 61.9564 22.7816C62 22.696 62 22.584 62 22.36V19.64C62 19.416 62 19.304 62.0436 19.2184C62.0819 19.1431 62.1431 19.0819 62.2184 19.0436C62.304 19 62.416 19 62.64 19H65.36C65.584 19 65.696 19 65.7816 19.0436C65.8569 19.0819 65.9181 19.1431 65.9564 19.2184C66 19.304 66 19.416 66 19.64V22.36C66 22.584 66 22.696 66.0436 22.7816C66.0819 22.8569 66.1431 22.9181 66.2184 22.9564C66.304 23 66.416 23 66.64 23H69.36C69.584 23 69.696 23 69.7816 23.0436C69.8569 23.0819 69.9181 23.1431 69.9564 23.2184C70 23.304 70 23.416 70 23.64V30.36C70 30.584 70 30.696 69.9564 30.7816C69.9181 30.8569 69.8569 30.9181 69.7816 30.9564C69.696 31 69.584 31 69.36 31H66.64C66.416 31 66.304 31 66.2184 30.9564C66.1431 30.9181 66.0819 30.8569 66.0436 30.7816C66 30.696 66 30.584 66 30.36V27.64C66 27.416 66 27.304 65.9564 27.2184C65.9181 27.1431 65.8569 27.0819 65.7816 27.0436C65.696 27 65.584 27 65.36 27H62.64C62.416 27 62.304 27 62.2184 27.0436C62.1431 27.0819 62.0819 27.1431 62.0436 27.2184C62 27.304 62 27.416 62 27.64V30.36C62 30.584 62 30.696 61.9564 30.7816C61.9181 30.8569 61.8569 30.9181 61.7816 30.9564C61.696 31 61.584 31 61.36 31H58.64Z' fill='%2320A5A6'/%3E%3Cpath d='M74.64 31C74.416 31 74.304 31 74.2184 30.9564C74.1431 30.9181 74.0819 30.8569 74.0436 30.7816C74 30.696 74 30.584 74 30.36V19.64C74 19.416 74 19.304 74.0436 19.2184C74.0819 19.1431 74.1431 19.0819 74.2184 19.0436C74.304 19 74.416 19 74.64 19H81.36C81.584 19 81.696 19 81.7816 19.0436C81.8569 19.0819 81.9181 19.1431 81.9564 19.2184C82 19.304 82 19.416 82 19.64V22.36C82 22.584 82 22.696 82.0436 22.7816C82.0819 22.8569 82.1431 22.9181 82.2184 22.9564C82.304 23 82.416 23 82.64 23H85.36C85.584 23 85.696 23 85.7816 23.0436C85.8569 23.0819 85.9181 23.1431 85.9564 23.2184C86 23.304 86 23.416 86 23.64V30.36C86 30.584 86 30.696 85.9564 30.7816C85.9181 30.8569 85.8569 30.9181 85.7816 30.9564C85.696 31 85.584 31 85.36 31H74.64Z' fill='%23F5E8D1'/%3E%3Cpath d='M90.64 31C90.416 31 90.304 31 90.2184 30.9564C90.1431 30.9181 90.0819 30.8569 90.0436 30.7816C90 30.696 90 30.584 90 30.36V19.64C90 19.416 90 19.304 90.0436 19.2184C90.0819 19.1431 90.1431 19.0819 90.2184 19.0436C90.304 19 90.416 19 90.64 19H93.36C93.584 19 93.696 19 93.7816 19.0436C93.8569 19.0819 93.9181 19.1431 93.9564 19.2184C94 19.304 94 19.416 94 19.64V26.36C94 26.584 94 26.696 94.0436 26.7816C94.0819 26.8569 94.1431 26.9181 94.2184 26.9564C94.304 27 94.416 27 94.64 27H97.36C97.584 27 97.696 27 97.7816 26.9564C97.8569 26.9181 97.9181 26.8569 97.9564 26.7816C98 26.696 98 26.584 98 26.36V19.64C98 19.416 98 19.304 98.0436 19.2184C98.0819 19.1431 98.1431 19.0819 98.2184 19.0436C98.304 19 98.416 19 98.64 19H101.36C101.584 19 101.696 19 101.782 19.0436C101.857 19.0819 101.918 19.1431 101.956 19.2184C102 19.304 102 19.416 102 19.64V30.36C102 30.584 102 30.696 101.956 30.7816C101.918 30.8569 101.857 30.9181 101.782 30.9564C101.696 31 101.584 31 101.36 31H90.64Z' fill='%23DD5639'/%3E%3C/svg%3E%0A");
@@ -106,26 +108,26 @@
   }
 }
 @layer page-2 {
-  .page02 {
+  page02 {
     padding :6px;
     grid-template-rows: 200px 20px calc((100vw + 38px) / 2) 1fr;
   }
   /* layer display */
   /* layer gamepad */
-  .page02 gamepad {
+  page02 gamepad {
     gap: 1px;
     grid-template-columns: calc(100vw / 10 + 6px) 1fr 1fr calc(100vw / 10 + 6px) 20px calc(100vw / 10 + 6px) 1fr 1fr calc(100vw / 10 + 6px);
     grid-template-rows: 26px 8px 1fr 1fr 26px;
   }
-  .page02 gamepad state-button  {grid-area: state-button;  grid-row: 1 / 1; grid-column: 1 / 1}
-  .page02 gamepad l-button      {grid-area: l-button;      grid-row: 1 / 1; grid-column: 2 / 5}
-  .page02 gamepad r-button      {grid-area: r-button;      grid-row: 1 / 1; grid-column: 6 / 9}
-  .page02 gamepad menu-button   {grid-area: menu-button;   grid-row: 1 / 1; grid-column: 9 / 10}
-  .page02 gamepad dpad-section  {grid-area: dpad-section;  grid-row: 3 / 6; grid-column: 1 / 5}
-  .page02 gamepad a-button      {grid-area: a-button;      grid-row: 3 / 3; grid-column: 6 / 10}
-  .page02 gamepad b-button      {grid-area: b-button;      grid-row: 4 / 4; grid-column: 6 / 9}
-  .page02 gamepad f-button      {grid-area: f-button;      grid-row: 4 / 4; grid-column: 9 / 10}
-  .page02 gamepad select-button {grid-area: select-button; grid-row: 5 / 5; grid-column: 6 / 8}
-  .page02 gamepad start-button  {grid-area: start-button;  grid-row: 5 / 5; grid-column: 8 / 10}
+  page02 gamepad state-button  {grid-area: state-button;  grid-row: 1 / 1; grid-column: 1 / 1}
+  page02 gamepad l-button      {grid-area: l-button;      grid-row: 1 / 1; grid-column: 2 / 5}
+  page02 gamepad r-button      {grid-area: r-button;      grid-row: 1 / 1; grid-column: 6 / 9}
+  page02 gamepad menu-button   {grid-area: menu-button;   grid-row: 1 / 1; grid-column: 9 / 10}
+  page02 gamepad dpad-section  {grid-area: dpad-section;  grid-row: 3 / 6; grid-column: 1 / 5}
+  page02 gamepad a-button      {grid-area: a-button;      grid-row: 3 / 3; grid-column: 6 / 10}
+  page02 gamepad b-button      {grid-area: b-button;      grid-row: 4 / 4; grid-column: 6 / 9}
+  page02 gamepad f-button      {grid-area: f-button;      grid-row: 4 / 4; grid-column: 9 / 10}
+  page02 gamepad select-button {grid-area: select-button; grid-row: 5 / 5; grid-column: 6 / 8}
+  page02 gamepad start-button  {grid-area: start-button;  grid-row: 5 / 5; grid-column: 8 / 10}
 }
 @layer page-3 {}
