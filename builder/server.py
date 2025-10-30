@@ -6,7 +6,7 @@ class COIHandler(SimpleHTTPRequestHandler):
         self.send_header("Cross-Origin-Embedder-Policy", "require-corp")
         super().end_headers()
 
-PORT = 9000
+PORT = 5173
 httpd = HTTPServer(("0.0.0.0", PORT), COIHandler)
 print(f"🚀 Server is running: http://localhost:{PORT}")
 httpd.serve_forever()

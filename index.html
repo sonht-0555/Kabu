@@ -1,349 +1,58 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="vi">
+<head>
+  <title>New UI</title>
     <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin">
     <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
     
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Kabu" />
-    
-    <link rel="stylesheet" type="text/css" href="/src/css/main.css" />
-    <link rel="apple-touch-icon" href="/src/img/icon.png" />
-    <link rel="icon" href="/src/img/icon.png" type="image/png" />
-    <link rel="manifest" href="/manifest.json" />
-    
-    <script src="/src/library/interact.js"></script>
-    <script src="/src/library/nip.js"></script>
-    
-    <title>Kabu</title>
-    <script>
-    let gameVer = 'Ver_8.63';
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js')
-                .then(registration => {
-                    console.log('Service Worker registered!', registration.scope);
-                })
-                .catch(error => {
-                    console.log('Service Worker registration failed:', error);
-                });
-        });
-        navigator.serviceWorker.addEventListener('message', function (event) {
-        console.log('Received message from Service Worker:', event.data);
-        if (event.data.msg === "Updating...") {
-            lockNoti("", event.data.msg, 1600);
-            setTimeout(() => { 
-                window.location.hash = `#t=${gameVer}`;
-                const version = location.hash.includes('t=') ? location.hash.split('=')[1] : 'default';
-            }, 1400);
-            }
-        });
-    }
-    </script>
-  </head>
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="mobile-web-app-title" content="Kabu" />
+  <link rel="stylesheet" type="text/css" href="./src/css/new.css" />
+</head>
 <body>
-    <!-- Layer Ingame -->
-    <div class="errorLog column"></div>
-
-    <div class="gap-15 column in-game disable" id="in-game">
-        <div class="target-boxes" id="target-boxes"></div>
-        <div class="gap-8 emu-display cw hw">
-            <div class="column">
-                <div class="flex-1 cw">
-                    <div class="canvas-container cw hw" id="canvas-container">
-                        <div class="textured" id="textured" style="position: absolute;"></div>
-                        <canvas width="240" height="160" class="canvas visible" id="canvas"></canvas>
-                        <div class="message-container loading-icon visible" id="loading-icon">
-                            <img src="data:image/svg+xml,%3Csvg width='51' height='7' viewBox='0 0 51 7' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M51 0V6H50V7H0V1H1V0H51Z' fill='%23252525' fill-opacity='0.5'/%3E%3Cpath d='M3 6H2V5H3V6Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M9 6H8V5H9V6Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M13 6H12V5H13V6Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M25 6H24V5H25V6Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M35 6H34V5H35V6Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M39 6H38V5H39V6Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M43 6H42V5H43V6Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M15 5H14V4H15V5Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M41 5H40V4H41V5Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M9 3H8V2H9V3Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M13 3H12V2H13V3Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M16 2V3H15V2H16Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M35 3H34V2H35V3Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M39 3H38V2H39V3Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M7 6H3V5H7V6Z' fill='%23F5E8D1'/%3E%3Cpath d='M12 6H9V5H12V6Z' fill='%23F5E8D1'/%3E%3Cpath d='M15 6H14V5H15V6Z' fill='%23F5E8D1'/%3E%3Cpath d='M19 6H18V5H15V3H16V4H18V3H16V2H19V6Z' fill='%23F5E8D1'/%3E%3Cpath d='M23 3H21V5H24V6H20V2H23V3Z' fill='%23F5E8D1'/%3E%3Cpath d='M31 3H29V5H31V6H26V5H28V3H26V2H31V3Z' fill='%23F5E8D1'/%3E%3Cpath d='M34 3H33V6H32V2H34V3Z' fill='%23F5E8D1'/%3E%3Cpath d='M37 6H35V5H36V2H37V6Z' fill='%23F5E8D1'/%3E%3Cpath d='M43 5H42V6H39V5H41V4H43V5Z' fill='%23F5E8D1'/%3E%3Cpath d='M45 6H44V5H45V6Z' fill='%23F5E8D1'/%3E%3Cpath d='M47 6H46V5H47V6Z' fill='%23F5E8D1'/%3E%3Cpath d='M3 5H2V2H3V5Z' fill='%23F5E8D1'/%3E%3Cpath d='M9 5H8V3H9V5Z' fill='%23F5E8D1'/%3E%3Cpath d='M13 5H12V3H13V5Z' fill='%23F5E8D1'/%3E%3Cpath d='M25 5H24V4H25V5Z' fill='%23F5E8D1'/%3E%3Cpath d='M35 5H34V3H35V5Z' fill='%23F5E8D1'/%3E%3Cpath d='M39 5H38V3H39V5Z' fill='%23F5E8D1'/%3E%3Cpath d='M24 4H23V3H24V4Z' fill='%23F5E8D1'/%3E%3Cpath d='M12 3H9V2H12V3Z' fill='%23F5E8D1'/%3E%3Cpath d='M43 2V3H39V2H43Z' fill='%23F5E8D1'/%3E%3Cpath d='M49 6H48V5H49V6Z' fill='%23F5E8D1'/%3E%3C/svg%3E%0A" alt="img">                        </div>
-                        <div class="message-container column visible" id="stateList">
-                            <div class="flex-1"></div>
-                            <div class="flex-1 state-container" id ="state-container">
-                                <div class="flex-1 stateDiv" id="stateDiv01">
-                                    <div class="flex-1 stateInfo column cw">
-                                        <div class="stateTitle">[01]</div>
-                                        <div class="stateDate" id="dateState01"></div>
-                                    </div>
-                                </div>
-                                <div class="flex-1 stateDiv" id="stateDiv02">
-                                    <div class="flex-1 stateInfo column cw">
-                                        <div class="stateTitle">[02]</div>
-                                        <div class="stateDate" id="dateState02"></div>
-                                    </div>
-                                </div>
-                                <div class="flex-1 stateDiv" id="stateDiv03">
-                                    <div class="flex-1 stateInfo column cw">
-                                        <div class="stateTitle">[03]</div>
-                                        <div class="stateDate" id="dateState03"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="sha" id="img-shader" style="z-index: 23; pointer-events: none; position: absolute;"></div>
-                    </div>
-                    <div class="column message-container" id="">
-                        <div class="flex-1" id="areaSet"></div>
-                        <div class="flex-1" id="">
-                            <div class="flex-1" id="loadStateButton"></div>
-                            <div class="flex-1" id="saveStateButton"></div>
-                        </div>
-                    </div>
-                    <div class="setting-container visible" id="control-setting">
-                        <div class="flex-1 gap-8 column control-setting">
-                            <div class="">
-                                <div class="flex-1 cs-name">Reload</div>
-                                <div class="flex-1 cs-detail">
-                                    <div class="cs-blank"></div>
-                                    <div id="box0" class="flex-1 box">Restart</div>
-                                    <div class="cs-next"></div>
-                                </div>
-                            </div>
-                            <div class="">
-                                <div class="flex-1 cs-name">Power</div>
-                                <div class="flex-1 cs-detail">
-                                    <div class="cs-blank"></div>
-                                    <div id="box1" class="flex-1 box">Reboot</div>
-                                    <div class="cs-next"></div>
-                                </div>
-                            </div>
-                            <div class="">
-                                <div class="flex-1 cs-name">Auto Sav</div>
-                                <div class="flex-1 cs-detail">
-                                    <div class="cs-minus"></div>
-                                    <div id="box2" class="flex-1 box"></div>
-                                    <div class="cs-plus"></div>
-                                </div>
-                            </div>
-                            <div class="">
-                                <div class="flex-1 cs-name">Shader</div>
-                                <div class="flex-1 cs-detail">
-                                    <div class="cs-minus"></div>
-                                    <div id="box3" class="flex-1 box"></div>
-                                    <div class="cs-plus"></div>
-                                </div>
-                            </div>
-                            <div class="">
-                                <div class="flex-1 cs-name">Opacity</div>
-                                <div class="flex-1 cs-detail">
-                                    <div class="cs-minus"></div>
-                                    <div id="box4" class="flex-1 box"></div>
-                                    <div class="cs-plus"></div>
-                                </div>
-                            </div>
-                            <div class="">
-                                <div class="flex-1 cs-name">Cheat</div>
-                                <div class="flex-1 cs-detail">
-                                    <div class="cs-blank"></div>
-                                    <div id="box5" class="flex-1 box" contenteditable="false">Off</div>
-                                    <div class="cs-next"></div>
-                                </div>
-                            </div>
-                            <div class="">
-                                <div class="flex-1 cs-name">Grayscale</div>
-                                <div class="flex-1 cs-detail">
-                                    <div class="cs-minus"></div>
-                                    <div id="box6" class="flex-1 box"></div>
-                                    <div class="cs-plus"></div>
-                                </div>
-                            </div>
-                            <div class="">
-                                <div class="flex-1 cs-name">Bright</div>
-                                <div class="flex-1 cs-detail">
-                                    <div class="cs-minus"></div>
-                                    <div id="box7" class="flex-1 box"></div>
-                                    <div class="cs-plus"></div>
-                                </div>
-                            </div>
-                            <div class="">
-                                <div class="flex-1 cs-name">Contrast</div>
-                                <div class="flex-1 cs-detail">
-                                    <div class="cs-minus"></div>
-                                    <div id="box8" class="flex-1 box"></div>
-                                    <div class="cs-plus"></div>
-                                </div>
-                            </div>
-                            <div class="">
-                                <div class="flex-1 cs-name">Saturate</div>
-                                <div class="flex-1 cs-detail">
-                                    <div class="cs-minus"></div>
-                                    <div id="box9" class="flex-1 box"></div>
-                                    <div class="cs-plus"></div>
-                                </div>
-                            </div>
-                            <div class="">
-                                <div class="flex-1 cs-name">Sepia</div>
-                                <div class="flex-1 cs-detail">
-                                    <div class="cs-minus"></div>
-                                    <div id="box10" class="flex-1 box"></div>
-                                    <div class="cs-plus"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex-1"></div>
-                        <div class="flex-1"></div>
-                    </div>
-                    <div class="setting-container column visible" id="areaTrans">
-                        <div id="resizable-draggable">
-                            <div class="resizer bottom-right"></div>
-                            <div class="resizer top-left"></div> 
-                          </div>
-                    </div>
-                </div>
-                <div class="canvas-bot">
-                    <div>     
-                        <svg width="14" height="11" viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path id ="led01" d="M0.333008 9H0V8.66699H0.333008V9ZM1.33301 9H1V8.66699H1.33301V9ZM0.666992 8.66699H0.333008V8.33301H0.666992V8.66699ZM1.66699 8.66699H1.33301V8.33301H1.66699V8.66699ZM1 8.33301H0.666992V8H1V8.33301ZM2 8.33301H1.66699V8H2V8.33301ZM0.333008 8H0V7.66699H0.333008V8ZM1.33301 8H1V7.66699H1.33301V8ZM0.666992 7.66699H0.333008V7.33301H0.666992V7.66699ZM1.66699 7.66699H1.33301V7.33301H1.66699V7.66699ZM1 7.33301H0.666992V7H1V7.33301ZM2 7.33301H1.66699V7H2V7.33301ZM0.333008 7H0V6.66699H0.333008V7ZM1.33301 7H1V6.66699H1.33301V7ZM0.666992 6.66699H0.333008V6.33301H0.666992V6.66699ZM1.66699 6.66699H1.33301V6.33301H1.66699V6.66699ZM1 6.33301H0.666992V6H1V6.33301ZM2 6.33301H1.66699V6H2V6.33301Z" fill="var(--profile-3)"/>
-                            <path id ="led02" d="M4.33301 9H4V8.66699H4.33301V9ZM5.33301 9H5V8.66699H5.33301V9ZM4.66699 8.66699H4.33301V8.33301H4.66699V8.66699ZM5.66699 8.66699H5.33301V8.33301H5.66699V8.66699ZM5 8.33301H4.66699V8H5V8.33301ZM6 8.33301H5.66699V8H6V8.33301ZM4.33301 8H4V7.66699H4.33301V8ZM5.33301 8H5V7.66699H5.33301V8ZM4.66699 7.66699H4.33301V7.33301H4.66699V7.66699ZM5.66699 7.66699H5.33301V7.33301H5.66699V7.66699ZM5 7.33301H4.66699V7H5V7.33301ZM6 7.33301H5.66699V7H6V7.33301ZM4.33301 7H4V6.66699H4.33301V7ZM5.33301 7H5V6.66699H5.33301V7ZM4.66699 6.66699H4.33301V6.33301H4.66699V6.66699ZM5.66699 6.66699H5.33301V6.33301H5.66699V6.66699ZM5 6.33301H4.66699V6H5V6.33301ZM6 6.33301H5.66699V6H6V6.33301Z" fill="var(--profile-3)"/>
-                            <path id ="led03" d="M8.33301 9H8V8.66699H8.33301V9ZM9.33301 9H9V8.66699H9.33301V9ZM8.66699 8.66699H8.33301V8.33301H8.66699V8.66699ZM9.66699 8.66699H9.33301V8.33301H9.66699V8.66699ZM9 8.33301H8.66699V8H9V8.33301ZM10 8.33301H9.66699V8H10V8.33301ZM8.33301 8H8V7.66699H8.33301V8ZM9.33301 8H9V7.66699H9.33301V8ZM8.66699 7.66699H8.33301V7.33301H8.66699V7.66699ZM9.66699 7.66699H9.33301V7.33301H9.66699V7.66699ZM9 7.33301H8.66699V7H9V7.33301ZM10 7.33301H9.66699V7H10V7.33301ZM8.33301 7H8V6.66699H8.33301V7ZM9.33301 7H9V6.66699H9.33301V7ZM8.66699 6.66699H8.33301V6.33301H8.66699V6.66699ZM9.66699 6.66699H9.33301V6.33301H9.66699V6.66699ZM9 6.33301H8.66699V6H9V6.33301ZM10 6.33301H9.66699V6H10V6.33301Z" fill="var(--profile-3)"/>
-                        </svg>
-                    </div>
-                    <div class="flex-1">
-                         <div class="notification-container flex-1"> 
-                            <span id="noti-mess">[_]...</span>
-                            <div class="flex-1 inputContainer">
-                                <div id="inputText" class="inputText"></div>
-                            </div> 
-                            <span class="timer" id="timer">...</span>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-        </div>
-        <div class="between column emu-control gap-8" id="emu-control">
-            <div class="flex-1 gap-22">
-                <div class="column gap-8" id="dpadContainer">
-                    <div class="bg br" style="height: 26px;">
-                        <div class="dpad-state bgp op4 br" id="statePageButton"></div>
-                        <div class="flex-1 dpad-l op4 bgp" id="L"></div>
-                    </div>
-                    <div class="flex-1 bg br ch cw dpad" style="position: relative;">
-                        <svg  width="100%" height="100%" viewBox="0 0 176 176" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <pattern id="s-hover" patternUnits="userSpaceOnUse" width="1" height="1">
-                                <image href="data:image/svg+xml,%3Csvg width='1' height='1' viewBox='0 0 1 1' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.333333 0.333333H0.666667V0.666667H0.333333V0.333333Z' fill='%231D1B18'/%3E%3Cpath d='M0.666667 0H1V0.333333H0.666667V0Z' fill='%231D1B18'/%3E%3Cpath d='M0 0.666667H0.333333V1H0V0.666667Z' fill='%231D1B18'/%3E%3C/svg%3E%0A" width="1" height="1" />
-                            </pattern>
-                            <path fill-opacity="0.01" fill="var(--profile-bg)" id="Left" class="spad left" d="M0 1V176H1V175H2V174H3V173H4V172H5V171H6V170H7V169H8V168H9V167H10V166H11V165H12V164H13V163H14V162H15V161H16V160H17V159H18V158H19V157H20V156H21V155H22V154H23V153H24V152H25V151H26V150H27V149H28V148H29V147H30V146H31V145H32V144H33V143H34V142H35V141H36V140H37V139H38V138H39V137H40V136H41V135H42V134H43V133H44V132H45V131H46V130H47V129H48V128H49V127H50V126H51V125H52V124H53V123H54V122H55V121H56V120H57V119H58V118H59V117H60V116H61V115H62V114H63V113H64V112H65V111H66V110H67V109H68V108H69V107H70V106H71V105H72V104H73V103H74V102H75V101H76V100H77V99H78V98H79V97H80V96H81V95H82V94H83V93H84V92H85V91H86V90H87V89H88V88H87V87H86V86H85V85H84V84H83V83H82V82H81V81H80V80H79V79H78V78H77V77H76V76H75V75H74V74H73V73H72V72H71V71H70V70H69V69H68V68H67V67H66V66H65V65H64V64H63V63H62V62H61V61H60V60H59V59H58V58H57V57H56V56H55V55H54V54H53V53H52V52H51V51H50V50H49V49H48V48H47V47H46V46H45V45H44V44H43V43H42V42H41V41H40V40H39V39H38V38H37V37H36V36H35V35H34V34H33V33H32V32H31V31H30V30H29V29H28V28H27V27H26V26H25V25H24V24H23V23H22V22H21V21H20V20H19V19H18V18H17V17H16V16H15V15H14V14H13V13H12V12H11V11H10V10H9V9H8V8H7V7H6V6H5V5H4V4H3V3H2V2H1V1H0Z"/>
-                            <path fill-opacity="0.01" fill="var(--profile-bg)" id="Right" class="spad right" d="M176 0V175H175V174H174V173H173V172H172V171H171V170H170V169H169V168H168V167H167V166H166V165H165V164H164V163H163V162H162V161H161V160H160V159H159V158H158V157H157V156H156V155H155V154H154V153H153V152H152V151H151V150H150V149H149V148H148V147H147V146H146V145H145V144H144V143H143V142H142V141H141V140H140V139H139V138H138V137H137V136H136V135H135V134H134V133H133V132H132V131H131V130H130V129H129V128H128V127H127V126H126V125H125V124H124V123H123V122H122V121H121V120H120V119H119V118H118V117H117V116H116V115H115V114H114V113H113V112H112V111H111V110H110V109H109V108H108V107H107V106H106V105H105V104H104V103H103V102H102V101H101V100H100V99H99V98H98V97H97V96H96V95H95V94H94V93H93V92H92V91H91V90H90V89H89V88H88V87H89V86H90V85H91V84H92V83H93V82H94V81H95V80H96V79H97V78H98V77H99V76H100V75H101V74H102V73H103V72H104V71H105V70H106V69H107V68H108V67H109V66H110V65H111V64H112V63H113V62H114V61H115V60H116V59H117V58H118V57H119V56H120V55H121V54H122V53H123V52H124V51H125V50H126V49H127V48H128V47H129V46H130V45H131V44H132V43H133V42H134V41H135V40H136V39H137V38H138V37H139V36H140V35H141V34H142V33H143V32H144V31H145V30H146V29H147V28H148V27H149V26H150V25H151V24H152V23H153V22H154V21H155V20H156V19H157V18H158V17H159V16H160V15H161V14H162V13H163V12H164V11H165V10H166V9H167V8H168V7H169V6H170V5H171V4H172V3H173V2H174V1H175V0H176Z"/>
-                            <path fill-opacity="0.01" fill="var(--profile-bg)" id="Down" class="spad down" d="M1 176H176V175H175V174H174V173H173V172H172V171H171V170H170V169H169V168H168V167H167V166H166V165H165V164H164V163H163V162H162V161H161V160H160V159H159V158H158V157H157V156H156V155H155V154H154V153H153V152H152V151H151V150H150V149H149V148H148V147H147V146H146V145H145V144H144V143H143V142H142V141H141V140H140V139H139V138H138V137H137V136H136V135H135V134H134V133H133V132H132V131H131V130H130V129H129V128H128V127H127V126H126V125H125V124H124V123H123V122H122V121H121V120H120V119H119V118H118V117H117V116H116V115H115V114H114V113H113V112H112V111H111V110H110V109H109V108H108V107H107V106H106V105H105V104H104V103H103V102H102V101H101V100H100V99H99V98H98V97H97V96H96V95H95V94H94V93H93V92H92V91H91V90H90V89H89V88H88V89H87V90H86V91H85V92H84V93H83V94H82V95H81V96H80V97H79V98H78V99H77V100H76V101H75V102H74V103H73V104H72V105H71V106H70V107H69V108H68V109H67V110H66V111H65V112H64V113H63V114H62V115H61V116H60V117H59V118H58V119H57V120H56V121H55V122H54V123H53V124H52V125H51V126H50V127H49V128H48V129H47V130H46V131H45V132H44V133H43V134H42V135H41V136H40V137H39V138H38V139H37V140H36V141H35V142H34V143H33V144H32V145H31V146H30V147H29V148H28V149H27V150H26V151H25V152H24V153H23V154H22V155H21V156H20V157H19V158H18V159H17V160H16V161H15V162H14V163H13V164H12V165H11V166H10V167H9V168H8V169H7V170H6V171H5V172H4V173H3V174H2V175H1V176Z"/>
-                            <path fill-opacity="0.01" fill="var(--profile-bg)" id="Up" class="spad up" d="M0 0H175V1H174V2H173V3H172V4H171V5H170V6H169V7H168V8H167V9H166V10H165V11H164V12H163V13H162V14H161V15H160V16H159V17H158V18H157V19H156V20H155V21H154V22H153V23H152V24H151V25H150V26H149V27H148V28H147V29H146V30H145V31H144V32H143V33H142V34H141V35H140V36H139V37H138V38H137V39H136V40H135V41H134V42H133V43H132V44H131V45H130V46H129V47H128V48H127V49H126V50H125V51H124V52H123V53H122V54H121V55H120V56H119V57H118V58H117V59H116V60H115V61H114V62H113V63H112V64H111V65H110V66H109V67H108V68H107V69H106V70H105V71H104V72H103V73H102V74H101V75H100V76H99V77H98V78H97V79H96V80H95V81H94V82H93V83H92V84H91V85H90V86H89V87H88V88H87V87H86V86H85V85H84V84H83V83H82V82H81V81H80V80H79V79H78V78H77V77H76V76H75V75H74V74H73V73H72V72H71V71H70V70H69V69H68V68H67V67H66V66H65V65H64V64H63V63H62V62H61V61H60V60H59V59H58V58H57V57H56V56H55V55H54V54H53V53H52V52H51V51H50V50H49V49H48V48H47V47H46V46H45V45H44V44H43V43H42V42H41V41H40V40H39V39H38V38H37V37H36V36H35V35H34V34H33V33H32V32H31V31H30V30H29V29H28V28H27V27H26V26H25V25H24V24H23V23H22V22H21V21H20V20H19V19H18V18H17V17H16V16H15V15H14V14H13V13H12V12H11V11H10V10H9V9H8V8H7V7H6V6H5V5H4V4H3V3H2V2H1V1H0V0Z"/>
-                            <path fill-opacity="0.01" fill="var(--profile-bg)" id="Down-left" class="spad dl" d="M0 132H1V133H2V134H3V135H4V136H5V137H6V138H7V139H8V140H9V141H10V142H11V143H12V144H13V145H14V146H15V147H16V148H17V149H18V150H19V151H20V152H21V153H22V154H23V155H24V156H25V157H26V158H27V159H28V160H29V161H30V162H31V163H32V164H33V165H34V166H35V167H36V168H37V169H38V170H39V171H40V172H41V173H42V174H43V175H44V176H0V132Z"/>
-                            <path fill-opacity="0.01" fill="var(--profile-bg)" id="Down-right" class="spad dr" d="M176 132H175V133H174V134H173V135H172V136H171V137H170V138H169V139H168V140H167V141H166V142H165V143H164V144H163V145H162V146H161V147H160V148H159V149H158V150H157V151H156V152H155V153H154V154H153V155H152V156H151V157H150V158H149V159H148V160H147V161H146V162H145V163H144V164H143V165H142V166H141V167H140V168H139V169H138V170H137V171H136V172H135V173H134V174H133V175H132V176H176V132Z"/>
-                            <path fill-opacity="0.01" fill="var(--profile-bg)" id="Up-left" class="spad ul" d="M0 44H1V43H2V42H3V41H4V40H5V39H6V38H7V37H8V36H9V35H10V34H11V33H12V32H13V31H14V30H15V29H16V28H17V27H18V26H19V25H20V24H21V23H22V22H23V21H24V20H25V19H26V18H27V17H28V16H29V15H30V14H31V13H32V12H33V11H34V10H35V9H36V8H37V7H38V6H39V5H40V4H41V3H42V2H43V1H44V0H0V44Z"/>
-                            <path fill-opacity="0.01" fill="var(--profile-bg)" id="Up-right" class="spad ur" d="M176 44H175V43H174V42H173V41H172V40H171V39H170V38H169V37H168V36H167V35H166V34H165V33H164V32H163V31H162V30H161V29H160V28H159V27H158V26H157V25H156V24H155V23H154V22H153V21H152V20H151V19H150V18H149V17H148V16H147V15H146V14H145V13H144V12H143V11H142V10H141V9H140V8H139V7H138V6H137V5H136V4H135V3H134V2H133V1H132V0H176V44Z"/>
-                        </svg>
-                        <div id="bgs" class="bgs" style="position: absolute; pointer-events: none; height:100%; width:100%;  transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);"></div>
-                        <svg class="bgp" style="position: absolute; pointer-events: none;" width="136" height="136" viewBox="0 0 136 136" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M69.0996 130C69.3205 130 69.5 130.179 69.5 130.4V135.6C69.5 135.821 69.3205 136 69.0996 136H66.9004C66.6795 136 66.5 135.821 66.5 135.6V130.4C66.5 130.179 66.6795 130 66.9004 130H69.0996ZM5.59961 66.5C5.82052 66.5 6 66.6795 6 66.9004V69.0996C6 69.3205 5.82052 69.5 5.59961 69.5H0.400391C0.179477 69.5 0 69.3205 0 69.0996V66.9004C0 66.6795 0.179477 66.5 0.400391 66.5H5.59961ZM135.6 66.5C135.821 66.5 136 66.6795 136 66.9004V69.0996C136 69.3205 135.821 69.5 135.6 69.5H130.4C130.179 69.5 130 69.3205 130 69.0996V66.9004C130 66.6795 130.179 66.5 130.4 66.5H135.6ZM69.0996 0C69.3205 0 69.5 0.179477 69.5 0.400391V5.59961C69.5 5.82052 69.3205 6 69.0996 6H66.9004C66.6795 6 66.5 5.82052 66.5 5.59961V0.400391C66.5 0.179477 66.6795 0 66.9004 0H69.0996Z" fill="var(--profile-cream)"/>
-                        </svg>
-                    </div>
-                </div>
-                <div class="flex-1 column gap-8">
-                    <div class="bg br" style="height: 26px;">
-                        <div class="flex-1 dpad-r op4 bgp" id="R"></div>
-                        <div class="dpad-menu bgp op4 br" id="menu-pad"></div>
-                    </div>
-                    <div class="flex-1 column bg br" style="gap: 1px;">
-                        <div class="flex-1" style="position: relative;">
-                            <div class="flex-1" id="A">
-                                <div class="flex-1 dpad-a bgp"></div>
-                                <div class="dpad-blank"></div>
-                            </div>
-                            <div class="rewind" id="rewind"></div>
-                        </div>
-                        <div class="flex-1 br">
-                            <div class="flex-1 dpad-b bgp" id="B"></div>
-                            <div class="dpad-turbo br bgp" id="turbo"></div>
-                        </div>
-                        <div class="br" style="height:26px;">
-                            <div class="flex-1 dpad-select bgp op4" id="Select"></div>
-                            <div class="flex-1 dpad-start bgp op4 br" id="Start">
-                        </div>
-                    </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="dynamic" id="dynamic">
-
-        </div>
-    </div>
-
-    <div class="between column localStorage disable" id="storage">
-        <div class="storage gap-10">
-            <div class="flex-1 home bc" id="backToHome"></div>
-            <label class="flex-1 upload-file bc" for="upLoadFile"></label>
-            <div class="flex-1 gap-10">
-                <div class="flex-1 cloud-restore" id="dropboxRestore"></div>
-                <div class="flex-1 cloud-backup" id="dropboxBackup"></div>
-            </div>
-            <div class="flex-1 cloud-dropbox" id="dropboxCloud"></div>
-            <input type="file" id="upLoadFile" hidden />
-        
-        </div>
-        <div class="column flex-disable mgba-storage" id="mgba-storage" style="overflow: auto;">
-            <div class="flex-1 rom-item">
-                <span class="flex-1" id="grapMode">ROM file.</span>
-                <span class="" id="GBAver">...</span>
-            </div>
-            <div id="romsFile" class="column"></div>
-            <div class="flex-1 rom-item">STATE file.</div>
-            <div id="statesFile" class="column"></div>
-            <div class="flex-1 rom-item">SAVE file.</div>
-            <div id="savesFile" class="column"></div>
-            <div class="flex-1 rom-item">CHEAT file.</div>
-            <div id="cheatsFile" class="column"></div>
-            <div class="flex-1 rom-item">SSHOT file.</div>
-            <div id="screenshotsFile" class="column"></div>
-        </div>
-        <div class="flex-1"></div>
-    </div>
-
-    <!-- New Layer-->
-     <div class="between column intro gap-8" id="intro">
-        <div class="s-list flex-1 column">
-            <div class="s-scroll column" id="rom-list">
-                <div class="s-rom_list br bg" style="height:40px;">
-                    <div class="s-rom_name flex-1" id="appVer" style="color: var(--profile-3);">...</div>
-                </div>
-            </div>
-            <div class="s-scroll column gap-8" id="rom-detail"></div>
-        </div>
-        <div class="action-button gap-8">
-            <div class="flex-1 s-logo bg bgp br" id="openLocalStorage"></div>
-            <div class="s-setting bg br" id="sSetting"></div>
-            <div class="s-layout bg br" id="sLayout">
-                <svg id="setAdjustment" width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect id="rect1" x="22" y="18" width="6" height="2" rx="0.3" fill="var(--profile-3)"/>
-                    <rect id="rect2" x="22" y="24" width="6" height="2" rx="0.3" fill="var(--profile-3)"/>
-                    <rect id="rect3" x="22" y="30" width="6" height="2" rx="0.3" fill="var(--profile-3)"/>
-                </svg>
-            </div>
-            <label for="fileInput" class="s-roms bg br" id="fileInputLable"></label>
-            <input type="file" id="fileInput" hidden />
-            <div class="s-back bg br disable" id="sBack"></div>
-        </div>
-     </div>
-    <!-- New Layer-->
-
-    <div class="lockNoti column cw ch visible" id="lockNoti">
-        <div class="flex-1"></div>
-        <span class="" id="notiTitle"></span></br>
-        <span class="" id="notiDetail" style="color: var(--profile-3)"></span>
-        <div class="flex-1"></div>
-    </div>
-    <script type="" src="./src/js/global.js"></script> 
-    <script type="module" src="./src/js/main.js"></script> 
-    <script type="module" src="./src/js/welcome.js"></script> 
-    <script type="module" src="./src/js/gamepad.js"></script> 
-    <script type="module" src="./src/js/ocr.js"></script>
-    <script type="module" src="./src/js/setting.js"></script> 
-    <script type="module" src="./src/js/state.js"></script> 
-    <script type="module" src="./src/js/storage.js"></script> 
-    <script type="module" src="./src/js/cloud.js"></script>  
+  <page01>
+    <list></list>
+    <cta>
+      <logo></logo>
+      <setting></setting>
+      <vertical>
+        <svg width="50" height="50" viewBox="0 0 50 50" fill="none">
+          <rect x="22" y="18" width="6" height="2" rx="0.3" fill="var(--profile-3)"/>
+          <rect x="22" y="24" width="6" height="2" rx="0.3" fill="var(--profile-3)"/>
+          <rect x="22" y="30" width="6" height="2" rx="0.3" fill="var(--profile-3)"/>
+        </svg>
+      </vertical>
+      <input type="file" id="romInput" hidden />
+      <label for="romInput" id="fileInputLable"></label>
+    </cta>
+  </page01>
+  <page02 hidden>
+    <display>
+      <canvas></canvas>
+      <notif></notif>
+    </display>
+    <divide></divide>
+    <gamepad>
+      <state-button ></state-button>
+      <l-button></l-button>
+      <r-button></r-button>
+      <menu-button></menu-button>
+      <dpad-section></dpad-section>
+      <a-button></a-button>
+      <wrap-button></wrap-button>
+      <b-button></b-button>
+      <f-button></f-button>
+      <select-button></select-button>
+      <start-button></start-button>
+    </gamepad>
+    <joypad></joypad>
+  </page02>
 </body>
-
-</html> 
+<script type="" src="./src/js/s-global.js"></script>
+<script type="module" src="./src/js/s-main.js"></script>
+<script type="module" src="./src/js/page01.js"></script> 
+<script type="module" src="./src/js/page02.js"></script> 
+</html>
