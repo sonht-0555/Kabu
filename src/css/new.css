@@ -125,17 +125,17 @@
     grid-template-columns: 1fr 1px 1fr 1px 1fr 1px 1fr 1px 10px 1px 1fr 1px 1fr 1px 1fr 1px 1fr;
     grid-template-rows: 24px 8px 1fr 1px 1fr 1px 24px;
   }
-  state-button  {grid-area: state-button;  grid-row: 1 / 1; grid-column: 1 / 1}
-  l-button      {grid-area: l-button;      grid-row: 1 / 1; grid-column: 3 / 9}
-  r-button      {grid-area: r-button;      grid-row: 1 / 1; grid-column: 11 / 16}
-  menu-button   {grid-area: menu-button;   grid-row: 1 / 1; grid-column: 17 / 18}
-  dpad-section  {grid-area: dpad-section;  grid-row: 3 / 8; grid-column: 1 / 9}
-  a-button      {grid-area: a-button;      grid-row: 3 / 3; grid-column: 11 / 18}
-  wrap-button   {grid-area: a-button;      grid-row: 3 / 3; grid-column: 11 / 16}
-  b-button      {grid-area: b-button;      grid-row: 5 / 5; grid-column: 11 / 16}
-  f-button      {grid-area: f-button;      grid-row: 5 / 5; grid-column: 17 / 18}
-  select-button {grid-area: select-button; grid-row: 7 / 7; grid-column: 11 / 14}
-  start-button  {grid-area: start-button;  grid-row: 7 / 7; grid-column: 15 / 18}
+  state-button  {position: relative; grid-area: state-button;  grid-row: 1 / 1; grid-column: 1 / 1}
+  l-button      {position: relative; grid-area: l-button;      grid-row: 1 / 1; grid-column: 3 / 9}
+  r-button      {position: relative; grid-area: r-button;      grid-row: 1 / 1; grid-column: 11 / 16}
+  menu-button   {position: relative; grid-area: menu-button;   grid-row: 1 / 1; grid-column: 17 / 18}
+  dpad-section  {position: relative; grid-area: dpad-section;  grid-row: 3 / 8; grid-column: 1 / 9}
+  a-button      {position: relative; grid-area: a-button;      grid-row: 3 / 3; grid-column: 11 / 18}
+  wrap-button   {position: relative; grid-area: a-button;      grid-row: 3 / 3; grid-column: 11 / 16}
+  b-button      {position: relative; grid-area: b-button;      grid-row: 5 / 5; grid-column: 11 / 16}
+  f-button      {position: relative; grid-area: f-button;      grid-row: 5 / 5; grid-column: 17 / 18}
+  select-button {position: relative; grid-area: select-button; grid-row: 7 / 7; grid-column: 11 / 14}
+  start-button  {position: relative; grid-area: start-button;  grid-row: 7 / 7; grid-column: 15 / 18}
 
   state-button::after {
     opacity: 0.4;
@@ -163,7 +163,8 @@
     background: url("data:image/svg+xml,%3Csvg width='131' height='75' viewBox='0 0 131 75' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M61.4 42C61.1791 42 61 41.8209 61 41.6V33.4C61 33.1791 61.1791 33 61.4 33H66.6C66.8209 33 67 33.1791 67 33.4V35.6C67 35.8209 67.1791 36 67.4 36H69.6C69.8209 36 70 36.1791 70 36.4V41.6C70 41.8209 69.8209 42 69.6 42H61.4Z' fill='%23F5E8D1'/%3E%3C/svg%3E%0A");
   }
   f-button::after {
-    background: url("data:image/svg+xml,%3Csvg width='43' height='75' viewBox='0 0 43 75' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M17.4 42C17.1791 42 17 41.8209 17 41.6V33.4C17 33.1791 17.1791 33 17.4 33H25.6C25.8209 33 26 33.1791 26 33.4V35.6C26 35.8209 25.8209 36 25.6 36H23.4C23.1791 36 23 36.1791 23 36.4V38.6C23 38.8209 22.8209 39 22.6 39H20.4C20.1791 39 20 39.1791 20 39.4V41.6C20 41.8209 19.8209 42 19.6 42H17.4Z' fill='%23F5E8D1'/%3E%3C/svg%3E%0A");
+    opacity: 0.4;
+    background: url("data:image/svg+xml,%3Csvg width='43' height='75' viewBox='0 0 43 75' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='19' y='33' width='5' height='2' rx='0.3' fill='%23F5E8D1'/%3E%3Crect opacity='0.4' x='19' y='40' width='5' height='2' rx='0.3' fill='%23F5E8D1'/%3E%3C/svg%3E%0A");
   }
   select-button::after {
     opacity: 0.4;
@@ -175,7 +176,9 @@
   }
   gamepad > :is(state-button, l-button, r-button, menu-button, dpad-section, a-button, wrap-button, b-button, f-button, select-button, start-button)::after {
   content: "";
-  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background-position: center;
