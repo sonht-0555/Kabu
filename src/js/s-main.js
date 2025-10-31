@@ -48,3 +48,9 @@ export async function loadGame(romName) {
     await Module.loadState(1);
     await setDisplay(romName);
 }
+export async function buttonPress(key) {
+    Module.buttonPress(key)
+}
+export async function buttonUnpress(key) {
+    Module.buttonUnpress(key)
+}
