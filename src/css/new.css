@@ -44,7 +44,7 @@
 }
 @layer base {
   page01, list, rom, cta, 
-  page02, display, gamepad {
+  page02, display, gamepad, notif {
     display: grid;
     width: 100%; 
   }
@@ -108,17 +108,31 @@
 }
 @layer page-2 {
   page02 {
-    grid-template-rows: auto 20px calc((100vw + 26px) / 2) 1fr;
+    grid-template-rows: auto 11px calc((100vw + 26px) / 2) 1fr;
     justify-items: center;
     padding :6px;
   }
   /* layer display */
   page02 display {
-    grid-template-rows: 1fr 20px;
+    grid-template-rows: 1fr 11px;
   }
   page02 canvas, notif {
     width:100%;
     image-rendering: pixelated;
+  }
+  notif {
+    font-family: "04b";
+    grid-template-columns: auto 1fr auto;
+    color: var(--profile-6);
+    text-align: left;
+    align-items: end;
+  }
+  notif titles, times{
+    line-height: 6px;
+    height: 7px;
+  }
+  notif times{
+    font-family: "04bf";
   }
   /* layer gamepad */
   page02 gamepad {

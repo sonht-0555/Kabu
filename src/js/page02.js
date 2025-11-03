@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function() {
         for (let touch of event.changedTouches) {
             const buttonId = getButtonIdFromTouch(touch);
             if (!buttonId) continue;
-            
+
             if (dpadButtons.includes(buttonId)) {
                 if (activeDpadTouches.has(touch.identifier) && activeDpadTouches.get(touch.identifier) !== buttonId) {
                     handleButtonPress(activeDpadTouches.get(touch.identifier), false);
