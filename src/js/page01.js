@@ -2,6 +2,7 @@ import * as Main from './s-main.js';
 // inputGame
 async function inputGame(InputFile) {
     await Main.uploadGame(romInput);
+    await delay(100);
     await Main.loadGame(InputFile.files[0].name);
 }
 // listGame

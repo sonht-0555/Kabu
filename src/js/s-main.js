@@ -69,6 +69,7 @@ export async function FSSync() {
 }
 export async function loadGame(romName) {
     await Module.loadGame(`/data/games/${romName}`);
+    await delay(100);
     await Module.loadState(1);
     await setDisplay(romName);
     timer(true);
