@@ -1,4 +1,4 @@
-tag("page01"), tag("page02"), tag("notif"), tag("display"), tag("list"), tag("name"), tag("canvas"), tag("gamepad");
+tag("page01"), tag("page02"), tag("notif"), tag("display"), tag("list"), tag("name"), tag("canvas"), tag("gamepad"), tag("titles");
 let gameName, gameType, gameWidth, gameHeight, integer, timerId;
 let [hours, minutes, seconds, count1] = [0, 0, 0, 0, 0];
 function tag(selector) {
@@ -14,9 +14,11 @@ async function setDisplay(romName) {
     [gameName, gameType] = [romName.slice(0, -4), romName.slice(-3)];
     [gameWidth, gameHeight] = (gameType === "zip" || gameType === "gba") ? [240, 160] : [160, 144];
     integer = Math.floor((window.innerWidth * window.devicePixelRatio) / gameWidth) / window.devicePixelRatio;
-    display.style.height = `${Math.ceil(gameHeight * integer) + 11}px`;
+    display.style.height = `${Math.ceil(gameHeight * integer) + 10}px`;
     display.style.width  = `${gameWidth  * integer}px`;
     canvas.style.height  = `${gameHeight * integer}px`;
+    // notification
+    titles.textContent = gameName
     // gamepad
     const base = Math.round((window.innerWidth - 12 - 8 - 16) / 8);
     const adjust = base % 2 === 0 ? base - 1 : base;
