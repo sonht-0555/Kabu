@@ -8,9 +8,9 @@
   "description": "NewUI",
   "icons": [
     {
-      "src": "/src/img/icon.png",
+      "src": "/src/img/icon.JPG",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/jpeg"
     }
   ]
 }
