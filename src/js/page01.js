@@ -20,9 +20,7 @@ async function listGame() {
 };
 // DOMContentLoaded
 document.addEventListener("DOMContentLoaded", function() {
-    setTimeout(() => { listGame() },1000);
-    setTimeout(() => { firstView() },2000);
-    
+    setTimeout(() => { listGame(),firstView() },1000);
     romInput.addEventListener("change", function() {
         inputGame(romInput);
     })

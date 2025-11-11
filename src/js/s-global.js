@@ -11,7 +11,7 @@ async function delay(ms) {
 }
 async function firstView() {
     const hour = new Date().getHours();
-    if (hour >= 21 || hour < 6) {
+    if (hour >= 20 || hour < 6) {
         document.querySelectorAll('name, wrap-button, b-button, dpad-section').forEach(el => el.classList.add('night-mode'));
     }
 }
