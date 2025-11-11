@@ -9,7 +9,13 @@ function tag(selector) {
 async function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-async function setDisplay(romName) {
+async function firstView() {
+    const hour = new Date().getHours();
+    if (hour <= 21 || hour < 6) {
+        document.querySelectorAll('name, wrap-button, b-button, dpad-section').forEach(el => el.classList.add('night-mode'));
+    }
+}
+async function gameView(romName) {
     // display
     [gameName, gameType] = [romName.slice(0, -4), romName.slice(-3)];
     [gameWidth, gameHeight] = (gameType === "zip" || gameType === "gba") ? [240, 160] : [160, 144];

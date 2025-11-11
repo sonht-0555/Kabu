@@ -2,7 +2,7 @@ import * as Main from './s-main.js';
 // gamepad
 const dpadButtons = ["up", "down", "left", "right", "up-left", "up-right", "down-left", "down-right"];
 const otherButtons = ["a", "b", "start", "select", "l", "r"];
-let activeDpadTouches = new Map();
+let activeDpadTouches  = new Map();
 let activeOtherTouches = new Map();
 function handleButtonPress(buttonId, isPressed) {
     if (!buttonId) return;

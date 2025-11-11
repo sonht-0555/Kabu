@@ -19,7 +19,7 @@ function initializeCore(coreInitFunction) {
     });
 }    
 initializeCore(stable);
-export function timer(isStart) {
+export async function timer(isStart) {
     if (isStart) {
         if (timerId) return;
         timerId = setInterval(() => {
@@ -65,8 +65,8 @@ export async function loadGame(romName) {
     await Module.loadGame(`/data/games/${romName}`);
     await delay(100);
     await Module.loadState(1);
-    await setDisplay(romName);
-    timer(true);
+    await gameView(romName);
+    await timer(true);
 }
 export async function buttonPress(key) {
     Module.buttonPress(key)
