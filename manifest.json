@@ -8,9 +8,9 @@
   "description": "Kabu",
   "icons": [
     {
-      "src": "/src/img/icon.png",
+      "src": "/src/img/icon.jpg",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/jpg"
     }
   ]
 }
