@@ -9,6 +9,12 @@ function tag(selector) {
 async function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+function led(slot) {
+    ['led1', 'led2', 'led3'].forEach(id => {
+        document.getElementById(id)?.classList.toggle('active', id === `led${slot}`);
+    });
+    setTimeout(() => { document.getElementById(`led${slot}`)?.classList.remove('active'); }, 4000);
+}
 async function firstView() {
     const hour = new Date().getHours();
     if (hour >= 20 || hour < 6) {

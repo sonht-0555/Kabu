@@ -77,6 +77,20 @@
   l-button.night-mode::after, r-button.night-mode::after, start-button.night-mode::after, select-button.night-mode::after {
     opacity: 0 !important;
   }
+  @keyframes led {
+    0% {
+      fill: var(--profile-3);
+    }
+    50% {
+      fill: var(--profile-6);
+    }
+    100% {
+      fill: var(--profile-3);
+    }
+  }
+  .led.active {
+    animation: led 3s;
+  }
 }
 @layer page-1 {
   page01 {

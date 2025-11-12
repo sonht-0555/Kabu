@@ -26,7 +26,7 @@ export async function timer(isStart) {
             if (++seconds === 60) [seconds, minutes] = [0, ++minutes];
             if (minutes === 60) [minutes, hours] = [0, ++hours];
             document.querySelector("times").textContent = `${hours}h${minutes.toString().padStart(2, '0')}.${(seconds % 60).toString().padStart(2, '0')}`;
-            if (++count1 === 60) { autoSave(); count1 = 0; }
+            if (++count1 === 30) { autoSave(); Module.SDL2(); count1 = 0; }
         }, 1000);
     } else if (timerId) {
         clearInterval(timerId);
@@ -36,6 +36,7 @@ export async function timer(isStart) {
 export async function autoSave() {
     await Module.saveState(1);
     await FSSync();
+    led(1);
     console.log(`Auto save`);
 }
 export async function uploadGame(romName) {
@@ -63,10 +64,11 @@ export async function FSSync() {
 }
 export async function loadGame(romName) {
     await Module.loadGame(`/data/games/${romName}`);
-    await delay(100);
+    await delay(200);
     await Module.loadState(1);
     await gameView(romName);
     await timer(true);
+    await Module.SDL2();
 }
 export async function buttonPress(key) {
     Module.buttonPress(key)
