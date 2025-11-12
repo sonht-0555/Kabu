@@ -14,15 +14,10 @@ function handleButtonPress(buttonId, isPressed) {
     } else {
         isPressed ? Main.buttonPress(buttonId) : Main.buttonUnpress(buttonId);
     }
-    const element = document.getElementById(buttonId);
-        if (element) {
-            if (isPressed) {
-                element.classList.add('touched');
-            } else {
-                element.classList.remove('touched');
-            }
-        }
-}
+    [document.getElementById(buttonId), dpadButtons.includes(buttonId) ? dpad : null]
+        .filter(Boolean)
+        .forEach(el => el.classList.toggle('touched', isPressed));
+    }
 function getButtonIdFromTouch(touch) {
     const element = document.elementFromPoint(touch.clientX, touch.clientY);
     const button = element?.closest("[id]");
