@@ -69,14 +69,14 @@
     background: url("data:image/svg+xml,%3Csvg width='1' height='1' viewBox='0 0 1 1' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.333008 0.666992H0V0.333008H0.333008V0.666992ZM0.666016 0.333008H0.333008V0H0.666016V0.333008Z' fill='%231D1B18'/%3E%3C/svg%3E%0A")!important;
   }
   .night-mode.touched {
-    background: url("data:image/svg+xml,%3Csvg width='1' height='1' viewBox='0 0 1 1' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.333008 0.666992H0V0.333008H0.333008V0.666992ZM0.666016 0.333008H0.333008V0H0.666016V0.333008Z' fill='%231D1B18' fill-opacity='0.4'/%3E%3C/svg%3E%0A")!important;
+    background: url("data:image/svg+xml,%3Csvg width='1' height='1' viewBox='0 0 1 1' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.333008 0.666992H0V0.333008H0.333008V0.666992ZM0.666016 0.333008H0.333008V0H0.666016V0.333008Z' fill='%231D1B18' fill-opacity='0.8'/%3E%3C/svg%3E%0A")!important;
   }
   .night-mode::after,name.night-mode {
     opacity: 0.4;
   }
-  l-button.night-mode::after, r-button.night-mode::after, start-button.night-mode::after, select-button.night-mode::after {
+  /*l-button.night-mode::after, r-button.night-mode::after, start-button.night-mode::after, select-button.night-mode::after {
     opacity: 0 !important;
-  }
+  }*/
   @keyframes led {
     0% {
       fill: var(--profile-3);
