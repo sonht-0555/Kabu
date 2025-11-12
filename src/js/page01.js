@@ -18,10 +18,23 @@ async function listGame() {
         rom.appendChild(more);
     });
 };
+// verticalSetting
+let current = parseInt(localStorage.getItem('verticalCurrent')) || 0;
+async function verSetting(values=[80, 160, 0]) {
+    page02.style.paddingTop = `${values[current]}px`;
+    values.map(value => `k${value}`).forEach((id, index) => {
+        document.getElementById(id).style.fill = index === current ? "var(--profile-1)" : 'var(--profile-3)';
+    });
+    localStorage.setItem('verticalCurrent', current);
+    current = (current + 1) % values.length; 
+}
 // DOMContentLoaded
 document.addEventListener("DOMContentLoaded", function() {
-    setTimeout(() => { listGame(),firstView() },1000);
+    setTimeout(() => { verSetting(),listGame(),firstView() },1000);
     romInput.addEventListener("change", function() {
         inputGame(romInput);
+    })
+    vertical.addEventListener("click", function() {
+        verSetting();
     })
 });

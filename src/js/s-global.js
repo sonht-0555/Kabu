@@ -1,4 +1,4 @@
-tag("page01"), tag("page02"), tag("notif"), tag("display"), tag("list"), tag("name"), tag("canvas"), tag("gamepad"), tag("l-button"), tag("r-button"), tag("start-button"), tag("select-button"), tag("titles");
+tag("page01"), tag("page02"), tag("notif"), tag("display"), tag("list"), tag("name"), tag("canvas"), tag("gamepad"), tag("l-button"), tag("r-button"), tag("start-button"), tag("select-button"), tag("titles"), tag("vertical");
 let gameName, gameType, gameWidth, gameHeight, integer, timerId;
 let [hours, minutes, seconds, count1] = [0, 0, 0, 0, 0];
 function tag(selector) {
