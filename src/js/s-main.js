@@ -39,6 +39,13 @@ export async function autoSave() {
     led(1);
     console.log(`Auto save`);
 }
+export async function saveState(slot) {
+    await Module.saveState(slot);
+    await FSSync();
+}
+export async function loadState(slot) {
+    await Module.loadState(slot);
+}
 export async function uploadGame(romName) {
     const file = romName.files[0];
     Module.uploadRom(file, () => {
@@ -54,12 +61,8 @@ export async function FSSync() {
     canSync = false;
     try {
         await Module.FSSync();
-    } catch (error) {
-        console.error('Sync error:', error);
     } finally {
-        setTimeout(() => {
-            canSync = true;
-        }, 3000);
+        setTimeout(() => { canSync = true; }, 3000);
     }
 }
 export async function loadGame(romName) {

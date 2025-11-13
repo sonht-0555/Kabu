@@ -23,6 +23,17 @@ function getButtonIdFromTouch(touch) {
     const button = element?.closest("[id]");
     return button ? button.id : null;
 }
+let tap = 0;
+canvas.addEventListener('touchstart', (event) => {
+    if (Date.now() - tap < 300) {
+        const { left, top, width, height } = canvas.getBoundingClientRect();
+        const { clientX, clientY } = event.touches[0];
+        const x = clientX - left, y = clientY - top;
+        (x < width / 2 ? (y < height / 2 ? handleTopLeft  : Main.loadState(2)) 
+                       : (y < height / 2 ? handleTopRight : Main.saveState(2)));
+    }
+    tap = Date.now();
+});
 document.addEventListener("DOMContentLoaded", function() {
     document.addEventListener("touchstart", (event) => {
         for (let touch of event.changedTouches) {
