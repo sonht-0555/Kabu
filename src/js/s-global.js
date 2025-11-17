@@ -30,12 +30,12 @@ async function gameView(romName) {
     [gameName, gameType] = [romName.slice(0, -4), romName.slice(-3)];
     [gameWidth, gameHeight] = (gameType === "zip" || gameType === "gba") ? [240, 160] : [160, 144];
     integer = Math.floor((window.innerWidth * window.devicePixelRatio) / gameWidth) / window.devicePixelRatio;
+    canvas.style.height  = `${gameHeight * integer}px`;
     display.style.height = `${Math.ceil(gameHeight * integer) + 10}px`;
     display.style.width  = `${gameWidth  * integer}px`;
-    canvas.style.height  = `${gameHeight * integer}px`;
     display.style.setProperty("--width", `${gameWidth}px`);
     display.style.setProperty("--height", `${gameHeight}px`);
-    display.style.setProperty("--zoom", integer);
+    display.style.setProperty("--scale", integer);
     console.log(integer)
     // notification
     titles.textContent = gameName
