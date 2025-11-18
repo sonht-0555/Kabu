@@ -1,5 +1,6 @@
-tag("page01"), tag("page02"), tag("notif"), tag("display"), tag("list"), tag("name"), tag("canvas"), tag("gamepad"), tag("l-button"), tag("r-button"), tag("start-button"), tag("select-button"), tag("dpad-section"), tag("titles"), tag("vertical");
+tag("page01"), tag("page02"), tag("notif"), tag("display"), tag("list"), tag("name"), tag("gamepad"), tag("l-button"), tag("r-button"), tag("start-button"), tag("select-button"), tag("dpad-section"), tag("titles"), tag("vertical");
 let gameName, gameType, gameWidth, gameHeight, integer, timerId;
+const canvas = document.getElementById('canvas');
 let [hours, minutes, seconds, count1] = [0, 0, 0, 0, 0];
 function tag(selector) {
     const element = document.querySelector(selector)
