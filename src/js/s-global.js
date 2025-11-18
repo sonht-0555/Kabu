@@ -37,6 +37,7 @@ async function gameView(romName) {
     display.style.setProperty("--width", `${gameWidth}px`);
     display.style.setProperty("--height", `${gameHeight}px`);
     display.style.setProperty("--scale", integer);
+    display.style.setProperty("--background", `url("data:image/svg+xml,%3Csvg width='1' height='1' xmlns='http://www.w3.org/2000/svg'%3E%3Crect y='.75' width='.25' height='.25' fill='black'/%3E%3Crect x='.25' y='.5' width='.25' height='.25' fill='black'/%3E%3Crect x='.5' y='.25' width='.25' height='.25' fill='black'/%3E%3Crect x='.75' width='.25' height='.25' fill='black'/%3E%3C/svg%3E")`);    
     console.log(integer)
     // notification
     titles.textContent = gameName
@@ -47,21 +48,6 @@ async function gameView(romName) {
     page02.style.gridTemplateRows  =  `auto ${window.innerWidth - (adjust * 8 + 8) - 12}px ${(adjust * 4) + 4 + 8 + 24}px 1fr`
     page01.hidden = true;
     page02.hidden = false;
-}
-const canvass = document.getElementById('myCanvas');
-        const ctx = canvass.getContext('2d');
-        const tileSize = 4;
-        function draw(x, y) {
-            ctx.fillStyle = 'black';
-            ctx.fillRect(x + 3, y + 0, 1, 1); // Pixel (3, 0)
-            ctx.fillRect(x + 2, y + 1, 1, 1); // Pixel (2, 1)
-            ctx.fillRect(x + 1, y + 2, 1, 1); // Pixel (1, 2)
-            ctx.fillRect(x + 0, y + 3, 1, 1); // Pixel (0, 3)
-        }
-        for (let y = 0; y < canvass.height; y += tileSize) {
-            for (let x = 0; x < canvass.width; x += tileSize) {
-                draw(x, y);
-            }
 }
 document.addEventListener("DOMContentLoaded", function() {
     
