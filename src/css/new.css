@@ -143,6 +143,8 @@
   page02 display {
     grid-template-rows: 1fr 10px;
     position: relative;
+    transform: translateZ(0);
+    will-change: transform;
   }
   .overlay{
     position: absolute;
@@ -152,7 +154,6 @@
     height: 640px !important;
     transform-origin: top left;
     transform: scale(0.333333);
-    z-index: 1;
     pointer-events: none;
   }
   /*display::after {
