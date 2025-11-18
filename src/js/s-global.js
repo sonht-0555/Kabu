@@ -47,6 +47,21 @@ async function gameView(romName) {
     page01.hidden = true;
     page02.hidden = false;
 }
+const canvass = document.getElementById('myCanvas');
+        const ctx = canvass.getContext('2d');
+        const tileSize = 4;
+        function draw(x, y) {
+            ctx.fillStyle = 'black';
+            ctx.fillRect(x + 3, y + 0, 1, 1); // Pixel (3, 0)
+            ctx.fillRect(x + 2, y + 1, 1, 1); // Pixel (2, 1)
+            ctx.fillRect(x + 1, y + 2, 1, 1); // Pixel (1, 2)
+            ctx.fillRect(x + 0, y + 3, 1, 1); // Pixel (0, 3)
+        }
+        for (let y = 0; y < canvass.height; y += tileSize) {
+            for (let x = 0; x < canvass.width; x += tileSize) {
+                draw(x, y);
+            }
+}
 document.addEventListener("DOMContentLoaded", function() {
     
 });
