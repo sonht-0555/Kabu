@@ -33,7 +33,7 @@ function sgvGen(N) {
         const rectString = `<rect x='${x}' y='${y}' width='${size_str}' height='${size_str}' fill='black'/>`;
         rects.push(rectString);
     }
-    const svgContent = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'>${rects.join('')}</svg>`;
+    const svgContent = `<svg xmlns='http://www.w3.org/2000/svg' width="1" height="1" viewBox='0 0 1 1'>${rects.join('')}</svg>`;
     let encodedSvg = svgContent
         .replace(/'/g, '"').replace(/#/g, '%23').replace(/"/g, "'"); 
     return `url("data:image/svg+xml,${encodedSvg}")`;
