@@ -147,16 +147,9 @@
     will-change: transform;
   }
   display::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: var(--width);
-    height: var(--height);
-    transform-origin: top left;
-    transform: scale(var(--scale));
     filter: brightness(0.8) contrast(1.2) saturate(0.8) sepia(0.2) grayscale(0);
     background: var(--background);
+    background-repeat: repeat !important;
     mix-blend-mode: overlay;
     pointer-events: none;
   }
@@ -174,15 +167,6 @@
     text-align: left;
     align-items: end;
     position: relative;
-  }
-  notif::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: url("data:image/svg+xml,%3Csvg width='1' height='1' viewBox='0 0 1 1' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.333333 0.333333H0.666667V0.666667H0.333333V0.333333Z' fill='black'/%3E%3Cpath d='M0.666667 0H1V0.333333H0.666667V0Z' fill='black'/%3E%3Cpath d='M0 0.666667H0.333333V1H0V0.666667Z' fill='black'/%3E%3C/svg%3E%0A");
   }
   notif titles, times{
     line-height: 6px;
@@ -252,7 +236,7 @@
     opacity: 0.4;
     background: url("data:image/svg+xml,%3Csvg width='87' height='24' viewBox='0 0 87 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M35.3 15C35.1343 15 35 14.8657 35 14.7V13.3C35 13.1343 35.1343 13 35.3 13H36.7C36.8657 13 37 12.8657 37 12.7V9.3C37 9.13431 37.1343 9 37.3 9H40.7C40.8657 9 41 9.13431 41 9.3V10.7C41 10.8657 40.8657 11 40.7 11H39.3C39.1343 11 39 11.1343 39 11.3V14.7C39 14.8657 38.8657 15 38.7 15H35.3Z' fill='%23F5E8D1'/%3E%3Cpath d='M45.3 15C45.1343 15 45 14.8657 45 14.7V11.3C45 11.1343 44.8657 11 44.7 11H43.3C43.1343 11 43 10.8657 43 10.7V9.3C43 9.13431 43.1343 9 43.3 9H48.7C48.8657 9 49 9.13431 49 9.3V10.7C49 10.8657 48.8657 11 48.7 11H47.3C47.1343 11 47 11.1343 47 11.3V14.7C47 14.8657 46.8657 15 46.7 15H45.3Z' fill='%23F5E8D1'/%3E%3Cpath d='M51.3 15C51.1343 15 51 14.8657 51 14.7V13.3C51 13.1343 51.1343 13 51.3 13H52.7C52.8657 13 53 13.1343 53 13.3V14.7C53 14.8657 52.8657 15 52.7 15H51.3Z' fill='%23F5E8D1'/%3E%3C/svg%3E%0A");
   }
-  gamepad > :is(state-button, l-button, r-button, menu-button, dpad-section, a-button, wrap-button, b-button, f-button, select-button, start-button)::after {
+  display::after, notif::after, state-button::after, l-button::after, r-button::after, menu-button::after, dpad-section::after, a-button::after, wrap-button::after, b-button::after, f-button::after, select-button::after, start-button::after {
   content: "";
   position: absolute;
   top: 0;

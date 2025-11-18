@@ -48,10 +48,7 @@ async function gameView(romName) {
     console.log(integer)
     display.style.height = `${Math.ceil(gameHeight * (integer/window.devicePixelRatio)) + 10}px`;
     display.style.width  = `${gameWidth  * (integer/window.devicePixelRatio)}px`;
-    display.style.setProperty("--width", `${gameWidth}px`);
-    display.style.setProperty("--height", `${gameHeight}px`);
-    display.style.setProperty("--scale", integer / window.devicePixelRatio);
-    display.style.setProperty("--background", sgvGen(integer));    
+    display.style.setProperty("--background", sgvGen(window.devicePixelRatio));    
     // notification
     titles.textContent = gameName
     // gamepad
