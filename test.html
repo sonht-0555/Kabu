@@ -1,43 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-    <title>Vẽ Hình bằng Canvas</title>
-    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin">
-    <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
-    
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Background Demo</title>
     <style>
-        canvas {
-            border: 1px solid #ccc;
-            transform-origin: top left;
-            transform: scale(0.25);
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            display: flex;
+            gap: 40px;
+        }
+
+        .box {
+            width: 50px;       /* Kích thước hiển thị */
+            height: 50px;
+            border: 2px solid #333;
+            background-repeat: no-repeat;
+            background-size: cover; /* Phóng to SVG 1x1 để lấp đầy box */
         }
     </style>
 </head>
 <body>
 
-    <!-- Canvas lớn -->
-    <canvas id="myCanvas" width="960" height="640"></canvas>
+    <div>
+        <h2>N = 4 Rects</h2>
+        <div id="box-n4" class="box"></div>
+    </div>
+
+    <div>
+        <h2>N = 3 Rects</h2>
+        <div id="box-n3" class="box"></div>
+    </div>
 
     <script>
-        const canvas = document.getElementById('myCanvas');
-        const ctx = canvas.getContext('2d');
-        const tileSize = 4;
-        function draw(x, y) {
-            ctx.fillStyle = 'black';
-            ctx.fillRect(x + 3, y + 0, 1, 1); // Pixel (3, 0)
-            ctx.fillRect(x + 2, y + 1, 1, 1); // Pixel (2, 1)
-            ctx.fillRect(x + 1, y + 2, 1, 1); // Pixel (1, 2)
-            ctx.fillRect(x + 0, y + 3, 1, 1); // Pixel (0, 3)
-        }
-        for (let y = 0; y < canvas.height; y += tileSize) {
-            for (let x = 0; x < canvas.width; x += tileSize) {
-                draw(x, y);
+        // Hàm tạo chuỗi SVG Data URI đã mã hóa tối thiểu
+        function createSimpleSvgBackground(N) {
+            if (N <= 0) return '';
+            const rects = [];
+            const size = 1 / N; 
+            for (let i = 0; i < N; i++) {
+                const x = (i * size).toFixed(3); 
+                const y = ((N - 1 - i) * size).toFixed(3); 
+                const size_str = size.toFixed(3);
+                const rectString = `<rect x='${x}' y='${y}' width='${size_str}' height='${size_str}' fill='black'/>`;
+                rects.push(rectString);
             }
+            const svgContent = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'>${rects.join('')}</svg>`;
+            let encodedSvg = svgContent
+                .replace(/'/g, '"').replace(/#/g, '%23').replace(/"/g, "'"); 
+            return `url("data:image/svg+xml,${encodedSvg}")`;
         }
+
+        // --- Áp dụng Background cho các DIV ---
+        
+        // 1. N = 4
+        document.getElementById('box-n4').style.backgroundImage = createSimpleSvgBackground(4);
+
+        // 2. N = 3
+        document.getElementById('box-n3').style.backgroundImage = createSimpleSvgBackground(3);
     </script>
 
 </body>

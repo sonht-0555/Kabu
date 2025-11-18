@@ -22,23 +22,36 @@ async function firstView() {
         document.querySelectorAll('name, wrap-button, a-button, b-button, dpad-section, l-button, r-button, start-button, select-button, f-button, state-button, menu-button').forEach(el => el.classList.add('night-mode'));
     }
 }
+function sgvGen(N) {
+    if (N <= 0) return '';
+    const rects = [];
+    const size = 1 / N; 
+    for (let i = 0; i < N; i++) {
+        const x = (i * size).toFixed(3); 
+        const y = ((N - 1 - i) * size).toFixed(3); 
+        const size_str = size.toFixed(3);
+        const rectString = `<rect x='${x}' y='${y}' width='${size_str}' height='${size_str}' fill='black'/>`;
+        rects.push(rectString);
+    }
+    const svgContent = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'>${rects.join('')}</svg>`;
+    let encodedSvg = svgContent
+        .replace(/'/g, '"').replace(/#/g, '%23').replace(/"/g, "'"); 
+    return `url("data:image/svg+xml,${encodedSvg}")`;
+}
 async function gameView(romName) {
     // global
-    page02.ontouchstart = (e) => {
-        e.preventDefault();
-    }
+    page02.ontouchstart = (e) => { e.preventDefault(); }
     // display
     [gameName, gameType] = [romName.slice(0, -4), romName.slice(-3)];
     [gameWidth, gameHeight] = (gameType === "zip" || gameType === "gba") ? [240, 160] : [160, 144];
-    integer = Math.floor((window.innerWidth * window.devicePixelRatio) / gameWidth) / window.devicePixelRatio;
-    canvas.style.height  = `${gameHeight * integer}px`;
-    display.style.height = `${Math.ceil(gameHeight * integer) + 10}px`;
-    display.style.width  = `${gameWidth  * integer}px`;
+    integer = Math.floor((window.innerWidth * window.devicePixelRatio) / gameWidth);
+    console.log(integer)
+    display.style.height = `${Math.ceil(gameHeight * (integer/window.devicePixelRatio)) + 10}px`;
+    display.style.width  = `${gameWidth  * (integer/window.devicePixelRatio)}px`;
     display.style.setProperty("--width", `${gameWidth}px`);
     display.style.setProperty("--height", `${gameHeight}px`);
-    display.style.setProperty("--scale", integer);
-    display.style.setProperty("--background", `url("data:image/svg+xml,%3Csvg width='1' height='1' xmlns='http://www.w3.org/2000/svg'%3E%3Crect y='.75' width='.25' height='.25' fill='black'/%3E%3Crect x='.25' y='.5' width='.25' height='.25' fill='black'/%3E%3Crect x='.5' y='.25' width='.25' height='.25' fill='black'/%3E%3Crect x='.75' width='.25' height='.25' fill='black'/%3E%3C/svg%3E")`);    
-    console.log(integer)
+    display.style.setProperty("--scale", integer / window.devicePixelRatio);
+    display.style.setProperty("--background", sgvGen(integer));    
     // notification
     titles.textContent = gameName
     // gamepad
