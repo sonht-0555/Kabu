@@ -91,6 +91,9 @@
   .grayscale {
     filter:grayscale(0.6)!important;
   }
+  .op8 {
+    opacity: 0.8 !important;
+  }
 }
 @layer page-1 {
   page01 {

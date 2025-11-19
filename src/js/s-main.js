@@ -41,20 +41,20 @@ export async function autoSave() {
 }
 export async function saveState(slot) {
     await Module.pauseGame();
-    canvas.classList.add('grayscale')
+    canvas.classList.add('op8')
     await Module.saveState(slot);
     await FSSync();
     await message("Saved!")
-    canvas.classList.remove('grayscale')
+    canvas.classList.remove('op8')
     await Module.resumeGame();
 
 }
 export async function loadState(slot) {
     await Module.pauseGame();
-    canvas.classList.add('grayscale')
+    canvas.classList.add('op8')
     await Module.loadState(slot);
     await message("Go_load!", 1000)
-    canvas.classList.remove('grayscale')
+    canvas.classList.remove('op8')
     await Module.resumeGame();
 
 }
