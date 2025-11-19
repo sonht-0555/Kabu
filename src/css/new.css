@@ -88,6 +88,9 @@
   .led.active {
     animation: led 3s;
   }
+  .grayscale {
+    filter:grayscale(0.6)!important;
+  }
 }
 @layer page-1 {
   page01 {

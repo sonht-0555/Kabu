@@ -38,13 +38,11 @@ function sgvGen(N) {
         .replace(/'/g, '"').replace(/#/g, '%23').replace(/"/g, "'"); 
     return `url("data:image/svg+xml,${encodedSvg}")`;
 }
-async function message(mess) {
+async function message(mess, second = 2000) {
     if (count) return;
     count = true;
-    //titles.style.color = "var(--profile-2)";
     titles.textContent = mess;
-    await delay(2000);
-    //titles.style.color = "var(--profile-3)";
+    await delay(second);
     titles.textContent = gameName;
     count = false;
 }
