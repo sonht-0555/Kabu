@@ -3,63 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SVG Background Demo</title>
+    <title>Loading Rút Gọn</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
             display: flex;
-            gap: 40px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: sans-serif;
+            background-color: #f4f4f4;
         }
-
-        .box {
-            width: 50px;       /* Kích thước hiển thị */
-            height: 50px;
-            border: 2px solid #333;
-            background-repeat: no-repeat;
-            background-size: cover; /* Phóng to SVG 1x1 để lấp đầy box */
+        #start-button {
+            padding: 10px 20px;
+            margin-bottom: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        /* Container (Đường ray) */
+        .loading-line-container {
+            width: 300px;
+            height: 1px;
+            background-color: #ddd;
+            position: relative;
+            overflow: hidden;
+            /* Ẩn ban đầu */
+            visibility: hidden; 
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        /* Hiển thị khi được kích hoạt */
+        .loading-line-container.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        /* Thanh loading (::after) */
+        .loading-line-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 80px;
+            height: 100%;
+            background-color: #007bff;
+            animation: none; /* Dừng animation ban đầu */
+        }
+        /* Kích hoạt animation khi có class 'active' */
+        .loading-line-container.active::after {
+            /* 2s: thời gian chạy, 1: chạy 1 lần, forwards: giữ trạng thái cuối */
+            animation: moveLine 2s 1 cubic-bezier(0.4, 0.0, 0.2, 1) forwards; 
+        }
+        /* Keyframes: Di chuyển từ trái sang phải */
+        @keyframes moveLine {
+            0% { left: -80px; } 
+            100% { left: 100%; }
         }
     </style>
 </head>
 <body>
-
-    <div>
-        <h2>N = 4 Rects</h2>
-        <div id="box-n4" class="box"></div>
-    </div>
-
-    <div>
-        <h2>N = 3 Rects</h2>
-        <div id="box-n3" class="box"></div>
-    </div>
+    <button id="start-button">Bắt đầu Loading</button>
+    <div id="loader" class="loading-line-container"></div>
 
     <script>
-        // Hàm tạo chuỗi SVG Data URI đã mã hóa tối thiểu
-        function createSimpleSvgBackground(N) {
-            if (N <= 0) return '';
-            const rects = [];
-            const size = 1 / N; 
-            for (let i = 0; i < N; i++) {
-                const x = (i * size).toFixed(3); 
-                const y = ((N - 1 - i) * size).toFixed(3); 
-                const size_str = size.toFixed(3);
-                const rectString = `<rect x='${x}' y='${y}' width='${size_str}' height='${size_str}' fill='black'/>`;
-                rects.push(rectString);
-            }
-            const svgContent = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'>${rects.join('')}</svg>`;
-            let encodedSvg = svgContent
-                .replace(/'/g, '"').replace(/#/g, '%23').replace(/"/g, "'"); 
-            return `url("data:image/svg+xml,${encodedSvg}")`;
+        const startButton = document.getElementById('start-button');
+        const loader = document.getElementById('loader');
+
+        function startLoading() {
+            if (loader.classList.contains('active')) return; // Ngăn chạy kép
+
+            startButton.disabled = true; // Vô hiệu hóa nút
+            loader.classList.add('active'); // Bắt đầu animation
+
+            // Lắng nghe sự kiện kết thúc animation (chỉ 1 lần)
+            loader.addEventListener('animationend', handleAnimationEnd, { once: true });
         }
 
-        // --- Áp dụng Background cho các DIV ---
-        
-        // 1. N = 4
-        document.getElementById('box-n4').style.backgroundImage = createSimpleSvgBackground(4);
+        function handleAnimationEnd() {
+            // Loại bỏ class 'active' để ẩn loading
+            loader.classList.remove('active');
+            startButton.disabled = false; // Kích hoạt lại nút
+            
+            // Đặt lại vị trí của thanh loading về ban đầu bằng cách can thiệp CSS
+            // để animation chạy lại đúng ở lần sau (giữ code gọn gàng)
+            loader.style.setProperty('--reset-left', 'none'); // Reset
+            
+            // Đợi một chút rồi đặt lại để animation có thể chạy lại
+            setTimeout(() => {
+                loader.style.setProperty('--reset-left', 'initial');
+            }, 50); 
+        }
 
-        // 2. N = 3
-        document.getElementById('box-n3').style.backgroundImage = createSimpleSvgBackground(3);
+        // Gắn sự kiện click
+        startButton.addEventListener('click', startLoading);
     </script>
-
 </body>
 </html>

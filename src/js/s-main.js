@@ -40,11 +40,19 @@ export async function autoSave() {
     console.log(`Auto save`);
 }
 export async function saveState(slot) {
+    await Module.pauseGame();
     await Module.saveState(slot);
     await FSSync();
+    await message("Saved!")
+    await Module.resumeGame();
+
 }
 export async function loadState(slot) {
+    await Module.pauseGame();
     await Module.loadState(slot);
+    await message("Go_load!")
+    await Module.resumeGame();
+
 }
 export async function uploadGame(romName) {
     const file = romName.files[0];

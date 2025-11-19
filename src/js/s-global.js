@@ -1,5 +1,5 @@
 tag("page01"), tag("page02"), tag("notif"), tag("display"), tag("list"), tag("name"), tag("gamepad"), tag("l-button"), tag("r-button"), tag("start-button"), tag("select-button"), tag("dpad-section"), tag("titles"), tag("vertical");
-let gameName, gameType, gameWidth, gameHeight, integer, timerId;
+let gameName, gameType, gameWidth, gameHeight, integer, timerId, count = false;
 const canvas = document.getElementById('canvas');
 let [hours, minutes, seconds, count1] = [0, 0, 0, 0, 0];
 function tag(selector) {
@@ -37,6 +37,16 @@ function sgvGen(N) {
     let encodedSvg = svgContent
         .replace(/'/g, '"').replace(/#/g, '%23').replace(/"/g, "'"); 
     return `url("data:image/svg+xml,${encodedSvg}")`;
+}
+async function message(mess) {
+    if (count) return;
+    count = true;
+    //titles.style.color = "var(--profile-2)";
+    titles.textContent = mess;
+    await delay(2000);
+    //titles.style.color = "var(--profile-3)";
+    titles.textContent = gameName;
+    count = false;
 }
 async function gameView(romName) {
     // global
