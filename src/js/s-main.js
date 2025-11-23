@@ -41,22 +41,17 @@ export async function autoSave() {
 }
 export async function saveState(slot) {
     await Module.pauseGame();
-    canvas.classList.add('op8')
+    canvas.classList.add('op8');
     await Module.saveState(slot);
     await FSSync();
-    await message("Saved!")
-    canvas.classList.remove('op8')
+    await message("Saved!", 1000);
+    canvas.classList.remove('op8');
     await Module.resumeGame();
 
 }
 export async function loadState(slot) {
-    await Module.pauseGame();
-    canvas.classList.add('op8')
     await Module.loadState(slot);
-    await message("Go_load!", 1000)
-    canvas.classList.remove('op8')
-    await Module.resumeGame();
-
+    await message("Go_load!", 1000);
 }
 export async function uploadGame(romName) {
     const file = romName.files[0];
