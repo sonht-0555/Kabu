@@ -170,6 +170,16 @@
     width:100%;
     image-rendering: pixelated;
   }
+  page02 .volume {
+    position: absolute;
+    transform: rotate(270deg);
+    right: 0;
+    top: 0;
+    height: 1px;
+    transform-origin: top right;
+    width: var(--volume);
+    opacity: 0;
+  }
   notif {
     font-family: "04b";
     grid-template-columns: auto 1fr auto;

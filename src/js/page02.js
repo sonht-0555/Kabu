@@ -17,7 +17,7 @@ function handleButtonPress(buttonId, isPressed) {
     [document.getElementById(buttonId), dpadButtons.includes(buttonId) ? dpad : null]
         .filter(Boolean)
         .forEach(el => el.classList.toggle('touched', isPressed));
-    }
+}
 function getButtonIdFromTouch(touch) {
     const element = document.elementFromPoint(touch.clientX, touch.clientY);
     const button = element?.closest("[id]");
@@ -33,6 +33,10 @@ canvas.addEventListener('touchstart', (event) => {
                        : (y < height / 2 ? handleTopRight : Main.saveState(2)));
     }
     tap = Date.now();
+});
+const slider = document.getElementById('volume');
+slider.addEventListener('input', function() {
+    gamepad.style.opacity = slider.value / 10;
 });
 document.addEventListener("DOMContentLoaded", function() {
     document.addEventListener("touchstart", (event) => {

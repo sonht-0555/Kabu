@@ -1,104 +1,48 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html>
 <head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading Rút Gọn</title>
+    <title>Min Swipe Logic Readable</title>
     <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: sans-serif;
-            background-color: #f4f4f4;
-        }
-        #start-button {
-            padding: 10px 20px;
-            margin-bottom: 30px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-        }
-        /* Container (Đường ray) */
-        .loading-line-container {
-            width: 300px;
-            height: 1px;
-            background-color: #ddd;
-            position: relative;
-            overflow: hidden;
-            /* Ẩn ban đầu */
-            visibility: hidden; 
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        /* Hiển thị khi được kích hoạt */
-        .loading-line-container.active {
-            visibility: visible;
-            opacity: 1;
-        }
-        /* Thanh loading (::after) */
-        .loading-line-container::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            width: 80px;
-            height: 100%;
-            background-color: #007bff;
-            animation: none; /* Dừng animation ban đầu */
-        }
-        /* Kích hoạt animation khi có class 'active' */
-        .loading-line-container.active::after {
-            /* 2s: thời gian chạy, 1: chạy 1 lần, forwards: giữ trạng thái cuối */
-            animation: moveLine 2s 1 cubic-bezier(0.4, 0.0, 0.2, 1) forwards; 
-        }
-        /* Keyframes: Di chuyển từ trái sang phải */
-        @keyframes moveLine {
-            0% { left: -80px; } 
-            100% { left: 100%; }
-        }
+        /* c: controlBox, v: valueDisplay */
+        #controlBox{width:300px;height:200px;border:1px solid #000;display:flex;justify-content:center;align-items:center;touch-action:none}
     </style>
 </head>
 <body>
-    <button id="start-button">Bắt đầu Loading</button>
-    <div id="loader" class="loading-line-container"></div>
-
+    <div id="controlBox">
+        <div id="valueDisplay">5</div>
+    </div>
     <script>
-        const startButton = document.getElementById('start-button');
-        const loader = document.getElementById('loader');
+        const controlBox=document.getElementById('controlBox'),valueDisplay=document.getElementById('valueDisplay');
+        let value=5,startY=0,isSwiping=false;
 
-        function startLoading() {
-            if (loader.classList.contains('active')) return; // Ngăn chạy kép
+        function updateDisplay(){valueDisplay.textContent=value;console.log(`[LOG] ${value}`)}
 
-            startButton.disabled = true; // Vô hiệu hóa nút
-            loader.classList.add('active'); // Bắt đầu animation
+        controlBox.addEventListener('touchstart',t=>{
+            const touchX=t.touches[0].clientX,boxRect=controlBox.getBoundingClientRect();
+            if (touchX > (boxRect.right - 20) && touchX <= boxRect.right) {
+                t.preventDefault();
+                isSwiping=true;
+                startY=t.touches[0].clientY;
+                console.log("[LOG] Start");
+            } else {isSwiping=false}
+        });
 
-            // Lắng nghe sự kiện kết thúc animation (chỉ 1 lần)
-            loader.addEventListener('animationend', handleAnimationEnd, { once: true });
-        }
+        controlBox.addEventListener('touchmove',t=>{
+            if(!isSwiping)return;
+            t.preventDefault();
+            const currentY=t.touches[0].clientY,deltaY=startY-currentY;
+            if(Math.abs(deltaY)>=30){
+                let oldValue=value;
+                if(deltaY>0)value=Math.min(10,value+1);
+                else value=Math.max(0,value-1);
+                if(oldValue!==value){updateDisplay();startY=currentY}
+            }
+        });
 
-        function handleAnimationEnd() {
-            // Loại bỏ class 'active' để ẩn loading
-            loader.classList.remove('active');
-            startButton.disabled = false; // Kích hoạt lại nút
-            
-            // Đặt lại vị trí của thanh loading về ban đầu bằng cách can thiệp CSS
-            // để animation chạy lại đúng ở lần sau (giữ code gọn gàng)
-            loader.style.setProperty('--reset-left', 'none'); // Reset
-            
-            // Đợi một chút rồi đặt lại để animation có thể chạy lại
-            setTimeout(() => {
-                loader.style.setProperty('--reset-left', 'initial');
-            }, 50); 
-        }
+        document.addEventListener('touchend',()=>{if(isSwiping)console.log("[LOG] End");isSwiping=false});
 
-        // Gắn sự kiện click
-        startButton.addEventListener('click', startLoading);
+        updateDisplay();
     </script>
 </body>
 </html>
