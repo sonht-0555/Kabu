@@ -172,12 +172,11 @@
   }
   page02 .volume {
     position: absolute;
-    transform: rotate(270deg);
     right: 0;
     top: 0;
-    height: 1px;
+    height: 4px;
     transform-origin: top right;
-    width: var(--volume);
+    width: 100%;
     opacity: 0;
   }
   notif {
