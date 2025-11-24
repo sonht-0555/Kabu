@@ -1,47 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Min Swipe Logic Readable</title>
+    <title>Swipe Logic Minimal</title>
     <style>
-        /* c: controlBox, v: valueDisplay */
-        #controlBox{width:300px;height:200px;border:1px solid #000;display:flex;justify-content:center;align-items:center;touch-action:none}
+        #control-box { position: relative; height: 100vh; }
     </style>
 </head>
 <body>
-    <div id="controlBox">
-        <div id="valueDisplay">5</div>
+    <div id="control-box">
+        <div id="value-display">Giá trị: 5</div>
     </div>
     <script>
-        const controlBox=document.getElementById('controlBox'),valueDisplay=document.getElementById('valueDisplay');
-        let value=5,startY=0,isSwiping=false;
+        const valueDisplay = document.getElementById('value-display');
+        let value = 5;
+        let startY = 0, isSwiping = false;
 
-        function updateDisplay(){valueDisplay.textContent=value;console.log(`[LOG] ${value}`)}
+        function updateDisplay() {
+            valueDisplay.textContent = `Giá trị: ${value}`;
+        }
 
-        controlBox.addEventListener('touchstart',t=>{
-            const touchX=t.touches[0].clientX,boxRect=controlBox.getBoundingClientRect();
-            if (touchX > (boxRect.right - 20) && touchX <= boxRect.right) {
-                t.preventDefault();
-                isSwiping=true;
-                startY=t.touches[0].clientY;
-                console.log("[LOG] Start");
-            } else {isSwiping=false}
+        document.getElementById('control-box').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            isSwiping = true;
+            startY = e.touches[0].clientY;
         });
 
-        controlBox.addEventListener('touchmove',t=>{
-            if(!isSwiping)return;
-            t.preventDefault();
-            const currentY=t.touches[0].clientY,deltaY=startY-currentY;
-            if(Math.abs(deltaY)>=30){
-                let oldValue=value;
-                if(deltaY>0)value=Math.min(10,value+1);
-                else value=Math.max(0,value-1);
-                if(oldValue!==value){updateDisplay();startY=currentY}
+        document.getElementById('control-box').addEventListener('touchmove', (e) => {
+            if (!isSwiping) return;
+            e.preventDefault();
+            const currentY = e.touches[0].clientY;
+            const deltaY = startY - currentY;
+            if (Math.abs(deltaY) >= 30) {
+                let oldValue = value;
+                if (deltaY > 0) value = Math.min(10, value + 1);
+                else value = Math.max(0, value - 1);
+                if (oldValue !== value) {
+                    updateDisplay();
+                    startY = currentY;
+                }
             }
         });
 
-        document.addEventListener('touchend',()=>{if(isSwiping)console.log("[LOG] End");isSwiping=false});
-
+        document.addEventListener('touchend', () => { isSwiping = false; });
         updateDisplay();
     </script>
 </body>
