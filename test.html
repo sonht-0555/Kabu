@@ -1,50 +1,54 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Swipe Logic Minimal</title>
-    <style>
-        #control-box { position: relative; height: 100vh; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Single DIV Control</title>
+  <style>
+    body { margin:0; display:flex; justify-content:center; align-items:center; min-height:100vh; }
+    #control-box { position:relative; width:400px; height:300px; border:2px solid #333; user-select:none; touch-action:none; display:flex; justify-content:center; align-items:center; }
+    #value-display { position:absolute; font-size:1.5em; padding:10px; background:rgba(255,255,255,0.9); border:1px dashed #666; z-index:10; }
+  </style>
 </head>
 <body>
-    <div id="control-box">
-        <div id="value-display">Giá trị: 5</div>
-    </div>
-    <script>
-        const valueDisplay = document.getElementById('value-display');
-        let value = 5;
-        let startY = 0, isSwiping = false;
-
-        function updateDisplay() {
-            valueDisplay.textContent = `Giá trị: ${value}`;
+  <div id="control-box">
+    <div id="value-display"></div>
+  </div>
+  <script>
+    const box = document.getElementById('control-box');
+    const display = document.getElementById('value-display');
+    let value = 5, startY = 0, swiping = false, lastTap = 0;
+    function update() { display.textContent = `Giá trị: ${value}`; }
+    function A() { display.textContent = "A"; }
+    function B() { display.textContent = "B"; }
+    function C() { display.textContent = "C"; }
+    function D() { display.textContent = "D"; }
+    
+    box.addEventListener('touchstart', e => {
+      const t = e.touches[0], r = box.getBoundingClientRect();
+      startY = t.clientY;
+      swiping = t.clientX > (r.right - 20);
+      if (!swiping) {
+        const now = Date.now();
+        if (now - lastTap < 300) {
+          const x = t.clientX - r.left, y = t.clientY - r.top;
+          x < r.width/2 ? (y < r.height/2 ? A() : B()) : (y < r.height/2 ? C() : D());
         }
+        lastTap = now;
+      }
+    });
 
-        document.getElementById('control-box').addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            isSwiping = true;
-            startY = e.touches[0].clientY;
-        });
+    box.addEventListener('touchmove', e => {
+      if (!swiping) return;
+      const y = e.touches[0].clientY, d = startY - y;
+      if (Math.abs(d) >= 30) {
+        value = d > 0 ? Math.min(10, value+1) : Math.max(0, value-1);
+        update();
+        startY = y;
+      }
+    });
 
-        document.getElementById('control-box').addEventListener('touchmove', (e) => {
-            if (!isSwiping) return;
-            e.preventDefault();
-            const currentY = e.touches[0].clientY;
-            const deltaY = startY - currentY;
-            if (Math.abs(deltaY) >= 30) {
-                let oldValue = value;
-                if (deltaY > 0) value = Math.min(10, value + 1);
-                else value = Math.max(0, value - 1);
-                if (oldValue !== value) {
-                    updateDisplay();
-                    startY = currentY;
-                }
-            }
-        });
-
-        document.addEventListener('touchend', () => { isSwiping = false; });
-        updateDisplay();
-    </script>
+    update();
+  </script>
 </body>
 </html>
