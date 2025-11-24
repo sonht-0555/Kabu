@@ -27,7 +27,7 @@ function getButtonIdFromTouch(touch) {
 canvas.addEventListener('touchstart', e => {
     const t = e.touches[0], r = canvas.getBoundingClientRect();
     startY = t.clientY;
-    swiping = t.clientX > (r.right - 10);
+    swiping = t.clientX > (r.right - 20);
     if (!swiping) {
     const now = Date.now();
     if (now - lastTap < 300) {
