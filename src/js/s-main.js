@@ -1,7 +1,5 @@
 import stable from "../core/4.0.8/mgba.js";
 import latest from "../core/4.0.9/mgba.js";
-let Module = null;
-let canSync = true;
 function initializeCore(coreInitFunction) {
     const coreInstance = { canvas: canvas };
     return coreInitFunction(coreInstance).then((core) => {
@@ -36,22 +34,22 @@ export async function timer(isStart) {
 export async function autoSave() {
     await Module.saveState(1);
     await FSSync();
-    led(1);
-    console.log(`Auto save`);
+    await message(`[${recCount}]_Recorded`);
+    recCount++;
 }
 export async function saveState(slot) {
     await Module.pauseGame();
     canvas.classList.add('op8');
     await Module.saveState(slot);
     await FSSync();
-    await message("Saved!", 1000);
+    await message(`[ss${slot}]_Recorded!`, 1000);
     canvas.classList.remove('op8');
     await Module.resumeGame();
 
 }
 export async function loadState(slot) {
     await Module.loadState(slot);
-    await message("Go_load!", 1000);
+    await message(`[ss${slot}]_Loaded!`, 1000);
 }
 export async function uploadGame(romName) {
     const file = romName.files[0];

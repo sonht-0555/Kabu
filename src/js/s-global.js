@@ -1,5 +1,5 @@
 tag("page01"), tag("page02"), tag("notif"), tag("display"), tag("list"), tag("name"), tag("gamepad"), tag("l-button"), tag("r-button"), tag("start-button"), tag("select-button"), tag("dpad-section"), tag("titles"), tag("vertical");
-let gameName, gameType, gameWidth, gameHeight, integer, timerId, count = false;
+let gameName, gameType, gameWidth, gameHeight, integer, timerId, count = null, Module = null, canSync = true, recCount = 1;
 const canvas = document.getElementById('canvas');
 let [hours, minutes, seconds, count1] = [0, 0, 0, 0, 0];
 function tag(selector) {
@@ -9,12 +9,6 @@ function tag(selector) {
 }
 async function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-}
-function led(slot) {
-    ['led1', 'led2', 'led3'].forEach(id => {
-        document.getElementById(id)?.classList.toggle('active', id === `led${slot}`);
-    });
-    setTimeout(() => { document.getElementById(`led${slot}`)?.classList.remove('active'); }, 4000);
 }
 async function firstView() {
     const hour = new Date().getHours();
@@ -39,12 +33,15 @@ function sgvGen(N) {
     return `url("data:image/svg+xml,${encodedSvg}")`;
 }
 async function message(mess, second = 2000) {
-    if (count) return;
-    count = true;
+    if (count) count.cancelled = true;
+    const task = { cancelled: false };
+    count = task;
     titles.textContent = mess;
     await delay(second);
-    titles.textContent = gameName;
-    count = false;
+    if (!task.cancelled && count === task) {
+        titles.textContent = gameName;
+        count = null;
+    }
 }
 async function gameView(romName) {
     // global
@@ -59,7 +56,6 @@ async function gameView(romName) {
     display.style.setProperty("--height", `${gameHeight}px`);
     display.style.setProperty("--scale", integer / window.devicePixelRatio);    
     display.style.setProperty("--background", sgvGen(window.devicePixelRatio));  
-    display.style.setProperty("--volume", `${gameHeight  * (integer/window.devicePixelRatio)}px`);  
     // notification
     titles.textContent = gameName
     // gamepad
