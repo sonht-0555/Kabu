@@ -27,7 +27,7 @@ function getButtonIdFromTouch(touch) {
 canvas.addEventListener('touchstart', e => {
     const t = e.touches[0], r = canvas.getBoundingClientRect();
     startY = t.clientY;
-    swiping = t.clientX > (r.right - 20);
+    swiping = t.clientX > (r.right - 40);
     if (!swiping) {
     const now = Date.now();
     if (now - lastTap < 300) {
@@ -40,7 +40,7 @@ canvas.addEventListener('touchstart', e => {
 canvas.addEventListener('touchmove', e => {
     if (!swiping) return;
     const y = e.touches[0].clientY, d = startY - y;
-    if (Math.abs(d) >= 30) {
+    if (Math.abs(d) >= 20) {
     value = d > 0 ? Math.min(10, value+1) : Math.max(0, value-1);
     gamepad.style.opacity = value / 10;
     startY = y;
