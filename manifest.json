@@ -8,7 +8,7 @@
   "description": "NewUI",
   "icons": [
     {
-      "src": "/src/img/icon.JPG",
+      "src": "/src/img/icon.jpg",
       "sizes": "512x512",
       "type": "image/jpeg"
     }
