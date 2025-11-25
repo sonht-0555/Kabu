@@ -24,7 +24,7 @@ export async function timer(isStart) {
             if (++seconds === 60) [seconds, minutes] = [0, ++minutes];
             if (minutes === 60) [minutes, hours] = [0, ++hours];
             document.querySelector("times").textContent = `${hours}h${minutes.toString().padStart(2, '0')}.${(seconds % 60).toString().padStart(2, '0')}`;
-            if (++count1 === 30) { autoSave(); Module.SDL2(); count1 = 0; }
+            if (++count1 === 60) { autoSave(); Module.SDL2(); count1 = 0; }
         }, 1000);
     } else if (timerId) {
         clearInterval(timerId);

@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (Math.abs(d) >= 20) {
         value = d > 0 ? Math.min(10, value+1) : Math.max(0, value-1);
         gamepad.style.opacity = value / 10;
-        message(`Brightness_${value}.Nit`);
+        message(`Brightness_${value}0.nit`);
         startY = y;
         }
     });

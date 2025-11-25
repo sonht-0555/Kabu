@@ -36,12 +36,15 @@ async function message(mess, second = 2000) {
     if (count) count.cancelled = true;
     const task = { cancelled: false };
     count = task;
+    notif.style.opacity = 1;
     titles.textContent = mess;
     await delay(second);
     if (!task.cancelled && count === task) {
         titles.textContent = gameName;
         count = null;
     }
+    await delay(8000);
+    notif.style.opacity = 0;
 }
 async function gameView(romName) {
     // global
