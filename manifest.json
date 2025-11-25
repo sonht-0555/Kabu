@@ -1,16 +1,16 @@
 {
-  "name": "NewUI",
-  "short_name": "NewUI",
+  "name": "Kabu",
+  "short_name": "Kabu",
   "start_url": "/?source=pwa",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
-  "description": "NewUI",
+  "description": "Kabu",
   "icons": [
     {
-      "src": "/src/img/icon.jpg",
+      "src": "/src/img/icon.png",
       "sizes": "512x512",
-      "type": "image/jpeg"
+      "type": "image/png"
     }
   ]
 }
