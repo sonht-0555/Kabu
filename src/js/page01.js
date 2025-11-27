@@ -30,7 +30,7 @@ async function verSetting(values=[80, 160, 6]) {
 }
 // DOMContentLoaded
 document.addEventListener("DOMContentLoaded", function() {
-    setTimeout(() => { verSetting(),listGame(),firstView() },1000);
+    setTimeout(() => { verSetting(),listGame() },1000);
     romInput.addEventListener("change", function() {
         inputGame(romInput);
     })
