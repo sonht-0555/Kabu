@@ -23,7 +23,7 @@ let current = parseInt(localStorage.getItem('verticalCurrent')) || 0;
 async function verSetting(values=[80, 160, 6]) {
     page02.style.paddingTop = `${values[current]}px`;
     values.map(value => `k${value}`).forEach((id, index) => {
-        document.getElementById(id).style.fill = index === current ? "var(--profile-1)" : 'var(--profile-4)';
+        document.getElementById(id).style.fill = index === current ? "var(--profile-1)" : 'var(--profile-5)';
     });
     localStorage.setItem('verticalCurrent', current);
     current = (current + 1) % values.length; 
