@@ -19,17 +19,18 @@
   }
   /*Common-open*/
   :root {
-    --profile-1: #C5AF90;
-    --profile-2: #636366; 
-    --profile-3: #61584C;
-    --profile-4: #463E33;
-    --profile-5: #2F2A22;
-    --profile-6: #1D1A15;
-    --profile-bg: #0A0907;
-    --profile-o: rgba(10, 10, 10, 0);
+    --profile-1:  rgba(197, 175, 144, 1.00); 
+    --profile-2:  rgba(197, 175, 144, 0.60); 
+    --profile-3:  rgba(197, 175, 144, 0.40);
+    --profile-4:  rgba(197, 175, 144, 0.32);
+    --profile-5:  rgba(197, 175, 144, 0.20);
+    --profile-6:  #1D1A15;
+    --profile-bg: rgba(197, 175, 144, 0.03);
+    --profile-o:  rgba(10, 10, 10, 0);
     --profile-black: #000000;
     --profile-orange: #DD5639;
     --profile-cyan: #20A5A6;
+    --profile-green: #243E2E;
   }
   body {
     font-size: 8px;
@@ -46,13 +47,13 @@
     position: absolute;
     top: 0;
     left: 0;
-    background: url("data:image/svg+xml,%3Csvg width='1' height='1' viewBox='0 0 1 1' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.333333 0.333333H0.666667V0.666667H0.333333V0.333333Z' fill='black'/%3E%3Cpath d='M0.666667 0H1V0.333333H0.666667V0Z' fill='black'/%3E%3Cpath d='M0 0.666667H0.333333V1H0V0.666667Z' fill='black'/%3E%3C/svg%3E%0A");
-    background-repeat: repeat;
     width: 100%;
     height: 100%;
+    z-index: 1;
+    background: url("data:image/svg+xml,%3Csvg width='1' height='1' viewBox='0 0 1 1' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.333333 0.333333H0.666667V0.666667H0.333333V0.333333Z' fill='black'/%3E%3Cpath d='M0.666667 0H1V0.333333H0.666667V0Z' fill='black'/%3E%3Cpath d='M0 0.666667H0.333333V1H0V0.666667Z' fill='black'/%3E%3C/svg%3E%0A");
+    background-repeat: repeat;
     mix-blend-mode: overlay;
     pointer-events: none;
-    z-index: 1;
   }
 }
 @layer base {
@@ -74,9 +75,6 @@
   [hidden] {
     display: none !important;
   }
-  .touched {
-    background-color: #0E0C0A !important;
-  }
   .op8 {
     opacity: 0.8 !important;
   }
@@ -86,11 +84,9 @@
     grid-template-rows: 1fr 50px;
     gap:8px;
     padding-bottom: 40px;
-    transition: all 0.5s ease-in-out;
   }
   list {
     grid-template-rows: repeat(12, 40px);
-    grid-template-areas: "rom";
     text-align: left;
     align-content: start;
     transform: rotate(180deg);
@@ -127,15 +123,13 @@
 @layer page-2 {
   page02 {
     justify-items: center;
-    padding :5px;
+    padding: 5px;
   }
   /* layer display */
   display {
+    z-index: 2;
     grid-template-rows: 1fr 10px;
     position: relative;
-    transform: translateZ(0);
-    will-change: transform;
-    z-index: 2;
   }
   display::after {
     content: "";
