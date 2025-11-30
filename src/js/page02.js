@@ -15,9 +15,6 @@ function handleButtonPress(buttonId, isPressed) {
     } else {
         isPressed ? Main.buttonPress(buttonId) : Main.buttonUnpress(buttonId);
     }
-    [document.getElementById(buttonId), dpadButtons.includes(buttonId) ? dpad : null]
-        .filter(Boolean)
-        .forEach(el => el.classList.toggle('touched', isPressed));
 }
 function getButtonIdFromTouch(touch) {
     const element = document.elementFromPoint(touch.clientX, touch.clientY);
@@ -110,4 +107,5 @@ document.addEventListener("DOMContentLoaded", function() {
     canvas.addEventListener('touchend', () => {
         swiping = false;
     });
+
 });
