@@ -1,9 +1,9 @@
 import * as Main from './s-main.js';
 // inputGame
-async function inputGame(InputFile) {
+async function inputGame(rom) {
     await Main.uploadGame(romInput);
     await delay(100);
-    await Main.loadGame(InputFile.files[0].name);
+    await Main.loadGame(rom.files[0].name);
 }
 // listGame
 async function listGame() {
@@ -19,13 +19,12 @@ async function listGame() {
     });
 };
 // verticalSetting
-let current = parseInt(localStorage.getItem('verticalCurrent')) || 0;
 async function verSetting(values=[80, 160, 6]) {
     page02.style.paddingTop = `${values[current]}px`;
     values.map(value => `k${value}`).forEach((id, index) => {
         document.getElementById(id).style.stroke = index === current ? "var(--profile-1)" : 'var(--profile-4)';
     });
-    localStorage.setItem('verticalCurrent', current);
+    localStorage.setItem('vertical', current);
     current = (current + 1) % values.length; 
 }
 // DOMContentLoaded

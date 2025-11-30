@@ -2,6 +2,7 @@ tag("page01"), tag("page02"), tag("notif"), tag("display"), tag("list"), tag("na
 let gameName, gameType, gameWidth, gameHeight, integer, timerId, count = null, Module = null, canSync = true, recCount = 1;
 const canvas = document.getElementById('canvas');
 let [hours, minutes, seconds, count1] = [0, 0, 0, 0, 0];
+let current = parseInt(localStorage.getItem('vertical')) || 0;
 function tag(selector) {
     const element = document.querySelector(selector)
     window[selector] = element;
@@ -10,13 +11,7 @@ function tag(selector) {
 async function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-async function firstView() {
-    const hour = new Date().getHours();
-    if (hour >= 20 || hour < 6) {
-        document.querySelectorAll('name, wrap-button, a-button, b-button, dpad-section, l-button, r-button, start-button, select-button, f-button, state-button, menu-button').forEach(el => el.classList.add('night-mode'));
-    }
-}
-function sgvGen(N) {
+function svgGen(N) {
     if (N <= 0) return '';
     const rects = [];
     const size = 1 / N; 
@@ -55,7 +50,7 @@ async function gameView(romName) {
     display.style.setProperty("--width", `${gameWidth}px`);
     display.style.setProperty("--height", `${gameHeight}px`);
     display.style.setProperty("--scale", integer / window.devicePixelRatio);    
-    display.style.setProperty("--background", sgvGen(window.devicePixelRatio));  
+    display.style.setProperty("--background", svgGen(window.devicePixelRatio));  
     // notification
     titles.textContent = gameName
     // gamepad
@@ -66,6 +61,4 @@ async function gameView(romName) {
     page01.hidden = true;
     page02.hidden = false;
 }
-document.addEventListener("DOMContentLoaded", function() {
-    
-});
+document.addEventListener("DOMContentLoaded", function(){});
