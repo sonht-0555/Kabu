@@ -1,10 +1,8 @@
 import * as Main from './s-main.js';
-// gamepad
 const dpadButtons = ["up", "down", "left", "right", "up-left", "up-right", "down-left", "down-right"];
 const otherButtons = ["a", "b", "start", "select", "l", "r"];
-let activeDpadTouches  = new Map();
-let activeOtherTouches = new Map();
-let value = 5, startY = 0, swiping = false, lastTap = 0;
+let activeDpadTouches  = new Map(), activeOtherTouches = new Map();
+let value = 5, startY = 0, swiping = false, lastTap = 0, turboState = 1;
 function handleButtonPress(buttonId, isPressed) {
     if (!buttonId) return;
     if (buttonId.includes("-")) {
@@ -81,11 +79,11 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         }
     });
-    canvas.addEventListener('touchstart', e => {
+    canvas.addEventListener("touchstart", (e) => {
         const t = e.touches[0], r = canvas.getBoundingClientRect();
         const now = Date.now();
         const x = t.clientX - r.left, y = t.clientY - r.top;
-        if (now - lastTap < 300) {
+        if (now - lastTap < 250) {
             x < r.width/2
                 ? (y < r.height/2 ? Main.loadState(3) : Main.loadState(2))
                 : (y < r.height/2 ? Main.saveState(3) : Main.saveState(2));
@@ -94,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function() {
         startY = t.clientY;
         swiping = t.clientX > (r.right - 40);
     });
-    canvas.addEventListener('touchmove', e => {
+    canvas.addEventListener("touchmove", (e) => {
         if (!swiping) return;
         const y = e.touches[0].clientY, d = startY - y;
         if (Math.abs(d) >= 20) {
@@ -104,8 +102,17 @@ document.addEventListener("DOMContentLoaded", function() {
         startY = y;
         }
     });
-    canvas.addEventListener('touchend', () => {
+    canvas.addEventListener("touchend", () => {
         swiping = false;
     });
-
+    f.addEventListener("touchstart", () => {
+        const now = Date.now();
+        if (now - lastTap < 250) {
+            turboState = turboState % 2 + 1;
+            Main.fastForward(turboState);
+            f.classList.toggle("active");
+            message(`[${turboState}x] Speed!`);
+        }
+        lastTap = now;
+    });
 });

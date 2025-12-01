@@ -39,13 +39,12 @@ export async function autoSave() {
 }
 export async function saveState(slot) {
     await Module.pauseGame();
-    canvas.classList.add('op8');
+    canvas.setAttribute('op8', ''); 
     await Module.saveState(slot);
     await FSSync();
     await message(`[ss${slot}]_Recorded!`, 1000);
-    canvas.classList.remove('op8');
+    canvas.removeAttribute('op8');  
     await Module.resumeGame();
-
 }
 export async function loadState(slot) {
     await Module.loadState(slot);
@@ -83,4 +82,7 @@ export async function buttonPress(key) {
 }
 export async function buttonUnpress(key) {
     Module.buttonUnpress(key)
+}
+export async function fastForward(number) {
+    Module.setFastForwardMultiplier(number);
 }

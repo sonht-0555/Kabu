@@ -15,7 +15,7 @@
 </head>
 <body>
   <page01>
-    <list><rom><name style="opacity: 0.4">Ver_8.39</name><more></more></rom></list>
+    <list><rom><name op4>Ver_8.41</name></rom></list>
     <cta>
       <logo></logo>
       <setting></setting>
@@ -32,7 +32,7 @@
   </page01>
   <page02 hidden>
     <display>
-      <canvas ontouchstart="event.stopPropagation()" id="canvas"></canvas>
+      <canvas  id="canvas"></canvas>
       <notif>
         <titles>...</titles>
         <times>0h00.00</times>
@@ -40,10 +40,10 @@
     </display>
     <divide></divide>
     <gamepad>
-      <state-button></state-button>
+      <state-button id="state"></state-button>
       <l-button id="l"></l-button>
       <r-button id="r"></r-button>
-      <menu-button></menu-button>
+      <menu-button id="menu"></menu-button>
       <dpad-section id="dpad">
         <svg width="100%" height="100%" viewBox="0 0 100 100" fill-opacity="0">
           <polygon points="50 50, 100 100, 100 0"   fill="transparent" id="right"/>
@@ -59,7 +59,7 @@
       <a-button id="a"></a-button>
       <wrap-button></wrap-button>
       <b-button id="b"></b-button>
-      <f-button></f-button>
+      <f-button id="f"></f-button>
       <select-button id="select"></select-button>
       <start-button id="start"></start-button>
     </gamepad>
