@@ -3,82 +3,38 @@ const dpadButtons = ["up", "down", "left", "right", "up-left", "up-right", "down
 const otherButtons = ["a", "b", "start", "select", "l", "r"];
 let activeDpadTouches  = new Map(), activeOtherTouches = new Map();
 let value = 5, startY = 0, swiping = false, lastTap = 0, turboState = 1;
-function handleButtonPress(buttonId, isPressed) {
-    if (!buttonId) return;
-    if (buttonId.includes("-")) {
-        const [primaryButton, secondaryButton] = buttonId.split("-");
-        [primaryButton, secondaryButton].forEach(btn =>
-            isPressed ? Main.buttonPress(btn) : Main.buttonUnpress(btn)
-        );
-    } else {
-        isPressed ? Main.buttonPress(buttonId) : Main.buttonUnpress(buttonId);
-    }
+function  buttonPress(btn){
+    btn.id.split('-').forEach(part => Main.buttonPress(part));
+  };
+function buttonUnpress(btn){
+    btn.id.split('-').forEach(part => Main.buttonUnpress(part));
+  }
+let active = null;
+function setActive(btn){
+  if (active === btn) return;
+  active && buttonUnpress(active);
+  active = btn;
+  buttonPress(btn);
 }
-function getButtonIdFromTouch(touch) {
-    const element = document.elementFromPoint(touch.clientX, touch.clientY);
-    const button = element?.closest("[id]");
-    return button ? button.id : null;
+function deactivate(){
+  active && (buttonUnpress(active), active = null);
 }
 document.addEventListener("DOMContentLoaded", function() {
-    gamepad.addEventListener("touchstart", (e) => {
-        for (let touch of e.changedTouches) {
-            const buttonId = getButtonIdFromTouch(touch);
-            if (!buttonId) continue;
-            if (dpadButtons.includes(buttonId)) {
-                if (activeDpadTouches.has(touch.identifier)) {
-                    handleButtonPress(activeDpadTouches.get(touch.identifier), false);
-                }
-                activeDpadTouches.set(touch.identifier, buttonId);
-                handleButtonPress(buttonId, true);
-            } else if (otherButtons.includes(buttonId)) {
-                if (activeOtherTouches.has(touch.identifier)) {
-                    handleButtonPress(activeOtherTouches.get(touch.identifier), false);
-                }
-                activeOtherTouches.set(touch.identifier, buttonId);
-                handleButtonPress(buttonId, true);
-            }
-        }
+    gamepad.addEventListener('pointerdown', e => {
+    const btn = e.target.closest('.btn, .func'); btn && setActive(btn);
     });
-    gamepad.addEventListener("touchmove", (e) => {
-        for (let touch of e.changedTouches) {
-            const buttonId = getButtonIdFromTouch(touch);
-            if (!buttonId) continue;
-
-            if (dpadButtons.includes(buttonId)) {
-                if (activeDpadTouches.has(touch.identifier) && activeDpadTouches.get(touch.identifier) !== buttonId) {
-                    handleButtonPress(activeDpadTouches.get(touch.identifier), false);
-                    activeDpadTouches.set(touch.identifier, buttonId);
-                    handleButtonPress(buttonId, true);
-                }
-            } else if (otherButtons.includes(buttonId)) {
-                if (activeOtherTouches.has(touch.identifier) && activeOtherTouches.get(touch.identifier) !== buttonId) {
-                    handleButtonPress(activeOtherTouches.get(touch.identifier), false);
-                    activeOtherTouches.set(touch.identifier, buttonId);
-                    handleButtonPress(buttonId, true);
-                }
-            }
-        }
+    gamepad.addEventListener('pointermove', e => {
+    if (!active) return;
+    const el = document.elementFromPoint(e.clientX, e.clientY);
+    if (!el) return;
+    const sameGroup =
+        (active.classList.contains('btn') && el.classList.contains('btn')) ||
+        (active.classList.contains('func') && el.classList.contains('func'));
+    if (sameGroup && el !== active && (el.classList.contains('btn') || el.classList.contains('func'))) {
+        setActive(el);
+    }
     });
-    gamepad.addEventListener("touchend", (e) => {
-        for (let touch of e.changedTouches) {
-            [activeDpadTouches, activeOtherTouches].forEach(activeTouches => {
-                if (activeTouches.has(touch.identifier)) {
-                    handleButtonPress(activeTouches.get(touch.identifier), false);
-                    activeTouches.delete(touch.identifier);
-                }
-            });
-        }
-    });
-    gamepad.addEventListener("touchcancel", (e) => {
-        for (let touch of e.changedTouches) {
-            [activeDpadTouches, activeOtherTouches].forEach(activeTouches => {
-                if (activeTouches.has(touch.identifier)) {
-                    handleButtonPress(activeTouches.get(touch.identifier), false);
-                    activeTouches.delete(touch.identifier);
-                }
-            });
-        }
-    });
+    ['pointerup','pointercancel'].forEach(t => gamepad.addEventListener(t, deactivate));
     canvas.addEventListener("touchstart", (e) => {
         const t = e.touches[0], r = canvas.getBoundingClientRect();
         const now = Date.now();

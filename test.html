@@ -6,32 +6,36 @@
 <style>
 body {height:100vh;display:flex;justify-content:center;align-items:center;margin:0;font-family:sans-serif;}
 .wrap {display:flex;gap:20px;}
-.btn {
-  width:140px;height:70px;background:#222;color:#fff;display:flex;justify-content:center;align-items:center;
+.btn, .func {
+  width:80px;height:80px;background:#222;color:#fff;display:flex;justify-content:center;align-items:center;
   border-radius:12px;font-size:16px;user-select:none;touch-action:none;transition:.15s;
 }
-.btn.active {background:#444;}
+.btn.active, .func.active {background:#444;}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div id="up" class="btn">UP</div>
-  <div id="down" class="btn">DOWN</div>
-  <div id="left" class="btn">LEFT</div>
-  <div id="right" class="btn">RIGHT</div>
+  <div id="up" class="btn">U</div>
+  <div id="up-left" class="btn">UL</div>
+  <div id="up-right" class="btn">UR</div>
+  <div id="down" class="btn">D</div>
+  <div id="down-left" class="btn">DL</div>
+  <div id="down-right" class="btn">DR</div>
+  <div id="left" class="btn">L</div>
+  <div id="right" class="btn">R</div>
   <div id="a" class="func">A</div>
   <div id="b" class="func">B</div>
-  <div id="start" class="func">Start</div>
-  <div id="select" class="func">Select</div>
+  <div id="start" class="func">S</div>
+  <div id="select" class="func">E</div>
 </div>
 
 <script>
 const Main = {
-  buttonPress(btn){ 
-  console.log('Press', btn.id); 
+  buttonPress(btn){
+    btn.id.split('-').forEach(part => console.log('Press', part));
   },
-  buttonUnpress(btn){ 
-  console.log('Unpress', btn.id); 
+  buttonUnpress(btn){
+    btn.id.split('-').forEach(part => console.log('Unpress', part));
   }
 };
 
@@ -46,13 +50,18 @@ function deactivate(){
   active && (Main.buttonUnpress(active), active = null);
 }
 addEventListener('pointerdown', e => {
-  const btn = e.target.closest('.btn');
-  btn && setActive(btn);
+  const btn = e.target.closest('.btn, .func'); btn && setActive(btn);
 });
 addEventListener('pointermove', e => {
   if (!active) return;
   const el = document.elementFromPoint(e.clientX, e.clientY);
-  el?.classList.contains('btn') && el !== active && setActive(el);
+  if (!el) return;
+  const sameGroup =
+    (active.classList.contains('btn') && el.classList.contains('btn')) ||
+    (active.classList.contains('func') && el.classList.contains('func'));
+  if (sameGroup && el !== active && (el.classList.contains('btn') || el.classList.contains('func'))) {
+    setActive(el);
+  }
 });
 ['pointerup','pointercancel'].forEach(t => addEventListener(t, deactivate));
 </script>
