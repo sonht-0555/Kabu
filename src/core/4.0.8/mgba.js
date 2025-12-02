@@ -82,7 +82,17 @@ Module.loadGame = (romPath, savePathOverride) => {
 };
 
 // remove keypress-keydown-keyup in _emscripten_set_keydown_callback_on_thread
-Module.SDL2 = () => {var SDL2 = Module["SDL2"]; if (SDL2 && SDL2.audioContext && (SDL2.audioContext.state === 'suspended' || SDL2.audioContext.state === 'interrupted')) {SDL2.audioContext.resume()}};
+Module.SDL2 = async () => {
+  var SDL2 = Module["SDL2"];
+  if (!SDL2?.audioContext || !['suspended', 'interrupted'].includes(SDL2.audioContext.state)) return;
+  try {
+    await SDL2.audioContext.resume();
+  } catch {
+    // best effort attempt at an audio teardown/resume for ios safari
+    await SDL2.audioContext.suspend();
+    await SDL2.audioContext.resume();
+  }
+};
 Module.editFileName = (filepath,filename,newFilename) => FS.rename(filepath, filepath.replace(filename, newFilename));
 Module.deleteFile = (filepath) => FS.unlink(filepath);
 Module.fileSize = (filepath) => FS.stat(filepath).size;
