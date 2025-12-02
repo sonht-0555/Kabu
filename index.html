@@ -15,7 +15,7 @@
 </head>
 <body>
   <page01>
-    <list><rom><name op4>Ver_8.42</name></rom></list>
+    <list><rom><name op4>Ver_8.43</name></rom></list>
     <cta>
       <logo></logo>
       <setting></setting>
@@ -41,27 +41,27 @@
     <divide></divide>
     <gamepad>
       <state-button id="state"></state-button>
-      <l-button id="l"></l-button>
-      <r-button id="r"></r-button>
+      <l-button data="func-l"></l-button>
+      <r-button data="func-r"></r-button>
       <menu-button id="menu"></menu-button>
       <dpad-section id="dpad">
         <svg width="100%" height="100%" viewBox="0 0 100 100" fill-opacity="0">
-          <polygon points="50 50, 100 100, 100 0"   fill="transparent" class="btn" id="right"/>
-          <polygon points="0 0, 0 100, 50 50"       fill="transparent" class="btn" id="left"/>
-          <polygon points="0 0, 100 0, 50 50"       fill="transparent" class="btn" id="up"/>
-          <polygon points="0 100, 100 100, 50 50"   fill="transparent" class="btn" id="down"/>
-          <polygon points="0 0, 25 0, 0 25"         fill="transparent" class="btn" id="up-left"/>
-          <polygon points="75 0, 100 0, 100 25"     fill="transparent" class="btn" id="up-right"/>
-          <polygon points="0 75, 25 100, 0 100"     fill="transparent" class="btn" id="down-left"/>
-          <polygon points="100 75, 100 100, 75 100" fill="transparent" class="btn" id="down-right"/>
+          <polygon points="50 50, 100 100, 100 0"   fill="transparent" data="btn-right"/>
+          <polygon points="0 0, 0 100, 50 50"       fill="transparent" data="btn-left"/>
+          <polygon points="0 0, 100 0, 50 50"       fill="transparent" data="btn-up"/>
+          <polygon points="0 100, 100 100, 50 50"   fill="transparent" data="btn-down"/>
+          <polygon points="0 0, 25 0, 0 25"         fill="transparent" data="btn-up-left"/>
+          <polygon points="75 0, 100 0, 100 25"     fill="transparent" data="btn-up-right"/>
+          <polygon points="0 75, 25 100, 0 100"     fill="transparent" data="btn-down-left"/>
+          <polygon points="100 75, 100 100, 75 100" fill="transparent" data="btn-down-right"/>
         </svg>
       </dpad-section>
-      <a-button id="a" class="func"></a-button>
+      <a-button data="func-a"></a-button>
       <wrap-button></wrap-button>
-      <b-button id="b" class="func"></b-button>
+      <b-button data="func-b"></b-button>
       <f-button id="f"></f-button>
-      <select-button id="select" class="func"></select-button>
-      <start-button id="start" class="func"></start-button>
+      <select-button data="func-select"></select-button>
+      <start-button data="func-start"></start-button>
     </gamepad>
     <joypad></joypad>
   </page02>
