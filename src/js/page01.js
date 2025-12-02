@@ -18,6 +18,10 @@ async function listGame() {
         rom.appendChild(more);
     });
 };
+// dot
+async function dot() {
+    
+}
 // verticalSetting
 async function verSetting(values=[80, 160, 6]) {
     page02.style.paddingTop = `${values[current]}px`;
