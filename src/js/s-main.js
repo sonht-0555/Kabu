@@ -76,6 +76,7 @@ export async function loadGame(romName) {
     await gameView(romName);
     await timer(true);
     await Module.SDL2();
+    await Module.pauseAudio();
     await Module.resumeAudio();
 }
 export async function buttonPress(key) {
