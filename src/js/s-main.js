@@ -53,7 +53,7 @@ export async function loadState(slot) {
 export async function uploadGame(romName) {
     const file = romName.files[0];
     Module.uploadRom(file, () => {
-        FSSync();
+        Module.FSSync();
     });
 }
 export function listFiles(name) {
@@ -76,6 +76,8 @@ export async function loadGame(romName) {
     await gameView(romName);
     await timer(true);
     await Module.SDL2();
+    await Module.pauseAudio();
+    await Module.resumeAudio();
 }
 export async function buttonPress(key) {
     Module.buttonPress(key)
