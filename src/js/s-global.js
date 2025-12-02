@@ -43,7 +43,7 @@ async function gameView(romName) {
     page02.ontouchstart = (e) => { e.preventDefault(); }
     // display
     [gameName, gameType] = [romName.slice(0, -4), romName.slice(-3)];
-    [gameWidth, gameHeight] = (gameType === "zip" || gameType === "7z" || gameType === "gba") ? [240, 160] : [160, 144];
+    [gameWidth, gameHeight] = (gameType === "zip" || gameType === ".7z" || gameType === "gba") ? [240, 160] : [160, 144];
     integer = Math.floor((window.innerWidth * window.devicePixelRatio) / gameWidth);
     display.style.height = `${Math.ceil(gameHeight * (integer/window.devicePixelRatio)) + 10}px`;
     display.style.width  = `${gameWidth  * (integer/window.devicePixelRatio)}px`;
