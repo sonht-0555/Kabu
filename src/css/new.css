@@ -104,7 +104,7 @@
     grid-template-columns: 1fr 40px 40px;
   }
   titl {
-    padding: 16px 0px 8px 0px;
+    padding: 16px 0px 6px 0px;
     color:var(--profile-4);
   }
   name {
