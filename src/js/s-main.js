@@ -86,3 +86,24 @@ export async function buttonUnpress(key) {
 export async function fastForward(number) {
     Module.setFastForwardMultiplier(number);
 }
+export async function editFiles(filepath, filename, newFilename) {
+    await Module.editFileName(filepath, filename, newFilename);
+    await Module.FSSync()
+}
+export async function deleteFiles(filepath) {
+    await Module.deleteFile(filepath);
+    await Module.FSSync()
+}
+export async function downloadFiles(filepath, filename) {
+    const save = Module.downloadFile(filepath);
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    a.download = filename;
+    const blob = new Blob([save], {
+        type: "application/octet-stream",
+    });
+    a.href = URL.createObjectURL(blob);
+    a.click();
+    URL.revokeObjectURL(blob);
+    a.remove();
+}

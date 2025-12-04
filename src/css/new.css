@@ -58,7 +58,7 @@
   }
 }
 @layer base {
-  page01, list, rom, cta, 
+  page01, list, list01, list02, rom, titl, file, cta, 
   page02, display, gamepad, notif {
     display: grid;
     width: 100%; 
@@ -69,7 +69,7 @@
     padding: 20px;
     box-sizing: border-box;
   }
-  rom, logo, setting, vertical, label, screen, state-button, l-button, r-button, menu-button, dpad-section, a-button, b-button, f-button, select-button, start-button {
+  rom, file, logo, setting, vertical, label, screen, state-button, l-button, r-button, menu-button, dpad-section, a-button, b-button, f-button, select-button, start-button {
     background-color: var(--profile-bg) !important;
     outline: 1px solid var(--profile-6);
   }
@@ -89,19 +89,29 @@
     gap:8px;
     padding-bottom: 40px;
   }
-  list {
-    grid-template-rows: repeat(12, 40px);
+  list, list01, list02 {
+    grid-template-rows: repeat(12, auto);
     text-align: left;
     align-content: start;
     transform: rotate(180deg);
     gap:1px;
   }
-  list rom {
+  rom, titl, file {
     grid-template-columns: 1fr 40px;
     transform: rotate(180deg);
   }
-  list name {
+  file {
+    grid-template-columns: 1fr 40px 40px 40px;
+  }
+  titl {
+    padding: 6px 0px;
+    color:var(--profile-4);
+  }
+  name {
     padding: 17px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   cta {
     grid-template-columns: auto 50px 50px 90px;
@@ -119,7 +129,16 @@
   more { 
     background: url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 10 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 1H2M0 5H2M0 9H2M4 1H6M8 1H10M4 5H6M8 5H10M4 9H6M8 9H10' stroke='%23C5AF90' stroke-opacity='0.32' stroke-width='2'/%3E%3C/svg%3E%0A");
   }
-  logo, setting, label, more {
+  edit {
+    background: url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 10 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 1H6M6 3H8M8 5H10M6 7H8M4 9H6M2 7H4M0 9H2M0 5H2M2 3H4' stroke='%23C5AF90' stroke-opacity='1' stroke-width='2'/%3E%3C/svg%3E%0A");
+  }
+  down {
+    background: url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 10 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 1H2M2 3H4M4 5H6M6 3H8M8 1H10M0 9H2M4 9H6M8 9H10' stroke='%23C5AF90' stroke-opacity='1' stroke-width='2'/%3E%3C/svg%3E%0A");
+  }
+  dele {
+    background: url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 10 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 1H2M2 3H4M4 5H6M6 3H8M8 1H10M0 9H2M2 7H4M6 7H8M8 9H10' stroke='%23C5AF90' stroke-opacity='1' stroke-width='2'/%3E%3C/svg%3E%0A");
+  }
+  logo, setting, label, more, edit, down, dele {
     background-position: center;
     background-repeat: no-repeat;
   }
