@@ -12,26 +12,21 @@ function showFileGroups(gameName) {
         { title: "states", files: Main.listFiles("states").filter(file => file.startsWith(gameName)) },
         { title: "games", files: Main.listFiles("games").filter(file => file.startsWith(gameName)) }
     ];
-    list01.innerHTML = fileGroups.map(group => group.files.length ? `${group.files.map(fileName => `<file data="${group.title}"><name>${fileName}</name><edit></edit><down></down><dele></dele></file>`).join('')}<titl>${group.title}</titl>`: '').join('');
-    list01.querySelectorAll('edit').forEach(btn => {
-        btn.onclick = async () => {
-            const nameEl = btn.parentElement.querySelector('name');
-            const oldName = nameEl.textContent;
-            const newName = window.prompt("Edit filename", oldName);
-            if (newName !== null) {
-                await Main.editFiles(`/data/${btn.parentElement.getAttribute('data')}/${oldName}`, oldName, newName);
-                showFileGroups(gameName);
-            }
-        };
-    });
+    list01.innerHTML = fileGroups.map(group => group.files.length ? `${group.files.map(fileName => `<file data="${group.title}"><name>${fileName}</name><down></down><dele></dele></file>`).join('')}<titl>${group.title}</titl>`: '').join('');
     list01.querySelectorAll('down').forEach(btn => {
-        btn.onclick = () => {
-
+        btn.onclick = async () => {
+            const nameEl = btn.parentElement.querySelector('name').textContent;
+            Main.downloadFiles(`/data/${btn.parentElement.getAttribute('data')}/${nameEl}`, nameEl);
+            showFileGroups(gameName);
         };
     });
     list01.querySelectorAll('dele').forEach(btn => {
         btn.onclick = async () => {
-
+            const nameEl = btn.parentElement.querySelector('name').textContent;
+            if (window.confirm(`Delete this file?  ${nameEl}`)) {
+                Main.deleteFiles(`/data/${btn.parentElement.getAttribute('data')}/${nameEl}`);
+                showFileGroups(gameName);
+            }
         };
     });
 }
