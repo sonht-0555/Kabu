@@ -62,4 +62,9 @@ document.addEventListener("DOMContentLoaded", function() {
     vertical.addEventListener("click", function() {
         verSetting();
     })
+    logo.addEventListener("click", function() {
+        list.hidden = false;
+        list01.hidden = true;
+        list02.hidden = true;
+    })
 });
