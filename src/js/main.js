@@ -55,7 +55,6 @@ export async function uploadFiles(filepath) {
     Module.uploadAll(file, () => {
         Module.FSSync();
     });
-    
 }
 export async function uploadRoms(filepath) {
     const file = filepath.files[0];
