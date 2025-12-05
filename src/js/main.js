@@ -52,13 +52,16 @@ export async function loadState(slot) {
 }
 export async function uploadFiles(filepath) {
     const file = filepath.files[0];
-    Module.uploadAll(file, () => {});
-    Module.FSSync();
+    Module.uploadAll(file, () => {
+        Module.FSSync();
+    });
+    
 }
 export async function uploadRoms(filepath) {
     const file = filepath.files[0];
-    Module.uploadRom(file, () => {});
-    Module.FSSync();
+    Module.uploadRom(file, () => {
+        Module.FSSync();
+    });
 }
 export function listFiles(name) {
     const result = Module.listFiles(name).filter((file) => file !== "." && file !== "..");

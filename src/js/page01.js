@@ -7,7 +7,7 @@ async function inputGame(rom) {
         await Main.loadGame(rom.files[0].name);
     } else if (['sav', 'png', 'ss1', 'ss2', 'ss3'].includes(rom.files[0].name.split('.').pop().toLowerCase())) {
         if (Main.listFiles('games').some(name => name.startsWith(rom.files[0].name.split('.')[0]))) {
-            await Main.uploadRoms(romInput);
+            await Main.uploadFiles(romInput);
         } else { alert("The file name does not match the game!") }
     } else { alert("File format not supported!") }
     list.hidden = false, list01.hidden = true, list02.hidden = true;
