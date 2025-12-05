@@ -12,12 +12,14 @@ function showFileGroups(gameName) {
         { title: "states", files: Main.listFiles("states").filter(file => file.startsWith(gameName)) },
         { title: "games", files: Main.listFiles("games").filter(file => file.startsWith(gameName)) }
     ];
-    list01.innerHTML = fileGroups.map(group => group.files.length ? `${group.files.map(fileName => `<file data="${group.title}"><name>${fileName}</name><down></down><dele></dele></file>`).join('')}<titl>${group.title}</titl>`: '').join('');
-    list01.querySelectorAll('down').forEach(btn => {
+    list01.innerHTML = fileGroups.map(group => group.files.length ? `${group.files.map(fileName => `<file data="${group.title}"><name>${fileName}</name><dele></dele></file>`).join('')}<titl>${group.title}</titl>`: '').join('');
+    list01.querySelectorAll('name').forEach(btn => {
         btn.onclick = async () => {
             const nameEl = btn.parentElement.querySelector('name').textContent;
-            Main.downloadFiles(`/data/${btn.parentElement.getAttribute('data')}/${nameEl}`, nameEl);
-            showFileGroups(gameName);
+            if (window.confirm(`Download this file?  ${nameEl}`)) {
+                Main.downloadFiles(`/data/${btn.parentElement.getAttribute('data')}/${nameEl}`, nameEl);
+                showFileGroups(gameName);
+            }
         };
     });
     list01.querySelectorAll('dele').forEach(btn => {
