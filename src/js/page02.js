@@ -1,4 +1,4 @@
-import * as Main from './s-main.js';
+import * as Main from './main.js';
 let value = 5, startY = 0, swiping = false, lastTap = 0, turboState = 1, active = null;
 function handleButton(press, element) {
     const parts = element?.getAttribute('data')?.split('-').slice(1) || [];

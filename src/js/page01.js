@@ -1,4 +1,4 @@
-import * as Main from './s-main.js';
+import * as Main from './main.js';
 //inputGame
 async function inputGame(rom) {
     if (['zip', 'gba', 'gbc', 'gb', '7z'].includes(rom.files[0].name.split('.').pop().toLowerCase())) {
@@ -65,7 +65,19 @@ async function verSetting(values=[80, 160, 6]) {
 }
 //DOMContentLoaded
 document.addEventListener("DOMContentLoaded", function() {
-    setTimeout(() => { verSetting(),listGame() },1000);
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+        });
+        navigator.serviceWorker.addEventListener('message', async function (event) {
+        if (event.data.msg === "Updating...") {
+            ver.textContent = "The system is updating...";
+            verSetting();
+            setTimeout(() => {listGame()},2000);
+            }
+        });
+    }
+    setTimeout(() => {verSetting(),listGame()},2000);
     romInput.addEventListener("change", function() {
         inputGame(romInput);
     })
