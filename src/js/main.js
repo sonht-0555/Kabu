@@ -52,7 +52,7 @@ export async function loadState(slot) {
 }
 export async function uploadFiles(filepath) {
     const file = filepath.files[0];
-    Module.uploadAll(file, async () => {
+    Module.uploadAll(file, () => {
         Module.FSSync();
     });
 }
