@@ -1,9 +1,17 @@
 import * as Main from './s-main.js';
 //inputGame
 async function inputGame(rom) {
-    await Main.uploadGame(romInput);
-    await delay(200);
-    await Main.loadGame(rom.files[0].name);
+    if (['zip', 'gba', 'gbc', 'gb', '7z'].includes(rom.files[0].name.split('.').pop().toLowerCase())) {
+        await Main.uploadFiles(romInput);
+        await delay(200);
+        await Main.loadGame(rom.files[0].name);
+    } else if (['sav', 'png', 'ss1', 'ss2', 'ss3'].includes(rom.files[0].name.split('.').pop().toLowerCase())) {
+        if (Main.listFiles('games').some(name => name.startsWith(rom.files[0].name.split('.')[0]))) {
+            await Main.uploadFiles(romInput);
+        } else { alert("The file name does not match the game!") }
+    } else { alert("File format not supported!") }
+    list.hidden = false, list01.hidden = true, list02.hidden = true;
+    listGame();
 }
 //listGame
 function showFileGroups(gameName) {
@@ -12,7 +20,7 @@ function showFileGroups(gameName) {
         { title: "states", files: Main.listFiles("states").filter(file => file.startsWith(gameName)) },
         { title: "games", files: Main.listFiles("games").filter(file => file.startsWith(gameName)) }
     ];
-    list01.innerHTML = fileGroups.map(group => group.files.length ? `${group.files.map(fileName => `<file data="${group.title}"><name>${fileName}</name><dele></dele></file>`).join('')}<titl>${group.title}</titl>`: '').join('');
+    list01.innerHTML = fileGroups.map(group => group.files.length ? `${group.files.map(fileName => `<file data="${group.title}"><name>${fileName}</name><dele></dele></file>`).join('')}<titl>${group.title}.</titl>`: '').join('');
     list01.querySelectorAll('name').forEach(btn => {
         btn.onclick = async () => {
             const nameEl = btn.parentElement.querySelector('name').textContent;
@@ -65,8 +73,7 @@ document.addEventListener("DOMContentLoaded", function() {
         verSetting();
     })
     logo.addEventListener("click", function() {
-        list.hidden = false;
-        list01.hidden = true;
-        list02.hidden = true;
+        list.hidden = false, list01.hidden = true, list02.hidden = true;
+        listGame();
     })
 });

@@ -50,9 +50,9 @@ export async function loadState(slot) {
     await Module.loadState(slot);
     await message(`[ss${slot}]_Loaded!`, 1000);
 }
-export async function uploadGame(romName) {
-    const file = romName.files[0];
-    Module.uploadRom(file, () => {
+export async function uploadFiles(filepath) {
+    const file = filepath.files[0];
+    Module.uploadAll(file, async () => {
         Module.FSSync();
     });
 }
