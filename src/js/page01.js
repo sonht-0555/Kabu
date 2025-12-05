@@ -2,7 +2,7 @@ import * as Main from './main.js';
 //inputGame
 async function inputGame(rom) {
     if (['zip', 'gba', 'gbc', 'gb', '7z'].includes(rom.files[0].name.split('.').pop().toLowerCase())) {
-        await Main.uploadFiles(romInput);
+        await Main.uploadRoms(romInput);
         await delay(200);
         await Main.loadGame(rom.files[0].name);
     } else if (['sav', 'png', 'ss1', 'ss2', 'ss3'].includes(rom.files[0].name.split('.').pop().toLowerCase())) {
