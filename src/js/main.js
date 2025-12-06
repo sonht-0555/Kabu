@@ -30,7 +30,7 @@ export async function timer(isStart) {
         clearInterval(timerId);
         timerId = null;
     }
-    setTimeout(() => {Module.SDL2()},2000);
+    setTimeout(() => {Module.SDL2()},10000);
 }
 export async function autoSave() {
     await Module.saveState(1);
