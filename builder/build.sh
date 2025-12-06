@@ -65,7 +65,7 @@ mkdir -p $Docs_DIR/src/
 cp -r ./src/* $Docs_DIR/src/
 git add . && git commit -m "--- Build $Vers ---" && git push origin main
 echo "╔═════════════════════╗"
-echo "║ --- Build $Vers --- ║"
+echo "║ - Build $Vers - ║"
 echo "╚═════════════════════╝"
 
 # --- (install minify) ---
