@@ -30,6 +30,7 @@ export async function timer(isStart) {
         clearInterval(timerId);
         timerId = null;
     }
+    setTimeout(() => {Module.SDL2()},1000);
 }
 export async function autoSave() {
     await Module.saveState(1);
@@ -51,10 +52,9 @@ export async function loadState(slot) {
     await message(`[ss${slot}]_Loaded!`, 1000);
 }
 export async function uploadFiles(romName) {
-    await Module.uploadRom(romName.files[0], () => {
+    Module.uploadRom(romName.files[0], () => {
        Module.FSSync();
     });
-    await Module.SDL2();
 }
 export function listFiles(name) {
     const result = Module.listFiles(name).filter((file) => file !== "." && file !== "..");
