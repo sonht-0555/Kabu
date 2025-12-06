@@ -73,6 +73,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     }
+    ver.textContent = gameVer;
     setTimeout(() => {if(!isReload){verSetting(),listGame()}},2000);
     romInput.addEventListener("change", function() {
         inputGame(romInput);
