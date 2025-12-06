@@ -19,7 +19,7 @@ done
 clear
 
 # Increment revision in sw.js
-revision=$(grep "let revision =" ./sw.js | sed "s/.*'V//;s/'.*//")
+revision=$(grep "let revision =" ./sw.js | sed "s/.*'Ver_//;s/'.*//")
 major_version=$(echo $revision | cut -d'.' -f1)
 minor_version=$(echo $revision | cut -d'.' -f2 | sed 's/^0*//')
 minor_version=$((minor_version + 1))
@@ -34,13 +34,13 @@ new_revision="V${major_version}.$(printf "%02d" $minor_version)"
 
 # Update revision in sw.js
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  sed -i '' "s/let revision = 'V[0-9]*\.[0-9]*';/let revision = '$new_revision';/" ./sw.js
+  sed -i '' "s/let revision = 'Ver_[0-9]*\.[0-9]*';/let revision = '$new_revision';/" ./sw.js
 else
-  sed -i "s/let revision = 'V[0-9]*\.[0-9]*';/let revision = '$new_revision';/" ./sw.js
+  sed -i "s/let revision = 'Ver_[0-9]*\.[0-9]*';/let revision = '$new_revision';/" ./sw.js
 fi
 
 # Increment version in index.html
-game_version=$(grep "let gameVer =" ./index.html | sed "s/.*'V//;s/';.*//")
+game_version=$(grep "let gameVer =" ./index.html | sed "s/.*'Ver_//;s/';.*//")
 major_version=$(echo $game_version | cut -d'.' -f1)
 minor_version=$(echo $game_version | cut -d'.' -f2 | sed 's/^0*//') 
 minor_version=$((minor_version + 1))
@@ -54,9 +54,9 @@ Vers="V${major_version}.$(printf "%02d" $minor_version)"
 
 # Update version in index.html
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  sed -i '' "s/let gameVer = 'V[0-9]*\.[0-9]*';/let gameVer = '$Vers';/" ./index.html
+  sed -i '' "s/let gameVer = 'Ver_[0-9]*\.[0-9]*';/let gameVer = '$Vers';/" ./index.html
 else
-  sed -i "s/let gameVer = 'V[0-9]*\.[0-9]*';/let gameVer = '$Vers';/" ./index.html
+  sed -i "s/let gameVer = 'Ver_[0-9]*\.[0-9]*';/let gameVer = '$Vers';/" ./index.html
 fi
 
 # Copy static files
