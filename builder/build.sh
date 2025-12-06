@@ -64,9 +64,9 @@ cp ./index.html ./manifest.json ./sw.js ./_headers $Docs_DIR/
 mkdir -p $Docs_DIR/src/
 cp -r ./src/* $Docs_DIR/src/
 git add . && git commit -m "--- Build $Vers ---" && git push origin main
-echo "╔═══════════════════════════╗"
+echo "╔════════════════════════╗"
 echo "║ --- Build $Vers --- ║"
-echo "╚═══════════════════════════╝"
+echo "╚════════════════════════╝"
 
 # --- (install minify) ---
 # sudo npm install -g javascript-obfuscator
