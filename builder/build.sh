@@ -54,19 +54,19 @@ Vers="Ver_${major_version}.$(printf "%02d" $minor_version)"
 
 # Update version in index.html
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  sed -i '' "s/let gameVer = 'Ver_[0-9]*\.[0-9]*';/let gameVer = '$Vers';/" ./index.html
+  sed -i '' "s/let gameVer = 'Ver_[0-9]*\.[0-9]*';/let gameVer = '$Verssss';/" ./index.html
 else
-  sed -i "s/let gameVer = 'Ver_[0-9]*\.[0-9]*';/let gameVer = '$Vers';/" ./index.html
+  sed -i "s/let gameVer = 'Ver_[0-9]*\.[0-9]*';/let gameVer = '$Verssss';/" ./index.html
 fi
 
 # Copy static files
 cp ./index.html ./manifest.json ./sw.js ./_headers $Docs_DIR/
 mkdir -p $Docs_DIR/src/
 cp -r ./src/* $Docs_DIR/src/
-git add . && git commit -m "--- Build $Vers ---" && git push origin main
-echo "╔═════════════════════╗"
-echo "║ --- Build $Vers --- ║"
-echo "╚═════════════════════╝"
+git add . && git commit -m "--- Build $Verssss ---" && git push origin main
+echo "╔════════════════════════╗"
+echo "║ --- Build $Verssss --- ║"
+echo "╚════════════════════════╝"
 
 # --- (install minify) ---
 # sudo npm install -g javascript-obfuscator
