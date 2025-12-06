@@ -59,6 +59,14 @@ async function verSetting(values=[80, 160, 6]) {
     localStorage.setItem('vertical', current);
     current = (current + 1) % values.length; 
 }
+function optionClick(text) {
+  const actions = {
+    'Cloud':   () => console.log('Cloud'),
+    'Restore': () => console.log('Restore'),
+    'Backup':  () => console.log('Backup')
+  };
+  if (actions[text]) actions[text]();
+}
 //DOMContentLoaded
 document.addEventListener("DOMContentLoaded", function() {
     if ('serviceWorker' in navigator) {
@@ -85,4 +93,7 @@ document.addEventListener("DOMContentLoaded", function() {
         list.hidden = false, list01.hidden = true, list02.hidden = true;
         listGame();
     })
+    document.querySelectorAll('opti').forEach(function(opti) {
+        opti.addEventListener('click', function() {optionClick(opti.textContent.trim())});
+    });
 });

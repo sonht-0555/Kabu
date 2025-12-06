@@ -69,19 +69,14 @@
     padding: 20px 20px 40px 20px;
     box-sizing: border-box;
   }
-  rom, file, logo, setting, vertical, label, screen, state-button, l-button, r-button, menu-button, dpad-section, a-button, b-button, f-button, select-button, start-button {
+  rom, file, logo, setting, vertical, label, screen, opti, state-button, l-button, r-button, menu-button, dpad-section, a-button, b-button, f-button, select-button, start-button {
     background-color: var(--profile-bg) !important;
     outline: 1px solid var(--profile-6);
   }
-  [hidden] {
-    display: none !important;
-  }
-  [op4] {
-    opacity: 0.4 !important;
-  }
-  [op8] {
-    opacity: 0.8 !important;
-  }
+  [hidden] { display: none !important }
+  [op4] { opacity: 0.4 !important }
+  [op8] { opacity: 0.8 !important }
+  [jus], opti { justify-content: center }
 }
 @layer page-1 {
   page01 {
@@ -95,7 +90,9 @@
     transform: rotate(180deg);
     gap:1px;
   }
-  rom, titl, file {
+  rom, titl, file, cont {
+    display: flex;
+    column-gap: 1px;
     grid-template-columns: 1fr 40px;
     transform: rotate(180deg);
   }
@@ -103,7 +100,9 @@
     padding: 16px 0px 6px 0px;
     color:var(--profile-4);
   }
-  name, ver {
+  name, ver, opti {
+    display: flex;
+    flex:1;
     padding: 17px;
     white-space: nowrap;
     overflow: hidden;
