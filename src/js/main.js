@@ -24,13 +24,12 @@ export async function timer(isStart) {
             if (++seconds === 60) [seconds, minutes] = [0, ++minutes];
             if (minutes === 60) [minutes, hours] = [0, ++hours];
             document.querySelector("times").textContent = `${hours}h${minutes.toString().padStart(2, '0')}.${(seconds % 60).toString().padStart(2, '0')}`;
-            if (++count1 === 60) { autoSave(); Module.SDL2(); count1 = 0; }
+            if (++count1 === 60) { autoSave(); count1 = 0; }
         }, 1000);
     } else if (timerId) {
         clearInterval(timerId);
         timerId = null;
     }
-    setTimeout(() => {Module.SDL2()},10000);
 }
 export async function autoSave() {
     await Module.saveState(1);
@@ -81,7 +80,8 @@ export async function buttonPress(key) {
     Module.buttonPress(key)
 }
 export async function buttonUnpress(key) {
-    Module.buttonUnpress(key)
+    Module.buttonUnpress(key);
+    Module.SDL2();
 }
 export async function fastForward(number) {
     Module.setFastForwardMultiplier(number);
