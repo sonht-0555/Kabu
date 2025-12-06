@@ -63,7 +63,7 @@ fi
 cp ./index.html ./manifest.json ./sw.js ./_headers $Docs_DIR/
 mkdir -p $Docs_DIR/src/
 cp -r ./src/* $Docs_DIR/src/
-git add . && git commit -m "--- Build $Ver_xxx ---" && git push origin new_ui
+git add . && git commit -m "--- Build $Ver_xxx ---" && git push origin main
 echo "╔════════════════════════╗"
 echo "║ --- Build $Ver_xxx --- ║"
 echo "╚════════════════════════╝"
