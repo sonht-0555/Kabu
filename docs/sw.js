@@ -1,4 +1,4 @@
-let revision = 'V6.93';
+let revision = 'V8.24';
 var urlsToCache = [
     '/',
     './README.md',
@@ -10,23 +10,15 @@ var urlsToCache = [
     './src/core/4.0.8/mgba.js',
     './src/core/4.0.8/mgba.wasm',
     './src/css/main.css',
+    './src/font/3x3.ttf',
     './src/font/04b.ttf',
     './src/font/04bf.woff',
     './src/font/mother.ttf',
-    './src/img/favi.png',
     './src/img/icon.png',
-    './src/js/cloud.js',
-    './src/js/gamepad.js',
     './src/js/global.js',
     './src/js/main.js',
-    './src/js/ocr.js',
-    './src/js/setting.js',
-    './src/js/shader.js',
-    './src/js/state.js',
-    './src/js/storage.js',
-    './src/js/welcome.js',
-    './src/library/interact.js',
-    './src/library/nip.js',
+    './src/js/page01.js',
+    './src/js/page02.js',
     './sw.js'
 ];
 
