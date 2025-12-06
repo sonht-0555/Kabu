@@ -168,43 +168,6 @@ Module.filePaths = () => {
   };
 };
 
-Module.uploadAll = (file, callback) => {
-  const split = file.name.split(".");
-  if (split.length < 2) {
-    console.warn("unrecognized file extension: " + file.name);
-    return;
-  }
-  const extension = split[split.length - 1].toLowerCase();
-
-  let dir = null;
-  if (extension == "sav") {
-    dir = "/data/saves/";
-  } else if (extension.startsWith("ss")) {
-    dir = "/data/states/";
-  } else if (extension.startsWith("png")) {
-    dir = "/data/screenshots/";
-    } else if (extension.startsWith("cheats")) {
-    dir = "/data/cheats/";
-  } else if (["gba", "gbc", "gb", "zip", "7z"].includes(extension)) {
-    dir = "/data/games/";
-  } else if (["ips", "ups", "bps"].includes(extension)) {
-    dir = "/data/patches/";
-  } else {
-    console.warn("unrecognized file extension: " + extension);
-    return;
-  }
-
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    FS.writeFile(dir + file.name, new Uint8Array(e.target.result));
-    if (callback) {
-      callback();
-    }
-  };
-
-  reader.readAsArrayBuffer(file);
-};
-
 Module.uploadRom = (file, callback) => {
   const split = file.name.split('.');
   if (split.length < 2) {
@@ -216,6 +179,14 @@ Module.uploadRom = (file, callback) => {
   let dir = null;
   if (['gba', 'gbc', 'gb', 'zip', '7z'].includes(extension)) {
     dir = '/data/games/';
+  } else if (['ss0', 'ss1', 'ss2', 'ss3', 'ss4'].includes(extension)) {
+    dir = '/data/states/';
+  } else if (['png'].includes(extension)) {
+    dir = '/data/screenshots/';
+  } else if (['cheats'].includes(extension)) {
+    dir = '/data/cheats/';
+  } else if (['cheats'].includes(extension)) {
+    dir = '/data/cheats/';
   } else {
     console.warn('unrecognized file extension: ' + extension);
     return;

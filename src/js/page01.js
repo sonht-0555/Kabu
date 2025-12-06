@@ -1,9 +1,13 @@
 import * as Main from './main.js';
 //inputGame
 async function inputGame(rom) {
-    await Main.uploadGame(romInput);
+    await Main.uploadRoms(romInput);
     await delay(200);
-    await Main.loadGame(rom.files[0].name);
+    if (['gba', 'zip', 'gbc', 'gb', 'z7'].includes(rom.files[0].name.split('.').pop().toLowerCase())) {
+        await Main.loadGame(rom.files[0].name);
+    }
+    list.hidden = false, list01.hidden = true, list02.hidden = true;
+    listGame();
 }
 //listGame
 function showFileGroups(gameName) {
