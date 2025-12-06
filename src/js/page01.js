@@ -1,15 +1,11 @@
 import * as Main from './main.js';
 //inputGame
 async function inputGame(rom) {
-    if (['zip', 'gba', 'gbc', 'gb', '7z'].includes(rom.files[0].name.split('.').pop().toLowerCase())) {
-        await Main.uploadRoms(romInput);
-        await delay(200);
+    await Main.uploadRoms(romInput);
+    await delay(200);
+    if (['gba', 'zip', 'gbc', 'gb', 'z7'].includes(rom.files[0].name.split('.').pop().toLowerCase())) {
         await Main.loadGame(rom.files[0].name);
-    } else if (['sav', 'png', 'ss1', 'ss2', 'ss3'].includes(rom.files[0].name.split('.').pop().toLowerCase())) {
-        if (Main.listFiles('games').some(name => name.startsWith(rom.files[0].name.split('.')[0]))) {
-            await Main.uploadFiles(romInput);
-        } else { alert("The file name does not match the game!") }
-    } else { alert("File format not supported!") }
+    }
     list.hidden = false, list01.hidden = true, list02.hidden = true;
     listGame();
 }
