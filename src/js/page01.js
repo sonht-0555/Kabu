@@ -68,11 +68,12 @@ document.addEventListener("DOMContentLoaded", function() {
         navigator.serviceWorker.addEventListener('message', async function (event) {
         if (event.data.msg === "Updating...") {
             ver.textContent = "The system is updating...";
+            isReload = true;
             setTimeout(() => {location.reload()},4000);
             }
         });
     }
-    setTimeout(() => {verSetting(),listGame()},2000);
+    setTimeout(() => {if(!isReload){verSetting(),listGame()}},2000);
     romInput.addEventListener("change", function() {
         inputGame(romInput);
     })

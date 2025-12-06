@@ -1,5 +1,5 @@
 tag("page01"), tag("logo"), tag("page02"), tag("notif"), tag("display"), tag("list"), tag("list01"), tag("list02"), tag("name"), tag("ver"), tag("gamepad"), tag("titles"), tag("vertical");
-let gameName, gameType, gameWidth, gameHeight, integer, timerId, count = null, Module = null, canSync = true, recCount = 1;
+let gameName, gameType, gameWidth, gameHeight, integer, timerId, count = null, Module = null, canSync = true, recCount = 1, isReload = false;
 const canvas = document.getElementById('canvas');
 let [hours, minutes, seconds, count1] = [0, 0, 0, 0, 0];
 let current = parseInt(localStorage.getItem('vertical')) || 0;
