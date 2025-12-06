@@ -40,7 +40,7 @@ else
 fi
 
 # Increment version in index.html
-game_version=$(grep "let gameVer =" ./index.html | sed "s/.*'V//;s/';.*//")
+game_version=$(grep "let gameVer =" ./index.html | sed "s/.*'Ver_//;s/';.*//")
 major_version=$(echo $game_version | cut -d'.' -f1)
 minor_version=$(echo $game_version | cut -d'.' -f2 | sed 's/^0*//') 
 minor_version=$((minor_version + 1))
@@ -50,7 +50,7 @@ if [ $minor_version -ge 100 ]; then
   minor_version=0
   major_version=$((major_version + 1))
 fi
-Vers="V${major_version}.$(printf "%02d" $minor_version)"
+Vers="Ver_${major_version}.$(printf "%02d" $minor_version)"
 
 # Update version in index.html
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -64,9 +64,9 @@ cp ./index.html ./manifest.json ./sw.js ./_headers $Docs_DIR/
 mkdir -p $Docs_DIR/src/
 cp -r ./src/* $Docs_DIR/src/
 git add . && git commit -m "--- Build $Vers ---" && git push origin main
-echo "╔══════════════════════╗"
-echo "║ -- Build $Vers -- ║"
-echo "╚══════════════════════╝"
+echo "╔═════════════════════╗"
+echo "║ --- Build $Vers --- ║"
+echo "╚═════════════════════╝"
 
 # --- (install minify) ---
 # sudo npm install -g javascript-obfuscator
