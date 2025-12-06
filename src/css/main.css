@@ -66,7 +66,7 @@
   page01, page02 {
     grid-template-rows: auto 50px 60px;
     height: 100vh;
-    padding: 20px 20px 20px 40p !important;
+    padding: 20px 20px 40px 20px !important;
     box-sizing: border-box;
   }
   rom, file, logo, setting, vertical, label, screen, state-button, l-button, r-button, menu-button, dpad-section, a-button, b-button, f-button, select-button, start-button {
