@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function() {
         navigator.serviceWorker.addEventListener('message', async function (event) {
         if (event.data.msg === "Updating...") {
             ver.textContent = "The system is updating...";
-            setTimeout(() => {location.reload()},1800);
+            setTimeout(() => {location.reload()},1500);
             }
         });
     }

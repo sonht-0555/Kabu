@@ -74,7 +74,6 @@ export async function loadGame(romName) {
     await Module.loadState(1);
     await gameView(romName);
     await timer(true);
-    await Module.SDL2();
 }
 export async function buttonPress(key) {
     Module.buttonPress(key)
