@@ -30,7 +30,7 @@ if [ $minor_version -ge 100 ]; then
   major_version=$((major_version + 1))
 fi
 
-new_revision="V${major_version}.$(printf "%02d" $minor_version)"
+new_revision="Ver_${major_version}.$(printf "%02d" $minor_version)"
 
 # Update revision in sw.js
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -50,7 +50,7 @@ if [ $minor_version -ge 100 ]; then
   minor_version=0
   major_version=$((major_version + 1))
 fi
-Vers="V${major_version}.$(printf "%02d" $minor_version)"
+Vers="Ver_${major_version}.$(printf "%02d" $minor_version)"
 
 # Update version in index.html
 if [[ "$OSTYPE" == "darwin"* ]]; then
