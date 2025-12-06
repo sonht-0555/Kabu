@@ -216,14 +216,6 @@ Module.uploadRom = (file, callback) => {
   let dir = null;
   if (['gba', 'gbc', 'gb', 'zip', '7z'].includes(extension)) {
     dir = '/data/games/';
-  } else if (['ss0', 'ss1', 'ss2', 'ss3', 'ss4'].includes(extension)) {
-    dir = '/data/states/';
-  } else if (['png'].includes(extension)) {
-    dir = '/data/screenshots/';
-  } else if (['cheats'].includes(extension)) {
-    dir = '/data/cheats/';
-  } else if (['cheats'].includes(extension)) {
-    dir = '/data/cheats/';
   } else {
     console.warn('unrecognized file extension: ' + extension);
     return;
