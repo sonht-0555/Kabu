@@ -65,7 +65,7 @@
   }
   page01, page02 {
     position: absolute;
-    height: 100vh;
+    height: 100%;
     padding: 20px 20px 40px 20px;
     box-sizing: border-box;
   }
