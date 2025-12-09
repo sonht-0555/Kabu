@@ -32,6 +32,15 @@
     --profile-cyan: #20A5A6;
     --profile-green: #243E2E;
   }
+  ::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
   body {
     font-size: 8px;
     color: var(--profile-1);
@@ -42,16 +51,9 @@
     overflow: hidden;
     background-color: var(--profile-black);
   }
-  body::after, notif::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+  body::after {
     z-index: 1;
     background: url("data:image/svg+xml,%3Csvg width='1' height='1' viewBox='0 0 1 1' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.333333 0.333333H0.666667V0.666667H0.333333V0.333333Z' fill='black'/%3E%3Cpath d='M0.666667 0H1V0.333333H0.666667V0Z' fill='black'/%3E%3Cpath d='M0 0.666667H0.333333V1H0V0.666667Z' fill='black'/%3E%3C/svg%3E%0A");
-    background-repeat: repeat;
     filter: brightness(1) contrast(1.2) saturate(0.8) sepia(0.2) grayscale(0);
     mix-blend-mode: overlay;
     pointer-events: none;
@@ -66,7 +68,6 @@
   page01, page02 {
     position: absolute;
     height: 100%;
-    padding: 20px 20px 40px 20px;
     box-sizing: border-box;
   }
   rom, file, logo, setting, vertical, label, screen, opti, state-button, l-button, r-button, menu-button, dpad-section, a-button, b-button, f-button, select-button, start-button {
@@ -81,6 +82,7 @@
 @layer page-1 {
   page01 {
     grid-template-rows: 1fr 50px;
+    padding: 20px 20px 40px 20px;
     gap:8px;
   }
   list, list01, list02 {
@@ -140,15 +142,11 @@
   }
   /* layer display */
   display {
-    z-index: 2;
     grid-template-rows: 1fr 10px;
     position: relative;
   }
   display::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
+    z-index: 3;
     filter: brightness(1) contrast(1.2) saturate(0.8) sepia(0.2) grayscale(0);
     background: var(--background);
     background-repeat: repeat;
@@ -160,6 +158,7 @@
     pointer-events: none;
   }
   display canvas {
+    z-index: 2;
     filter: brightness(0.8) contrast(1.2) saturate(0.8) sepia(0.2) grayscale(0);
   }
   page02 canvas, notif {
@@ -237,8 +236,8 @@
     background: url("data:image/svg+xml,%3Csvg width='23' height='6' viewBox='0 0 23 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 5H8V1H11M13 1H16M16 1V6M16 1H19M21 5H23' stroke='%23C5AF90' stroke-opacity='0.4' stroke-width='2'/%3E%3C/svg%3E%0A");
   }
   state-button, menu-button, l-button, r-button, dpad-section, a-button, wrap-button, b-button, f-button, select-button, start-button {
-  background-position: center !important;
-  background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
   }
 }
 @layer page-3 {}
