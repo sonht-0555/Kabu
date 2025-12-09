@@ -61,7 +61,7 @@
 }
 @layer base {
   page01, list, list01, list02, file, cta, 
-  page02, display, gamepad, notif {
+  page02, display, gamepad, notif, joypad {
     display: grid;
     width: 100%; 
   }
@@ -231,6 +231,10 @@
   state-button, menu-button, l-button, r-button, dpad-section, a-button, wrap-button, b-button, f-button, select-button, start-button {
     background-position: center !important;
     background-repeat: no-repeat !important;
+  }
+  joypad {
+    padding-top: 20px;
+    grid-template-columns: 1fr 1fr;
   }
 }
 @layer page-3 {}

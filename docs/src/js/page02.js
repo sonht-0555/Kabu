@@ -11,10 +11,10 @@ function setState(element) {
     handleButton(true, element);
 }
 document.addEventListener("DOMContentLoaded", function() {
-    gamepad.addEventListener('pointerdown', (e) => {
+    document.addEventListener('pointerdown', (e) => {
         setState(e.target.closest('[data]'));
     });
-    gamepad.addEventListener('pointermove', (e) => {
+    document.addEventListener('pointermove', (e) => {
         active && (() => {
             const element = document.elementFromPoint(e.clientX, e.clientY)?.closest('[data]');
             element && element !== active &&
