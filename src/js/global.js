@@ -58,7 +58,7 @@ async function gameView(romName) {
     const adjust = base % 2 === 0 ? base - 1 : base;
     gamepad.style.gridTemplateColumns = `${adjust}px 1px ${adjust}px 1px ${adjust}px 1px ${adjust}px 1px auto 1px ${adjust}px 1px ${adjust}px 1px ${adjust}px 1px ${adjust}px`;
     page02.style.gridTemplateRows  =  `auto ${window.innerWidth - (adjust * 8 + 8) - 12}px ${(adjust * 4) + 4 + 8 + 26}px 1fr`;
-    joypad.style.width = `${(adjust * 4 + 4)}px`;
+    joypad.style.width = `${(adjust * 4 + 3)}px`;
     // action
     page01.hidden = true;
     page02.hidden = false;
