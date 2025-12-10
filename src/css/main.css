@@ -228,13 +228,16 @@
   start-button {
     background: url("data:image/svg+xml,%3Csvg width='23' height='6' viewBox='0 0 23 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 5H8V1H11M13 1H16M16 1V6M16 1H19M21 5H23' stroke='%23C5AF90' stroke-opacity='0.4' stroke-width='2'/%3E%3C/svg%3E%0A");
   }
-  state-button, menu-button, l-button, r-button, dpad-section, a-button, wrap-button, b-button, f-button, select-button, start-button {
+  joypad svg {
+    background: url("data:image/svg+xml,%3Csvg width='45' height='45' viewBox='0 0 45 45' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M23 22H45V23H23V45H22V23H0V22H22V0H23V22Z' fill='%231D1A15'/%3E%3C/svg%3E%0A");
+  }
+  state-button, menu-button, l-button, r-button, dpad-section, a-button, wrap-button, b-button, f-button, select-button, start-button, #joypad {
     background-position: center !important;
     background-repeat: no-repeat !important;
   }
   joypad {
     padding-top: 20px;
-    grid-template-columns: 1fr 1fr;
+    justify-content:end;
   }
 }
 @layer page-3 {}
