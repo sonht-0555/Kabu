@@ -47,5 +47,9 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         lastTap = Date.now();
     });
-    ['pointerup', 'pointercancel'].forEach(type => addEventListener(type, () => setState(null), swiping = false));
+    joypad.addEventListener('pointerdown', (e) => {
+        navi.style.display = "";
+    });
+   ['pointerup', 'pointercancel'].forEach(type => addEventListener(type, () => { setState(null); swiping = false; navi.style.display = "none"; })
+);
 });
