@@ -76,5 +76,5 @@ async function gameView(romName) {
 }
 document.addEventListener("DOMContentLoaded", function(){
     //body.style.setProperty("--background", svgGen01(window.devicePixelRatio)); 
-    //body.style.setProperty("--background", svgGen02(window.devicePixelRatio, "0.0.1.0.1.0.1.0.0")); 
+    body.style.setProperty("--background", svgGen02(window.devicePixelRatio, "0.0.1.0.1.0.1.0.0")); 
 });
