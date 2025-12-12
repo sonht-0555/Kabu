@@ -5,6 +5,11 @@ function initializeCore(coreInitFunction) {
     return coreInitFunction(coreInstance).then((core) => {
         core.FSInit();
         Module = core;
+        Module.setCoreSettings({
+            timestepSync: false, 
+            videoSync: true,
+            //audioBufferSize: 2048,     
+        });
     });
 }    
 initializeCore(latest);
