@@ -6,7 +6,7 @@ function initializeCore(coreInitFunction) {
         core.FSInit();
         Module = core;
         Module.setCoreSettings({
-            timestepSync: false, 
+            //timestepSync: true, 
             videoSync: true,
             //audioBufferSize: 2048,     
         });
