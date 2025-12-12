@@ -40,8 +40,8 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     f.addEventListener('pointerdown', (e) => {
         if (Date.now() - lastTap < 250) {
-            turboState = turboState === 1 ? 2 : 1;
-            Main.fastForward(turboState);
+            turboState = turboState === 8 ? 16 : 8;
+            Module.setMainLoopTiming(0, turboState);
             f.classList.toggle("active");
             message(`[${turboState}x] Speed!`);
         }
