@@ -32,7 +32,7 @@ function svgGen02(N, matrixString) {
         const cells = matrixString.split('.');
         for (let i = 0; i < N; i++) {
             for (let j = 0; j < N; j++) {
-                svgContent += `<rect x="${j / N}" y="${i / N}" width="${1 / N}" height="${1 / N}" fill="${cells[i * N + j] === '1' ? 'cornflowerblue' : 'none'}" />`;
+                svgContent += `<rect x="${j / N}" y="${i / N}" width="${1 / N}" height="${1 / N}" fill="${cells[i * N + j] === '1' ? 'black' : 'none'}" />`;
             }
         }
         svgContent += `</svg>`;
