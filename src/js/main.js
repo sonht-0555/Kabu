@@ -74,8 +74,9 @@ export async function buttonUnpress(key) {
     Module.SDL2();
 }
 export async function fastForward(number) {
-    Module.setCoreSettings({timestepSync: number === 2});
-    Module.setFastForwardMultiplier(number);
+    await Module.setCoreSettings({timestepSync: number === 2});
+    await delay(10000);
+    await Module.setFastForwardMultiplier(number);
 }
 export async function editFiles(filepath, filename, newFilename) {
     await Module.editFileName(filepath, filename, newFilename);
