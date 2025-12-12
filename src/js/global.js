@@ -1,4 +1,4 @@
-tag("page01"), tag("logo"), tag("page02"), tag("notif"), tag("display"), tag("list"), tag("list01"), tag("list02"), tag("name"), tag("ver"), tag("gamepad"), tag("titles"), tag("vertical");
+tag("body"), tag("page01"), tag("logo"), tag("page02"), tag("notif"), tag("display"), tag("list"), tag("list01"), tag("list02"), tag("name"), tag("ver"), tag("gamepad"), tag("titles"), tag("vertical");
 let gameName, gameType, gameWidth, gameHeight, integer, timerId, count = null, Module = null, canSync = true, recCount = 1, isReload = false;
 const canvas = document.getElementById('canvas');
 let [hours, minutes, seconds, count1] = [0, 0, 0, 0, 0];
@@ -49,8 +49,7 @@ async function gameView(romName) {
     display.style.width  = `${gameWidth  * (integer/window.devicePixelRatio)}px`;
     display.style.setProperty("--width", `${gameWidth}px`);
     display.style.setProperty("--height", `${gameHeight}px`);
-    display.style.setProperty("--scale", integer / window.devicePixelRatio);    
-    //display.style.setProperty("--background", svgGen(window.devicePixelRatio));  
+    display.style.setProperty("--scale", integer / window.devicePixelRatio);     
     // notification
     titles.textContent = gameName;
     // gamepad
@@ -63,4 +62,6 @@ async function gameView(romName) {
     page01.hidden = true;
     page02.hidden = false;
 }
-document.addEventListener("DOMContentLoaded", function(){});
+document.addEventListener("DOMContentLoaded", function(){
+    body.style.setProperty("--background", svgGen(window.devicePixelRatio)); 
+});

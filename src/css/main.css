@@ -55,8 +55,7 @@
   }
   body::after {
     z-index: 1;
-    filter: var(--filter);
-    background: url("data:image/svg+xml,%3Csvg width='1' height='1' viewBox='0 0 1 1' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0.333333 0.333333H0.666667V0.666667H0.333333V0.333333Z' fill='black'/%3E%3Cpath d='M0.666667 0H1V0.333333H0.666667V0Z' fill='black'/%3E%3Cpath d='M0 0.666667H0.333333V1H0V0.666667Z' fill='black'/%3E%3C/svg%3E%0A");
+    background-image: var(--background);
   }
 }
 @layer base {
