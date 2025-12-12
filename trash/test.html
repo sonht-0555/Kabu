@@ -1,62 +1,55 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<title>Pointer Demo</title>
-<style>
-body {height:100vh;display:flex;justify-content:center;align-items:center;margin:0;font-family:sans-serif;}
-.wrap {display:flex;gap:20px;}
-/* style theo tiền tố group trong data */
-[data^="btn-"], [data^="func-"] {
-  width:80px;height:80px;background:#222;color:#fff;display:flex;justify-content:center;align-items:center;
-  border-radius:12px;font-size:16px;user-select:none;touch-action:none;transition:.15s;
-}
-</style>
+    <meta charset="UTF-8">
+    <title>SVG Matrix Grid Generator</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        svg {
+            border: 1px solid #ccc;
+            margin-top: 20px;
+        }
+        #svgContainer {
+            width: 100px;
+            height: 100px;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+        }
+    </style>
 </head>
 <body>
-<div class="wrap">
-  <div data="btn-up">U</div>
-  <div data="btn-up-left">UL</div>
-  <div data="btn-up-right">UR</div>
-  <div data="btn-down">D</div>
-  <div data="btn-down-left">DL</div>
-  <div data="btn-down-right">DR</div>
-  <div data="btn-left">L</div>
-  <div data="btn-right">R</div>
-  <div data="func-a">A</div>
-  <div data="func-b">B</div>
-  <div data="func-start">S</div>
-  <div data="func-select">E</div>
-</div>
 
-<script>
-let active = null;
-function unpress(element) {
-  const parts = element.getAttribute('data').split('-').slice(1);
-  parts.forEach(p => console.log('unpress', p));
-}
-function press(element) {
-  const parts = element.getAttribute('data').split('-').slice(1);
-  parts.forEach(p => console.log('press', p));
-}
-function setActiveState(element) {
-  if (element === active) return;
-  active && unpress(active);
-  active = element || null;
-  element && press(element);
-}
-addEventListener('pointerdown', event => {
-  setActiveState(event.target.closest('[data]'));
-});
-addEventListener('pointermove', event => {
-  active && (() => {
-    const element = document.elementFromPoint(event.clientX, event.clientY)?.closest('[data]');
-    element && element !== active &&
-      active.getAttribute('data').split('-')[0] === element.getAttribute('data').split('-')[0] &&
-      setActiveState(element);
-  })();
-});
-['pointerup','pointercancel'].forEach(type => addEventListener(type, () => setActiveState(null)));
-</script>
+    <h1>Tạo Lưới SVG 3x3 và Tô Màu</h1>
+    <div id="svgContainer"></div>
+    <script>
+        function generateSvgGrid(N, matrixString) {
+            let svgContent = `<svg width="1" height="1" viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg">`;
+            const cells = matrixString.split('.');
+            for (let i = 0; i < N; i++) {
+                for (let j = 0; j < N; j++) {
+                    svgContent += `<rect x="${j / N}" y="${i / N}" width="${1 / N}" height="${1 / N}" fill="${cells[i * N + j] === '1' ? 'cornflowerblue' : 'none'}" />`;
+                }
+            }
+            svgContent += `</svg>`;
+            const encoded = encodeURIComponent(svgContent);
+            return `url("data:image/svg+xml,${encoded}")`;
+        }
+
+        const N = 4;
+        const matrixInput = "1.1.1.1.0.0.0.0.0.0.1.0.1.0.0.0";
+        const generatedBg = generateSvgGrid(N, matrixInput);
+
+        const container = document.getElementById('svgContainer');
+        container.style.backgroundImage = generatedBg;
+
+        console.log('SVG set as background:', generatedBg);
+    </script>
+
 </body>
 </html>

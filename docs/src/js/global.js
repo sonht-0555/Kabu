@@ -11,7 +11,7 @@ function tag(selector) {
 async function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-function svgGen(N) {
+function svgGen01(N) {
     if (N <= 0) return '';
     const rects = [];
     const size = 1 / N; 
@@ -27,6 +27,18 @@ function svgGen(N) {
         .replace(/'/g, '"').replace(/#/g, '%23').replace(/"/g, "'"); 
     return `url("data:image/svg+xml,${encodedSvg}")`;
 }
+function svgGen02(N, matrixString) {
+        let svgContent = `<svg width="1" height="1" viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg">`;
+        const cells = matrixString.split('.');
+        for (let i = 0; i < N; i++) {
+            for (let j = 0; j < N; j++) {
+                svgContent += `<rect x="${j / N}" y="${i / N}" width="${1 / N}" height="${1 / N}" fill="${cells[i * N + j] === '1' ? 'cornflowerblue' : 'none'}" />`;
+            }
+        }
+        svgContent += `</svg>`;
+        const encoded = encodeURIComponent(svgContent);
+        return `url("data:image/svg+xml,${encoded}")`;
+    }
 async function message(mess, second = 2000) {
     if (count) count.cancelled = true;
     const task = { cancelled: false };
@@ -63,5 +75,6 @@ async function gameView(romName) {
     page02.hidden = false;
 }
 document.addEventListener("DOMContentLoaded", function(){
-    body.style.setProperty("--background", svgGen(window.devicePixelRatio)); 
+    //body.style.setProperty("--background", svgGen01(window.devicePixelRatio)); 
+    body.style.setProperty("--background", svgGen02(window.devicePixelRatio, "0.1.0.1.0.0.0.0.0")); 
 });
