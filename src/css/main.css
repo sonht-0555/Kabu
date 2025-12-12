@@ -77,8 +77,8 @@
   [hidden] { display: none !important }
   [op4] { opacity: 0.4 !important }
   [op8] { opacity: 0.8 !important }
-  [fi1] { filter:  brightness(1) contrast(1.2) saturate(0.8) sepia(0.2) grayscale(0) }
-  [fi2] { --filter:brightness(1) contrast(1.2) saturate(0.8) sepia(0.2) grayscale(0) }
+  [fi1] { filter:  brightness(0.8) contrast(1.2) saturate(0.8) sepia(0.2) grayscale(0) }
+  [fi2] { --filter:brightness(0.8) contrast(1.2) saturate(0.8) sepia(0.2) grayscale(0) }
   [jus], opti { justify-content: center }
 }
 @layer page-1 {

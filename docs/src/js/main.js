@@ -75,7 +75,6 @@ export async function buttonUnpress(key) {
 }
 export async function fastForward(number) {
     await Module.setCoreSettings({timestepSync: number === 2, videoSync: number === 1});
-    await delay(500);
     await Module.setFastForwardMultiplier(number);
 }
 export async function editFiles(filepath, filename, newFilename) {
