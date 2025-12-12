@@ -50,7 +50,7 @@ async function gameView(romName) {
     display.style.setProperty("--width", `${gameWidth}px`);
     display.style.setProperty("--height", `${gameHeight}px`);
     display.style.setProperty("--scale", integer / window.devicePixelRatio);    
-    display.style.setProperty("--background", svgGen(window.devicePixelRatio));  
+    //display.style.setProperty("--background", svgGen(window.devicePixelRatio));  
     // notification
     titles.textContent = gameName;
     // gamepad
