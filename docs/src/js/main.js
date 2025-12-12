@@ -79,7 +79,7 @@ export async function buttonUnpress(key) {
     Module.SDL2();
 }
 export async function fastForward(number) {
-    Module.setFastForwardMultiplier(number);
+    Module.setMainLoopTiming(0, number);
 }
 export async function editFiles(filepath, filename, newFilename) {
     await Module.editFileName(filepath, filename, newFilename);
