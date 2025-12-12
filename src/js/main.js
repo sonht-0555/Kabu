@@ -5,15 +5,6 @@ function initializeCore(coreInitFunction) {
     return coreInitFunction(coreInstance).then((core) => {
         core.FSInit();
         Module = core;
-        Module.setCoreSettings({
-            rewindEnable: false,
-            timestepSync: false,     
-            videoSync: true, 
-            autoSaveStateEnable: false,
-            restoreAutoSaveStateOnLoad: false,
-            autoSaveStateTimerIntervalSeconds: 0, 
-            audioBufferSize: 2048,      
-        });
     });
 }    
 initializeCore(latest);

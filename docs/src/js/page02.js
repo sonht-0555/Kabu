@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     f.addEventListener('pointerdown', (e) => {
         if (Date.now() - lastTap < 250) {
-            turboState = turboState % 2 + 1;
+            turboState = turboState === 1 ? 3 : 1;
             Main.fastForward(turboState);
             f.classList.toggle("active");
             message(`[${turboState}x] Speed!`);
