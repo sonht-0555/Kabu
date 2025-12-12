@@ -1,15 +1,10 @@
-import stable from "../core/4.0.8/mgba.js";
-import latest from "../core/4.0.9/mgba.js";
+import stable from "../core/stable/mgba.js";
+import latest from "../core/latest/mgba.js";
 function initializeCore(coreInitFunction) {
     const coreInstance = { canvas: canvas };
     return coreInitFunction(coreInstance).then((core) => {
         core.FSInit();
         Module = core;
-        Module.setCoreSettings({
-            timestepSync: false, 
-            videoSync: true,
-            //audioBufferSize: 2048,     
-        });
     });
 }    
 initializeCore(latest);

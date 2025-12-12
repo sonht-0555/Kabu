@@ -1,14 +1,14 @@
-let revision = 'Ver_1.34';
+let revision = 'Ver_1.35';
 var urlsToCache = [
     '/',
     './README.md',
     './_headers',
     './index.html',
     './manifest.json',
-    './src/core/4.0.9/mgba.js',
-    './src/core/4.0.9/mgba.wasm',
-    './src/core/4.0.8/mgba.js',
-    './src/core/4.0.8/mgba.wasm',
+    './src/core/latest/mgba.js',
+    './src/core/latest/mgba.wasm',
+    './src/core/stable/mgba.js',
+    './src/core/stable/mgba.wasm',
     './src/css/main.css',
     './src/font/3x3.ttf',
     './src/font/04b.ttf',
