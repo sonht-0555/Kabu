@@ -56,6 +56,9 @@
   body::after {
     z-index: 1;
     background-image: var(--background);
+    transform: translateZ(0);
+    backface-visibility:hidden;
+    will-change: transform;
   }
 }
 @layer base {
