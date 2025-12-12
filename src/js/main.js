@@ -16,7 +16,7 @@ function initializeCore(coreInitFunction) {
         });
     });
 }    
-initializeCore(stable);
+initializeCore(latest);
 export async function timer(isStart) {
     if (isStart) {
         if (timerId) return;
