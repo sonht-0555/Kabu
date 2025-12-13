@@ -48,9 +48,9 @@ async function gameView(romName) {
     integer = Math.floor((window.innerWidth * window.devicePixelRatio) / gameWidth);
     display.style.height = `${Math.ceil(gameHeight * (integer/window.devicePixelRatio)) + 10}px`;
     display.style.width  = `${gameWidth  * (integer/window.devicePixelRatio)}px`;
-    display.style.setProperty("--width", `${gameWidth}px`);
-    display.style.setProperty("--height", `${gameHeight}px`);
-    display.style.setProperty("--scale", integer / window.devicePixelRatio);     
+    screen.style.setProperty("--width", `${gameWidth}px`);
+    screen.style.setProperty("--height", `${gameHeight}px`);
+    screen.style.setProperty("--scale", integer / window.devicePixelRatio);     
     // notification
     titles.textContent = gameName;
     // gamepad
@@ -65,5 +65,5 @@ async function gameView(romName) {
 }
 document.addEventListener("DOMContentLoaded", function(){
     body.style.setProperty("--background", svgGen(3, "0.0.1.0.1.0.1.0.0"));
-    screen.style.setProperty("--shader", svgGen(3, local(`shader0${local("shader")}`) || "0.0.1.0.1.0.1.0.0")); 
+    screen.style.setProperty("--shader", svgGen(4, local(`shader0${local("shader")}`) || "0.0.0.1.0.0.1.0.0.1.0.0.1.0.0.0")); 
 });

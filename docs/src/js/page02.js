@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
         } else {
             number = number % 5 + 1;
             local("shader", number);
-            const shader = local(`shader0${number}`) || "0.0.1.0.1.0.1.0.0";
+            const shader = local(`shader0${number}`) || "0.0.0.1.0.0.1.0.0.1.0.0.1.0.0.0";
             screen.style.setProperty("--shader", svgGen(window.devicePixelRatio, shader)); 
             message(`[${shader}_0${number}] Matrix!`);
         }
