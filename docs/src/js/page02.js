@@ -1,5 +1,5 @@
 import * as Main from './main.js';
-let value = 5, startY = 0, swiping = false, lastTap = 0, turboState = 1, active = null;
+let value = 5, startY = 0, swiping = false, lastTap = 0, number = 1, active = null;
 function handleButton(press, element) {
     const parts = element?.getAttribute('data')?.split('-').slice(1) || [];
     parts.forEach(part => press ? Main.buttonPress(part) : Main.buttonUnpress(part));
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
     canvas.addEventListener('pointerdown', (e) => {
         const r = canvas.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
-        if (Date.now() - lastTap < 250) {
+        if (Date.now() - lastTap < 300) {
             x < r.width / 2 ? (y < r.height / 2 ? Main.loadState(3) : Main.loadState(2)) : (y < r.height / 2 ? Main.saveState(3) : Main.saveState(2));
         }
         lastTap = Date.now(), startY = e.clientY, swiping = e.clientX > (r.right - 40);
@@ -39,11 +39,24 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
     f.addEventListener('pointerdown', (e) => {
-        if (Date.now() - lastTap < 250) {
-            turboState = turboState === 1 ? 2 : 1;
-            Main.fastForward(turboState);
+        if (Date.now() - lastTap < 300) {
+            number = number === 1 ? 2 : 1;
+            Main.fastForward(number);
             f.classList.toggle("active");
-            message(`[${turboState}x] Speed!`);
+            message(`[${number}x] Speed!`);
+        }
+        lastTap = Date.now();
+    });
+    state.addEventListener('pointerdown', (e) => {
+        if (Date.now() - lastTap < 300) {
+            const input = prompt("Format [shaderxx-data]");
+            input && local(...((() => { const [name, ...dataParts] = input.split('-'); return [name, dataParts.join('-')]; })()));
+        } else {
+            number = number % 5 + 1;
+            local("shader", number);
+            const shader = local(`shader0${number}`) || "0.0.1.0.1.0.1.0.0";
+            screen.style.setProperty("--shader", svgGen(window.devicePixelRatio, shader)); 
+            message(`[${shader}_0${number}] Matrix!`);
         }
         lastTap = Date.now();
     });

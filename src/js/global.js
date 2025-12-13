@@ -1,44 +1,33 @@
-tag("body"), tag("page01"), tag("logo"), tag("page02"), tag("notif"), tag("display"), tag("list"), tag("list01"), tag("list02"), tag("name"), tag("ver"), tag("gamepad"), tag("titles"), tag("vertical");
+tag("body"), tag("page01"), tag("logo"), tag("page02"), tag("notif"), tag("display"), tag("list"), tag("list01"), tag("list02"), tag("name"), tag("ver"), tag("gamepad"), tag("titles"), tag("vertical"), tag("screen");
 let gameName, gameType, gameWidth, gameHeight, integer, timerId, count = null, Module = null, canSync = true, recCount = 1, isReload = false;
 const canvas = document.getElementById('canvas');
 let [hours, minutes, seconds, count1] = [0, 0, 0, 0, 0];
-let current = parseInt(localStorage.getItem('vertical')) || 0;
+let current = parseInt(local('vertical')) || 0;
 function tag(selector) {
     const element = document.querySelector(selector)
     window[selector] = element;
     return element;
 }
+function local(key, value) {
+    return arguments.length < 2 || value === null
+        ? localStorage.getItem(key)
+        : localStorage.setItem(key, value);
+}
 async function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-function svgGen01(N) {
-    if (N <= 0) return '';
-    const rects = [];
-    const size = 1 / N; 
+function svgGen(N, matrixString) {
+    let svgContent = `<svg width="1" height="1" viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg">`;
+    const cells = matrixString.split('.');
     for (let i = 0; i < N; i++) {
-        const x = (i * size).toFixed(3); 
-        const y = ((N - 1 - i) * size).toFixed(3); 
-        const size_str = size.toFixed(3);
-        const rectString = `<rect x='${x}' y='${y}' width='${size_str}' height='${size_str}' fill='black'/>`;
-        rects.push(rectString);
-    }
-    const svgContent = `<svg xmlns='http://www.w3.org/2000/svg' width="1" height="1" viewBox='0 0 1 1'>${rects.join('')}</svg>`;
-    let encodedSvg = svgContent
-        .replace(/'/g, '"').replace(/#/g, '%23').replace(/"/g, "'"); 
-    return `url("data:image/svg+xml,${encodedSvg}")`;
-}
-function svgGen02(N, matrixString) {
-        let svgContent = `<svg width="1" height="1" viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg">`;
-        const cells = matrixString.split('.');
-        for (let i = 0; i < N; i++) {
-            for (let j = 0; j < N; j++) {
-                svgContent += `<rect x="${j / N}" y="${i / N}" width="${1 / N}" height="${1 / N}" fill="${cells[i * N + j] === '1' ? 'black' : 'none'}" />`;
-            }
+        for (let j = 0; j < N; j++) {
+            svgContent += `<rect x="${j / N}" y="${i / N}" width="${1 / N}" height="${1 / N}" fill="${cells[i * N + j] === '1' ? 'black' : 'none'}" />`;
         }
-        svgContent += `</svg>`;
-        const encoded = encodeURIComponent(svgContent);
-        return `url("data:image/svg+xml,${encoded}")`;
     }
+    svgContent += `</svg>`;
+    const encoded = encodeURIComponent(svgContent);
+    return `url("data:image/svg+xml,${encoded}")`;
+}
 async function message(mess, second = 2000) {
     if (count) count.cancelled = true;
     const task = { cancelled: false };
@@ -75,6 +64,6 @@ async function gameView(romName) {
     page02.hidden = false;
 }
 document.addEventListener("DOMContentLoaded", function(){
-    //body.style.setProperty("--background", svgGen01(window.devicePixelRatio)); 
-    body.style.setProperty("--background", svgGen02(window.devicePixelRatio, "0.0.1.0.1.0.1.0.0")); 
+    body.style.setProperty("--background", svgGen(3, "0.0.1.0.1.0.1.0.0"));
+    screen.style.setProperty("--shader", svgGen(3, local(`shader0${local("shader")}`) || "0.0.1.0.1.0.1.0.0")); 
 });

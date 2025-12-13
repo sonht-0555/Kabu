@@ -56,7 +56,7 @@ async function verSetting(values=[80, 160, 6]) {
     values.map(value => `k${value}`).forEach((id, index) => {
         document.getElementById(id).style.stroke = index === current ? "var(--profile-1)" : 'var(--profile-4)';
     });
-    localStorage.setItem('vertical', current);
+    local('vertical', current);
     current = (current + 1) % values.length; 
 }
 function optionClick(text) {

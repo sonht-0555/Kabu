@@ -32,7 +32,7 @@
     --profile-cyan: #20A5A6;
     --profile-green: #243E2E;
   }
-  ::after {
+  body::after, screen::after {
     content: "";
     position: absolute;
     top: 0;
@@ -72,7 +72,7 @@
     height: 100%;
     box-sizing: border-box;
   }
-  rom, file, logo, setting, vertical, label, screen, opti, state-button, l-button, r-button, menu-button, dpad-section, a-button, b-button, f-button, select-button, start-button {
+  rom, file, logo, setting, vertical, label, opti, state-button, l-button, r-button, menu-button, dpad-section, a-button, b-button, f-button, select-button, start-button {
     background-color: var(--profile-bg) !important;
     outline: 1px solid var(--profile-6);
   }
@@ -148,6 +148,8 @@
     position: relative;
     grid-template-rows: 1fr 10px;
   }
+  screen { z-index: 2; position: relative }
+  screen::after { background-image: var(--shader) }
   canvas, notif {
     width:100%;
     image-rendering: pixelated;
