@@ -65,5 +65,5 @@ async function gameView(romName) {
 }
 document.addEventListener("DOMContentLoaded", function(){
     body.style.setProperty("--background", svgGen(3, "0.0.1.0.1.0.1.0.0"));
-    screen.style.setProperty("--shader", svgGen(4, local(`shader0${local("shader")}`) || "0.0.0.1.0.0.1.0.0.1.0.0.1.0.0.0")); 
+    screen.style.setProperty("--shader", svgGen(3, local(`shader0${local("shader")}`) || "0.0.1.0.1.0.1.0.0")); 
 });
