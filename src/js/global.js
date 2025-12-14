@@ -63,7 +63,8 @@ async function gameView(romName) {
     // action
     page01.hidden = true;
     page02.hidden = false;
-    body.style.setProperty("--background", svgGen(window.devicePixelRatio, "0.0.1.0.1.0.1.0.0"));
     screen.style.setProperty("--shader", svgGen(integer, local(`shader0${local("shader")}`) || "0.0.0.1.0.0.1.0.0.1.0.0.1.0.0.0"));
 }
-document.addEventListener("DOMContentLoaded", function(){});
+document.addEventListener("DOMContentLoaded", function(){
+    body.style.setProperty("--background", svgGen(window.devicePixelRatio, "0.0.1.0.1.0.1.0.0"));
+});
