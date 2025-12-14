@@ -67,4 +67,7 @@ async function gameView(romName) {
 }
 document.addEventListener("DOMContentLoaded", function(){
     body.style.setProperty("--background", svgGen(window.devicePixelRatio, "0.0.1.0.1.0.1.0.0"));
+    //document.addEventListener("visibilitychange",()=>console.log(document.hidden?"⤵️":"⤴️"));
+    //window.addEventListener("pagehide",()=>console.log("⤵️"));window.addEventListener("pageshow",()=>console.log("⤴️"));
+    //document.addEventListener("freeze",()=>console.log("⤵️"));document.addEventListener("resume",()=>console.log("⤴️"));
 });
