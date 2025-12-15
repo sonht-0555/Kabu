@@ -6,8 +6,17 @@ function initializeCore(coreInitFunction) {
         core.FSInit();
         Module = core;
     });
-}    
-initializeCore(latest);
+}
+function visibility(event) {
+    if (document.visibilityState === 'hidden' || event?.type === 'beforeunload' || event?.persisted) {
+        page02.hidden = true;
+        pauseGame();
+    } else {
+        canvas.classList.add("visible");
+        page02.hidden = false;
+        resumeGame();
+    }
+}
 export async function timer(isStart) {
     if (isStart) {
         if (timerId) return;
@@ -22,10 +31,20 @@ export async function timer(isStart) {
         timerId = null;
     }
 }
+export async function resumeGame() {
+    await Module.resumeGame();
+    await Module.resumeAudio();
+    message("[_] Resumed!");
+}
+export async function pauseGame() {
+    await Module.pauseGame();
+    await Module.pauseAudio();
+    message("[_] Paused!");
+}
 export async function autoSave() {
     await Module.saveState(1);
     await FSSync();
-    await message(`[${recCount}]_Recorded`);
+    await message(`[${recCount}]_Recorded!`);
     recCount++;
 }
 export async function saveState(slot) {
@@ -98,3 +117,11 @@ export async function downloadFiles(filepath, filename) {
     URL.revokeObjectURL(blob);
     a.remove();
 }
+document.addEventListener("DOMContentLoaded", function() {
+    ["pagehide", "freeze", "visibilitychange"].forEach(e => document.addEventListener(e, visibility));
+    window.addEventListener("beforeunload", visibility);
+    page01.ontouchstart = e => swipe = (e.touches[0].clientY > page01.getBoundingClientRect().bottom - 40) ? e.touches[0].clientY : null;
+    page01.ontouchmove = e => swipe && swipe - e.touches[0].clientY > 30 && (page02.hidden = true, pauseGame(), swipe = null);
+    page01.ontouchend = () => swipe = null;
+    initializeCore(latest);
+});

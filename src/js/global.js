@@ -1,5 +1,5 @@
 tag("body"), tag("page01"), tag("logo"), tag("page02"), tag("notif"), tag("display"), tag("list"), tag("list01"), tag("list02"), tag("name"), tag("ver"), tag("gamepad"), tag("titles"), tag("vertical"), tag("screen");
-let gameName, gameType, gameWidth, gameHeight, integer, timerId, count = null, Module = null, canSync = true, recCount = 1, isReload = false;
+let gameName, gameType, gameWidth, gameHeight, integer, timerId, count = null, Module = null, canSync = true, recCount = 1, isReload = false, swipe;
 const canvas = document.getElementById('canvas');
 let [hours, minutes, seconds, count1] = [0, 0, 0, 0, 0];
 let current = parseInt(local('vertical')) || 0;
@@ -67,7 +67,4 @@ async function gameView(romName) {
 }
 document.addEventListener("DOMContentLoaded", function(){
     body.style.setProperty("--background", svgGen(window.devicePixelRatio, "0.0.1.0.1.0.1.0.0"));
-    //document.addEventListener("visibilitychange",()=>console.log(document.hidden?"⤵️":"⤴️"));
-    //window.addEventListener("pagehide",()=>console.log("⤵️"));window.addEventListener("pageshow",()=>console.log("⤴️"));
-    //document.addEventListener("freeze",()=>console.log("⤵️"));document.addEventListener("resume",()=>console.log("⤴️"));
 });
