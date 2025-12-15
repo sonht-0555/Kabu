@@ -7,16 +7,6 @@ function initializeCore(coreInitFunction) {
         Module = core;
     });
 }
-function visibility(event) {
-    if (document.visibilityState === 'hidden' || event?.type === 'beforeunload' || event?.persisted) {
-        page02.hidden = true;
-        pauseGame();
-    } else {
-        canvas.classList.add("visible");
-        setTimeout(() => {page02.hidden = false}, 300);
-        resumeGame();
-    }
-}
 export async function timer(isStart) {
     if (isStart) {
         if (timerId) return;
@@ -118,7 +108,5 @@ export async function downloadFiles(filepath, filename) {
     a.remove();
 }
 document.addEventListener("DOMContentLoaded", function() {
-    ["pagehide", "freeze", "visibilitychange"].forEach(e => document.addEventListener(e, visibility));
-    window.addEventListener("beforeunload", visibility);
-    initializeCore(latest);
+   initializeCore(latest);
 });

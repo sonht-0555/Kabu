@@ -1,55 +1,35 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>SVG Matrix Grid Generator</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-        svg {
-            border: 1px solid #ccc;
-            margin-top: 20px;
-        }
-        #svgContainer {
-            width: 100px;
-            height: 100px;
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Visibility Test</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: black;
+    }
+  </style>
 </head>
 <body>
-
-    <h1>Tạo Lưới SVG 3x3 và Tô Màu</h1>
-    <div id="svgContainer"></div>
-    <script>
-        function generateSvgGrid(N, matrixString) {
-            let svgContent = `<svg width="1" height="1" viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg">`;
-            const cells = matrixString.split('.');
-            for (let i = 0; i < N; i++) {
-                for (let j = 0; j < N; j++) {
-                    svgContent += `<rect x="${j / N}" y="${i / N}" width="${1 / N}" height="${1 / N}" fill="${cells[i * N + j] === '1' ? 'cornflowerblue' : 'none'}" />`;
-                }
-            }
-            svgContent += `</svg>`;
-            const encoded = encodeURIComponent(svgContent);
-            return `url("data:image/svg+xml,${encoded}")`;
+  <script>
+    function setHidden(hidden) {
+        if (hidden) {
+          document.body.style.background = 'black';
+        } else {
+          setTimeout(() => {document.body.style.background = 'white'}, 1000);
         }
+    }
 
-        const N = 4;
-        const matrixInput = "1.1.1.1.0.0.0.0.0.0.1.0.1.0.0.0";
-        const generatedBg = generateSvgGrid(N, matrixInput);
-
-        const container = document.getElementById('svgContainer');
-        container.style.backgroundImage = generatedBg;
-
-        console.log('SVG set as background:', generatedBg);
-    </script>
-
+    document.addEventListener('visibilitychange', () => {
+      setHidden(document.visibilityState === 'hidden');
+    });
+    window.addEventListener('blur', () => setHidden(true));
+    window.addEventListener('focus', () => setHidden(false));
+    window.addEventListener('pagehide', () => setHidden(true));
+    window.addEventListener('pageshow', () => setHidden(false));
+    document.addEventListener('freeze', () => setHidden(true));
+    document.addEventListener('resume', () => setHidden(false));
+  </script>
 </body>
 </html>

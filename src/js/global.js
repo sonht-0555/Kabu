@@ -65,6 +65,22 @@ async function gameView(romName) {
     page02.hidden = false;
     screen.style.setProperty("--shader", svgGen(integer, local(`shader0${local("shader")}`) || "0.0.0.1.0.0.1.0.0.1.0.0.1.0.0.0"));
 }
+function setHidden(hidden) {
+        if (hidden) {
+          screen.hidden = true;
+        } else {
+          setTimeout(() => {screen.hidden = false}, 300);
+        }
+    }
 document.addEventListener("DOMContentLoaded", function(){
     body.style.setProperty("--background", svgGen(window.devicePixelRatio, "0.0.1.0.1.0.1.0.0"));
+    document.addEventListener('visibilitychange', () => {
+      setHidden(document.visibilityState === 'hidden');
+    });
+    window.addEventListener('blur', () => setHidden(true));
+    window.addEventListener('focus', () => setHidden(false));
+    window.addEventListener('pagehide', () => setHidden(true));
+    window.addEventListener('pageshow', () => setHidden(false));
+    document.addEventListener('freeze', () => setHidden(true));
+    document.addEventListener('resume', () => setHidden(false));
 });

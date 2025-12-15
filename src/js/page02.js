@@ -63,9 +63,6 @@ document.addEventListener("DOMContentLoaded", function() {
     joypad.onpointerdown = e => {
         joypad.style.opacity = "1";
     };
-    //page02.ontouchstart = e => swipe = (e.touches[0].clientY > page01.getBoundingClientRect().bottom - 40) ? e.touches[0].clientY : null;
-    //page02.ontouchmove = e => swipe && swipe - e.touches[0].clientY > 30 && (page02.hidden = true, pauseGame(), swipe = null);
-    //page02.ontouchend = () => swipe = null;
-   ['pointerup', 'pointercancel'].forEach(type => addEventListener(type, () => { setState(null); swiping = false; joypad.style.opacity = "0" })
+    ['pointerup', 'pointercancel'].forEach(type => addEventListener(type, () => { setState(null); swiping = false; joypad.style.opacity = "0" })
 );
 });
