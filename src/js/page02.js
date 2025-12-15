@@ -69,6 +69,6 @@ document.addEventListener("DOMContentLoaded", function() {
     invis.onpointermove = e => {
         canvas.hidden = true;
     };
-    ['pointerup', 'pointercancel'].forEach(type => addEventListener(type, () => { setState(null); swiping = false; joypad.style.opacity = "0"; setTimeout(() => { canvas.hidden = false }, 400) })
+    ['pointerup', 'pointercancel'].forEach(type => addEventListener(type, () => { setState(null); swiping = false; joypad.style.opacity = "0";})
 );
 });
