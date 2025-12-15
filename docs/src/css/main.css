@@ -146,18 +146,17 @@
     position: relative;
     grid-template-rows: 1fr 10px;
   }
-  screen { z-index: 2; position: relative }
+  screen { z-index: 2; position: relative; transition: opacity 0.5s ease-in-out }
   screen::after { 
     width: var(--width);
     height: var(--height);
     transform: scale(var(--scale));
     background-image: var(--shader);
-    background-size: var(--size);
+    background-size: 2px;
   }
-  canvas, notif {
+  canvas {
     width:100%;
     image-rendering: pixelated;
-    transition: opacity 0.6s ease-in-out;
   }
   notif {
     position: relative;
