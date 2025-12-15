@@ -47,6 +47,8 @@
     will-change: transform;
   }
   body {
+    grid-template-rows: 1fr 40px;
+    position: relative;
     font-size: 8px;
     color: var(--profile-1);
     font-family: "3x3";
@@ -62,14 +64,10 @@
   }
 }
 @layer base {
-  page01, list, list01, list02, file, cta, 
+  body, page01, list, list01, list02, file, cta, 
   page02, display, gamepad, notif, joypad {
     display: grid;
-    width: 100%; 
-  }
-  page01, page02 {
-    position: absolute;
-    height: 100%;
+    width: 100%;
     box-sizing: border-box;
   }
   rom, file, logo, setting, vertical, label, opti, state-button, l-button, r-button, menu-button, dpad-section, a-button, b-button, f-button, select-button, start-button {
@@ -90,7 +88,7 @@
 @layer page-1 {
   page01 {
     grid-template-rows: 1fr 50px;
-    padding: 20px 20px 40px 20px;
+    padding: 0px 20px;
     gap:8px;
   }
   list, list01, list02 {
