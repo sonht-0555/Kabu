@@ -66,6 +66,4 @@ document.addEventListener("DOMContentLoaded", function() {
     invis.onpointermove  = () => {screen.style.opacity = "0"};
     page02.onpointerdown = () => {screen.style.opacity = "1"};
     document.onvisibilitychange = () => !document.hidden && (screen.style.opacity = "1");
-    window.onpagehide = () => screen.style.opacity = "0";
-
 });
