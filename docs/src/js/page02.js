@@ -64,11 +64,10 @@ document.addEventListener("DOMContentLoaded", function() {
         joypad.style.opacity = "1";
     };
     invis.onpointerdown = e => {
-        canvas.hidden = true;
+        canvas.style.opacity = "0"
     };
-    invis.onpointermove = e => {
-        canvas.hidden = true;
-    };
-    ['pointerup', 'pointercancel'].forEach(type => addEventListener(type, () => { setState(null); swiping = false; joypad.style.opacity = "0";})
-);
+    ['pointerup', 'pointercancel'].forEach(type => addEventListener(type, () => { setState(null); swiping = false; joypad.style.opacity = "0"}));
+    const show = () => canvas.style.opacity = "1";
+    document.addEventListener('visibilitychange', () => document.visibilityState === 'visible' && show());
+    window.addEventListener('pageshow', show);
 });
