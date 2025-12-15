@@ -148,11 +148,8 @@
   }
   screen { z-index: 2; position: relative; transition: opacity 0.5s ease-in-out }
   screen::after { 
-    width: var(--width);
-    height: var(--height);
-    transform: scale(var(--scale));
     background-image: var(--shader);
-    background-size: 2px;
+    background-size: 1.3333333px;
   }
   canvas {
     width:100%;
