@@ -81,6 +81,7 @@ export async function buttonPress(key) {
 export async function buttonUnpress(key) {
     Module.buttonUnpress(key);
     Module.SDL2();
+    screen.style.opacity = "1";
 }
 export async function fastForward(number) {
     await Module.setCoreSettings({timestepSync: number === 2, videoSync: number === 1});

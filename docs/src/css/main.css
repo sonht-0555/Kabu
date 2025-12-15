@@ -157,7 +157,7 @@
   canvas, notif {
     width:100%;
     image-rendering: pixelated;
-    transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.6s ease-in-out;
   }
   notif {
     position: relative;
