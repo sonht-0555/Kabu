@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function() {
     ['pointerup', 'pointercancel'].forEach(type => addEventListener(type, () => { setState(null); swiping = false; joypad.style.opacity = "0"}));
     joypad.onpointerdown = () => {joypad.style.opacity = "1"};
     // visibility
-    invis.onpointerdown  = () => {screen.style.opacity = "0"};
+    invis.onpointermove  = () => {screen.style.opacity = "0"};
     page02.onpointerdown = () => {screen.style.opacity = "1"};
     document.onvisibilitychange = () => !document.hidden && (screen.style.opacity = "1");
 });
