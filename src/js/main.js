@@ -13,7 +13,7 @@ function visibility(event) {
         pauseGame();
     } else {
         canvas.classList.add("visible");
-        page02.hidden = false;
+        setTimeout(() => {page02.hidden = false}, 300);
         resumeGame();
     }
 }
@@ -120,8 +120,5 @@ export async function downloadFiles(filepath, filename) {
 document.addEventListener("DOMContentLoaded", function() {
     ["pagehide", "freeze", "visibilitychange"].forEach(e => document.addEventListener(e, visibility));
     window.addEventListener("beforeunload", visibility);
-    page01.ontouchstart = e => swipe = (e.touches[0].clientY > page01.getBoundingClientRect().bottom - 40) ? e.touches[0].clientY : null;
-    page01.ontouchmove = e => swipe && swipe - e.touches[0].clientY > 30 && (page02.hidden = true, pauseGame(), swipe = null);
-    page01.ontouchend = () => swipe = null;
     initializeCore(latest);
 });

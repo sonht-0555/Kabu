@@ -11,25 +11,25 @@ function setState(element) {
     handleButton(true, element);
 }
 document.addEventListener("DOMContentLoaded", function() {
-    document.addEventListener('pointerdown', (e) => {
+    document.onpointerdown = e => {
         setState(e.target.closest('[data]'));
-    });
-    document.addEventListener('pointermove', (e) => {
+    };
+    document.onpointermove = e => {
         active && (() => {
             const element = document.elementFromPoint(e.clientX, e.clientY)?.closest('[data]');
             element && element !== active &&
                 active.getAttribute('data').split('-')[0] === element.getAttribute('data').split('-')[0] &&
                 setState(element);
         })();
-    });
-    canvas.addEventListener('pointerdown', (e) => {
+    };
+    canvas.onpointerdown = e => {
         const r = canvas.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
         if (Date.now() - lastTap < 300) {
             x < r.width / 2 ? (y < r.height / 2 ? Main.loadState(3) : Main.loadState(2)) : (y < r.height / 2 ? Main.saveState(3) : Main.saveState(2));
         }
         lastTap = Date.now(), startY = e.clientY, swiping = e.clientX > (r.right - 40);
-    });
-    canvas.addEventListener('pointermove', (e) => {
+    };
+    canvas.onpointermove = e => {
         if (!swiping) return;
         if (Math.abs(startY - e.clientY) >= 20) {
             value = startY - e.clientY > 0 ? Math.min(10, value + 1) : Math.max(0, value - 1);
@@ -37,8 +37,8 @@ document.addEventListener("DOMContentLoaded", function() {
             message(`Brightness_${value}0.nit`);
             startY = e.clientY;
         }
-    });
-    f.addEventListener('pointerdown', (e) => {
+    };
+    f.onpointerdown = e => {
         if (Date.now() - lastTap < 300) {
             number = number === 1 ? 2 : 1;
             Main.fastForward(number);
@@ -46,8 +46,8 @@ document.addEventListener("DOMContentLoaded", function() {
             message(`[${number}x] Speed!`);
         }
         lastTap = Date.now();
-    });
-    state.addEventListener('pointerdown', (e) => {
+    };
+    state.onpointerdown = e => {
         if (Date.now() - lastTap < 300) {
             const input = prompt("Format [shaderxx-data]");
             input && local(...((() => { const [name, ...dataParts] = input.split('-'); return [name, dataParts.join('-')]; })()));
@@ -59,10 +59,13 @@ document.addEventListener("DOMContentLoaded", function() {
             message(`[${shader}_0${number}] Matrix!`);
         }
         lastTap = Date.now();
-    });
-    joypad.addEventListener('pointerdown', (e) => {
+    };
+    joypad.onpointerdown = e => {
         joypad.style.opacity = "1";
-    });
+    };
+    //page02.ontouchstart = e => swipe = (e.touches[0].clientY > page01.getBoundingClientRect().bottom - 40) ? e.touches[0].clientY : null;
+    //page02.ontouchmove = e => swipe && swipe - e.touches[0].clientY > 30 && (page02.hidden = true, pauseGame(), swipe = null);
+    //page02.ontouchend = () => swipe = null;
    ['pointerup', 'pointercancel'].forEach(type => addEventListener(type, () => { setState(null); swiping = false; joypad.style.opacity = "0" })
 );
 });
