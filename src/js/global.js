@@ -48,9 +48,7 @@ async function gameView(romName) {
     integer = Math.floor((window.innerWidth * window.devicePixelRatio) / gameWidth);
     display.style.height = `${Math.ceil(gameHeight * (integer/window.devicePixelRatio)) + 10}px`;
     display.style.width  = `${gameWidth  * (integer/window.devicePixelRatio)}px`;
-    screen.style.setProperty("--width", `${gameWidth * 2}px`);
-    screen.style.setProperty("--height", `${gameHeight * 2}px`);
-    screen.style.setProperty("--scale", integer / ( window.devicePixelRatio * 2));
+    screen.style.setProperty("--size", `${window.devicePixelRatio}px`);
     // notification
     titles.textContent = gameName;
     // gamepad
@@ -62,7 +60,7 @@ async function gameView(romName) {
     // action
     page01.hidden = true;
     page02.hidden = false;
-    screen.style.setProperty("--shader", svgGen(integer, local(`shader0${local("shader")}`) || "0.0.0.1.0.0.1.0.0.1.0.0.1.0.0.0"));
+    screen.style.setProperty("--shader", svgGen(window.devicePixelRatio * integer, local(`shader0${local("shader")}`) || "0.0.0.1.0.0.0.1.0.0.0.1.0.0.1.0.0.0.1.0.0.0.1.0.0.1.0.0.0.1.0.0.0.1.0.0.1.0.0.0.1.0.0.0.1.0.0.0.0.0.0.1.0.0.0.1.0.0.0.1.0.0.1.0.0.0.1.0.0.0.1.0.0.1.0.0.0.1.0.0.0.1.0.0.1.0.0.0.1.0.0.0.1.0.0.0.0.0.0.1.0.0.0.1.0.0.0.1.0.0.1.0.0.0.1.0.0.0.1.0.0.1.0.0.0.1.0.0.0.1.0.0.1.0.0.0.1.0.0.0.1.0.0.0"));
 }
 function setHidden(hidden) {
         if (hidden) {
