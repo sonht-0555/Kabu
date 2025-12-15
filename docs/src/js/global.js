@@ -74,13 +74,4 @@ function setHidden(hidden) {
     }
 document.addEventListener("DOMContentLoaded", function(){
     body.style.setProperty("--background", svgGen(window.devicePixelRatio, "0.0.1.0.1.0.1.0.0"));
-    document.addEventListener('visibilitychange', () => {
-      setHidden(document.visibilityState === 'hidden');
-    });
-    window.addEventListener('blur', () => setHidden(true));
-    window.addEventListener('focus', () => setHidden(false));
-    window.addEventListener('pagehide', () => setHidden(true));
-    window.addEventListener('pageshow', () => setHidden(false));
-    document.addEventListener('freeze', () => setHidden(true));
-    document.addEventListener('resume', () => setHidden(false));
 });
