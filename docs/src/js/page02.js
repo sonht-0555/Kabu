@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
             startY = e.clientY;
         }
     };
-    f.onpointerdown = e => {
+    f.onpointerdown = () => {
         if (Date.now() - lastTap < 300) {
             number = number === 1 ? 2 : 1;
             Main.fastForward(number);
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         lastTap = Date.now();
     };
-    state.onpointerdown = e => {
+    state.onpointerdown = () => {
         if (Date.now() - lastTap < 300) {
             const input = prompt("Format [shaderxx-data]");
             input && local(...((() => { const [name, ...dataParts] = input.split('-'); return [name, dataParts.join('-')]; })()));
@@ -60,12 +60,10 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         lastTap = Date.now();
     };
-    joypad.onpointerdown = e => {
-        joypad.style.opacity = "1";
-    };
-    invis.onpointerdown = e => {
-        screen.style.opacity = "0"
-    };
     ['pointerup', 'pointercancel'].forEach(type => addEventListener(type, () => { setState(null); swiping = false; joypad.style.opacity = "0"}));
+    joypad.onpointerdown = () => {joypad.style.opacity = "1"};
+    // visibility
+    invis.onpointerdown  = () => {screen.style.opacity = "0"};
+    page02.onpointerdown = () => {screen.style.opacity = "1"};
     document.onvisibilitychange = () => !document.hidden && (screen.style.opacity = "1");
 });
