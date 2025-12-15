@@ -78,6 +78,10 @@
   }
   [hidden] { display: none !important }
   [op0] { opacity: 0 !important }
+  .visible {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
   [op4] { opacity: 0.4 !important }
   [op8] { opacity: 0.8 !important }
   [fil] { filter:  brightness(0.9) contrast(1.2) saturate(0.9) sepia(0.2) grayscale(0) }
@@ -160,6 +164,7 @@
   canvas, notif {
     width:100%;
     image-rendering: pixelated;
+    transition: opacity 0.3s ease-in-out;
   }
   notif {
     position: relative;
