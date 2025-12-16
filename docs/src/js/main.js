@@ -13,7 +13,7 @@ export async function timer(isStart) {
         timerId = setInterval(() => {
             if (++seconds === 60) [seconds, minutes] = [0, ++minutes];
             if (minutes === 60) [minutes, hours] = [0, ++hours];
-            document.querySelector("times").textContent = `${hours}h${minutes.toString().padStart(2, '0')}.${(seconds % 60).toString().padStart(2, '0')}`;
+            document.querySelector("time1").textContent = `${hours}h${minutes.toString().padStart(2, '0')}.${(seconds % 60).toString().padStart(2, '0')}`;
             if (++count1 === 60) { autoSave(); count1 = 0; }
         }, 1000);
     } else if (timerId) {
@@ -83,7 +83,7 @@ export async function buttonUnpress(key) {
     Module.SDL2();
 }
 export async function fastForward(number) {
-    await Module.setCoreSettings({timestepSync: number === 2, videoSync: number === 1});
+    await Module.setCoreSettings({time1tepSync: number === 2, videoSync: number === 1});
     await Module.setFastForwardMultiplier(number);
 }
 export async function editFiles(filepath, filename, newFilename) {

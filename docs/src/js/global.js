@@ -1,4 +1,4 @@
-tag("body"), tag("page01"), tag("page02"), tag("logo"), tag("page02"), tag("notif"), tag("display"), tag("list"), tag("list01"), tag("list02"), tag("name"), tag("ver"), tag("gamepad"), tag("titles"), tag("vertical"), tag("screen"), tag("invis"), tag("joypad");
+tag("body"), tag("page00"), tag("page01"), tag("page02"), tag("logo"), tag("page02"), tag("notification"), tag("display"), tag("list"), tag("list01"), tag("list02"), tag("name"), tag("ver"), tag("gamepad"), tag("title1"), tag("vertical"), tag("screen"), tag("invis"), tag("joypad"), tag("green0"), tag("white0"), tag("message0");
 let gameName, gameType, gameWidth, gameHeight, integer, timerId, count = null, Module = null, canSync = true, recCount = 1, isReload = false, swipe;
 const canvas = document.getElementById('canvas');
 let [hours, minutes, seconds, count1] = [0, 0, 0, 0, 0];
@@ -35,12 +35,18 @@ async function message(mess, second = 2000) {
     if (count) count.cancelled = true;
     const task = { cancelled: false };
     count = task;
-    titles.textContent = mess;
+    title1.textContent = mess;
     await delay(second);
     if (!task.cancelled && count === task) {
-        titles.textContent = gameName;
+        title1.textContent = gameName;
         count = null;
     }
+}
+async function notifi(green, white, message) {
+    page00.hidden = false;
+    green0.textContent = green;
+    white0.textContent = white;
+    message0.textContent = message;
 }
 async function gameView(romName) {
     // global
@@ -53,7 +59,7 @@ async function gameView(romName) {
     display.style.width  = `${gameWidth  * (integer/window.devicePixelRatio)}px`;
     screen.style.setProperty("--size", `${integer}px`);
     // notification
-    titles.textContent = gameName;
+    title1.textContent = gameName;
     // gamepad
     const base = Math.round((window.innerWidth - 12 - 8 - 16) / 8);
     const adjust = base % 2 === 0 ? base - 1 : base;
@@ -65,13 +71,6 @@ async function gameView(romName) {
     page02.hidden = false;
     screen.style.setProperty("--shader", svgGen(window.devicePixelRatio, integer, local(`shader0${local("shader")}`) || "0.0.0.1.0.0.1.0.0.1.0.0.1.0.0.0"));
 }
-function setHidden(hidden) {
-        if (hidden) {
-          screen.hidden = true;
-        } else {
-          setTimeout(() => {screen.hidden = false}, 300);
-        }
-    }
 document.addEventListener("DOMContentLoaded", function(){
     body.style.setProperty("--background", svgGen(1, window.devicePixelRatio, "0.0.1.0.1.0.1.0.0"));
 });
