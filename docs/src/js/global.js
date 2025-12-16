@@ -16,17 +16,20 @@ function local(key, value) {
 async function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-function svgGen(N, matrixString) {
-    let svgContent = `<svg width="1" height="1" viewBox="0 0 1 1" xmlns="http://www.w3.org/2000/svg">`;
-    const cells = matrixString.split('.');
+function svgGen(repeat, size, string) {
+    const N = repeat * size;
+    const c = document.createElement('canvas');
+    c.width = c.height = N;
+    const ctx = c.getContext('2d');
+    const cells = string.split('.');
     for (let i = 0; i < N; i++) {
         for (let j = 0; j < N; j++) {
-            svgContent += `<rect x="${j / N}" y="${i / N}" width="${1 / N}" height="${1 / N}" fill="${cells[i * N + j] === '1' ? 'black' : 'none'}" />`;
+            if (cells[(i % size) * size + (j % size)] === '1') {
+                ctx.fillRect(j, i, 1, 1);
+            }
         }
     }
-    svgContent += `</svg>`;
-    const encoded = encodeURIComponent(svgContent);
-    return `url("data:image/svg+xml,${encoded}")`;
+    return `url(${c.toDataURL()})`;
 }
 async function message(mess, second = 2000) {
     if (count) count.cancelled = true;
@@ -60,7 +63,7 @@ async function gameView(romName) {
     // action
     page01.hidden = true;
     page02.hidden = false;
-    screen.style.setProperty("--shader", svgGen(window.devicePixelRatio * integer, local(`shader0${local("shader")}`) || "0.0.0.1.0.0.0.1.0.0.0.1.0.0.1.0.0.0.1.0.0.0.1.0.0.1.0.0.0.1.0.0.0.1.0.0.1.0.0.0.1.0.0.0.1.0.0.0.0.0.0.1.0.0.0.1.0.0.0.1.0.0.1.0.0.0.1.0.0.0.1.0.0.1.0.0.0.1.0.0.0.1.0.0.1.0.0.0.1.0.0.0.1.0.0.0.0.0.0.1.0.0.0.1.0.0.0.1.0.0.1.0.0.0.1.0.0.0.1.0.0.1.0.0.0.1.0.0.0.1.0.0.1.0.0.0.1.0.0.0.1.0.0.0"));
+    screen.style.setProperty("--shader", svgGen(window.devicePixelRatio, integer, local(`shader0${local("shader")}`) || "0.0.0.1.0.0.1.0.0.1.0.0.1.0.0.0"));
 }
 function setHidden(hidden) {
         if (hidden) {
@@ -70,5 +73,5 @@ function setHidden(hidden) {
         }
     }
 document.addEventListener("DOMContentLoaded", function(){
-    body.style.setProperty("--background", svgGen(window.devicePixelRatio, "0.0.1.0.1.0.1.0.0"));
+    body.style.setProperty("--background", svgGen(1, window.devicePixelRatio, "0.0.1.0.1.0.1.0.0"));
 });

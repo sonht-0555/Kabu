@@ -44,6 +44,7 @@
     transform-origin: top left;
     transform: translateZ(0);
     backface-visibility:hidden;
+    background-size: 1px;
     will-change: transform;
   }
   body {
