@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function() {
     ['pointerup', 'pointercancel'].forEach(type => addEventListener(type, () => { setState(null); swiping = false; joy.style.opacity = "0"}));
     joy.onpointerdown = () => {joy.style.opacity = "1"};
     // visibility
-    invis.onpointerdown  = () => {display.style.opacity = "0"};
-    [display, gamepad, joypad].forEach(el => el.onpointerdown = () => display.style.opacity = "1");
-    document.onvisibilitychange = () => !document.hidden && (display.style.opacity = "1");
+    invis.onpointerdown  = () => {screen.style.opacity = "0"};
+    [screen, gamepad, joypad].forEach(el => el.onpointerdown = () => screen.style.opacity = "1");
+    document.onvisibilitychange = () => !document.hidden && (screen.style.opacity = "1");
 });
