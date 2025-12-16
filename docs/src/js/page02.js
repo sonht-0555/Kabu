@@ -60,10 +60,10 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         lastTap = Date.now();
     };
-    ['pointerup', 'pointercancel'].forEach(type => addEventListener(type, () => { setState(null); swiping = false; joypad.style.opacity = "0"}));
-    joypad.onpointerdown = () => {joypad.style.opacity = "1"};
+    ['pointerup', 'pointercancel'].forEach(type => addEventListener(type, () => { setState(null); swiping = false; joy.style.opacity = "0"}));
+    joy.onpointerdown = () => {joy.style.opacity = "1"};
     // visibility
     invis.onpointerdown  = () => {screen.style.opacity = "0"};
-    page02.onpointerdown = () => {screen.style.opacity = "1"};
+    [screen, gamepad, joypad].forEach(el => el.onpointerdown = () => screen.style.opacity = "1");
     document.onvisibilitychange = () => !document.hidden && (screen.style.opacity = "1");
 });

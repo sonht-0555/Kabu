@@ -14,7 +14,7 @@
   <link rel="stylesheet" type="text/css" href="./src/css/main.css" />
   <link rel="manifest" href="/manifest.json" />
 </head>
-<script>let gameVer = 'Ver_1.86';</script>
+<script>let gameVer = 'Ver_1.87';</script>
 <body>
   <page01 hidden>
     <list02 hidden>
@@ -73,15 +73,15 @@
       <start-button data="func-start"></start-button>
     </gamepad>
     <joypad>
-      <svg id="joypad" style="height:auto; width:auto" viewBox="0 0 100 100" fill-opacity="0">
+      <svg id="joy" style="height:auto; width:auto" viewBox="0 0 100 100" fill-opacity="0">
         <polygon points="50 50, 100 100, 100 0"   fill="transparent" data="btn-right"/>
         <polygon points="0 0, 0 100, 50 50"       fill="transparent" data="btn-left"/>
         <polygon points="0 0, 100 0, 50 50"       fill="transparent" data="btn-up"/>
         <polygon points="0 100, 100 100, 50 50"   fill="transparent" data="btn-down"/>
       </svg>
     </joypad>
+    <invis></invis>
   </page02>
-  <invis></invis>
 </body>
 <script type="" src="./src/js/global.js"></script>
 <script type="module" src="./src/js/main.js"></script>
