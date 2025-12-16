@@ -63,7 +63,13 @@ document.addEventListener("DOMContentLoaded", function() {
     ['pointerup', 'pointercancel'].forEach(type => addEventListener(type, () => { setState(null); swiping = false; joy.style.opacity = "0"}));
     joy.onpointerdown = () => {joy.style.opacity = "1"};
     // visibility
-    invis.onpointerdown  = () => {notifi("pa","use.", "click to resume.")};
-    page00.onpointerdown = () => {page00.hidden = true};
-    document.onvisibilitychange = () => !document.hidden && (page00.hidden = true);
+    invis.onpointermove  = () => {notifi("pa","use.", "twice to resume."), Main.pauseGame()};
+    page00.onpointerdown = () => {
+        if (Date.now() - lastTap < 300) {
+            page00.hidden = true; 
+            Main.resumeGame();
+        }
+        lastTap = Date.now();
+    };
+    //document.onvisibilitychange = () => !document.hidden && (page00.hidden = true);
 });

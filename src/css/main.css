@@ -88,6 +88,7 @@
   page00 {
     z-index: 3;
     grid-template-rows: 1fr auto auto 1fr;
+    height: calc(100vh - 40px);
     gap: 11px;
     background: var(--profile-black);
   }
