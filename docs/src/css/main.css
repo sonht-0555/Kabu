@@ -26,11 +26,11 @@
     --profile-5:  rgba(197, 175, 144, 0.20);
     --profile-6:  #1D1A15;
     --profile-bg: rgba(197, 175, 144, 0.04);
-    --profile-o:  rgba(10, 10, 10, 0);
     --profile-black: #000000;
     --profile-orange: #DD5639;
     --profile-cyan: #20A5A6;
-    --profile-green: #243E2E;
+    --profile-green: rgba(36, 62, 46, 1);
+    --profile-green-dark: rgba(36, 62, 46, 0.4);
   }
   body::after, page00::after, screen::after {
     content: "";
@@ -92,8 +92,8 @@
     background: var(--profile-black);
   }
   title0 { font-size: 12px }
-  green0 { color: var(--profile-green) }
-  message0 { color: var(--profile-3) }
+  green0 { color: var(--profile-green); text-shadow: -3px 0px 0px var(--profile-green-dark)}
+  message0 { color: var(--profile-4) }
 }
 @layer page-1 {
   page01 {
