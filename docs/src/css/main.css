@@ -48,7 +48,6 @@
     will-change: transform;
   }
   body {
-    position: relative;
     z-index: 1;
     font-size: 8px;
     color: var(--profile-1);
