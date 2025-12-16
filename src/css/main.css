@@ -149,8 +149,9 @@
   display {
     position: relative;
     grid-template-rows: 1fr 10px;
+    transition: opacity 0.5s ease-in-out ;
   }
-  screen { z-index: 2; position: relative; transition: opacity 0.5s ease-in-out }
+  screen { z-index: 2; position: relative}
   screen::after { 
     background-image: var(--shader);
     background-size: var(--size);
