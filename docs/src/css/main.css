@@ -89,10 +89,9 @@
     z-index: 3;
     grid-template-rows: 1fr auto auto 1fr;
     height: calc(100vh - 40px);
-    gap: 11px;
     background: var(--profile-black);
   }
-  title0 { font-size: 12px }
+  title0 { font-size: 12px; padding-bottom: 11px; }
   green0 { color: var(--profile-green); text-shadow: -3px 0px 0px var(--profile-green-dark)}
   message0 { color: var(--profile-4) }
 }
@@ -252,5 +251,6 @@
     padding-top: 20px;
     justify-content:end;
   }
+  invis {width: 24%}
 }
 @layer page-3 {}
