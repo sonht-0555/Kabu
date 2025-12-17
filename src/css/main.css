@@ -91,6 +91,7 @@
     grid-template-rows: 1fr auto auto 1fr;
     height: calc(100vh - 24px);
     background: var(--profile-black);
+    transition: opacity 0.3s ease-in-out;
   }
   title0 { font-size: 12px; padding: 1px 0px 10px 0px; }
   green0 { color: var(--profile-green); text-shadow: -3px 0px 0px var(--profile-green-dark)}
@@ -251,6 +252,6 @@
     padding-top: 20px;
     justify-content:end;
   }
-  invis { width: 32%; transition: opacity 0.3s ease-in-out }
+  invis { width: 32% }
 }
 @layer page-3 {}
