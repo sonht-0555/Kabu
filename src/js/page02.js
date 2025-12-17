@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function() {
     ['pointerup', 'pointercancel'].forEach(type => addEventListener(type, () => { setState(null); swiping = false; joy.style.opacity = "0"}));
     joy.onpointerdown = () => {joy.style.opacity = "1"};
     // visibility
-    invis.onpointermove  = () => {notifi("pa","use.", "twice to resume."), Main.pauseGame()};
+    invis.onpointermove  = () => {notifi("pa","use.", "&nbsp twice to resume."), Main.pauseGame()};
     page00.onpointerdown = () => {
         if (Date.now() - lastTap < 300) {
             page00.hidden = true; 
