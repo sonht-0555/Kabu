@@ -88,7 +88,7 @@
   page00 {
     z-index: 3;
     grid-template-rows: 1fr auto auto 1fr;
-    height: calc(100vh - 24px);
+    height: calc(100vh - 30px);
     background: var(--profile-black);
   }
   title0 { font-size: 12px; padding: 1px 0px 10px 0px; }
@@ -251,6 +251,6 @@
     padding-top: 20px;
     justify-content:end;
   }
-  invis {width: 32%}
+  invis {width: 90%}
 }
 @layer page-3 {}
