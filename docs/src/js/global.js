@@ -43,7 +43,7 @@ async function message(mess, second = 2000) {
     }
 }
 async function notifi(green, white, message) {
-    page00.hidden = false;
+    page00.hide = false;
     green0.textContent = green;
     white0.textContent = white;
     message0.textContent = message;

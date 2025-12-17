@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function() {
     invis.onpointermove  = () => {notifi("pa","use.", "twice to resume."), Main.pauseGame()};
     page00.onpointerdown = () => {
         if (Date.now() - lastTap < 300) {
-            page00.hidden = true; 
+            page00.hide = true; 
             Main.resumeGame();
         }
         lastTap = Date.now();
