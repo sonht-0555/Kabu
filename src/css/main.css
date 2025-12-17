@@ -79,7 +79,6 @@
     outline: 1px solid var(--profile-6);
   }
   [hidden] { display: none !important }
-  [hide] { opacity: 0 !important }
   [op4] { opacity: 0.4 !important }
   [op8] { opacity: 0.8 !important }
   [fil] { filter:  brightness(1) contrast(1.2) saturate(0.8) sepia(0.2) grayscale(0) }
@@ -91,7 +90,6 @@
     grid-template-rows: 1fr auto auto 1fr;
     height: calc(100vh - 24px);
     background: var(--profile-black);
-    transition: opacity 0.3s ease-in-out;
   }
   title0 { font-size: 12px; padding: 1px 0px 10px 0px; }
   green0 { color: var(--profile-green); text-shadow: -3px 0px 0px var(--profile-green-dark)}
@@ -171,6 +169,7 @@
   canvas {
     width:100%;
     image-rendering: pixelated;
+    transition: opacity 0.5s ease-in-out;
   }
   notification {
     position: relative;
@@ -252,6 +251,6 @@
     padding-top: 20px;
     justify-content:end;
   }
-  invis { width: 32% }
+  invis {width: 32%}
 }
 @layer page-3 {}
