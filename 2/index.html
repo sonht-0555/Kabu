@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WASM Emulator</title>
+     <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin">
+    <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+    
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="mobile-web-app-title" content="Kabu" />
+    <style>
+        body {
+        background-color: black;
+        color: white;        }
+        canvas {
+            display: block;
+            image-rendering: pixelated;
+            max-width: 95vw;
+            max-height: 95vh;
+        }
+    </style>
+</head>
+<body>
+    <!-- Controls -->
+    <div id="controls">
+        <input type="file" id="gameFile"/>
+        <button id="playBtn" >Play</button>
+        <span id="status">Ready</span>
+    </div>
+
+    <!-- Game Canvas -->
+    <div id="ejs_parent">
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <script src="init-wasm.js"></script>
+    <script>
+
+        const emu = new WasmInitializer({
+            wasmPath: './snes9x_libretro.wasm',
+            jsRuntimePath: './snes9x_libretro.js'
+        });
+        emu.init();
+
+        let gameFile;
+        document.getElementById('gameFile').addEventListener('change', (e) => {
+            gameFile = e.target.files[0];
+        });
+
+        document.getElementById('playBtn').addEventListener('click', () => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const romData = new Uint8Array(e.target.result);
+                EM_FS.writeFile('/' + gameFile.name, romData);
+                emu.Module.callMain(['/' + gameFile.name]);
+                emu.Module.resumeMainLoop();
+            };
+            reader.readAsArrayBuffer(gameFile);
+        });
+    </script>
+</body>
+</html>
