@@ -7,15 +7,16 @@
   @font-face { font-family: "mother"; src: url("../font/mother.ttf"); }
   @font-face { font-family: "3x3"; src: url("../font/3x3.ttf"); }
   body,html,:where(body),:where(html) {
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+    -webkit-tap-highlight-color: black !important;
     -webkit-user-drag: none !important;
     -webkit-touch-callout: none !important;
     -webkit-overflow-scrolling: touch !important;
     -webkit-user-select: none !important;
-    -webkit-font-smoothing: antialiased;
+    -webkit-font-smoothing: antialiased !important;
     cursor: default !important;
     user-select: none !important;
-    text-rendering: optimizeLegibility;
+    text-rendering: optimizeLegibility !important;
+    background-color: black !important;
   }
   /*Common-open*/
   :root {
@@ -56,7 +57,6 @@
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    background-color: var(--profile-black);
   }
   body::after, page00::after {
     background-image: var(--background);
@@ -79,6 +79,8 @@
     outline: 1px solid var(--profile-6);
   }
   [hidden] { display: none !important }
+  body.hide { opacity: 0 !important }
+  [hide] { opacity: 0 !important }
   [op4] { opacity: 0.4 !important }
   [op8] { opacity: 0.8 !important }
   [fil] { filter:  brightness(1) contrast(1.2) saturate(0.8) sepia(0.2) grayscale(0) }
