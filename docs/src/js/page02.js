@@ -1,5 +1,5 @@
 import * as Main from './main.js';
-let value = 5, startY = 0, swiping = false, lastTap = 0, number = 1, active = null;
+let value = 5, startY = 0, swiping = false, lastTap = 0, number = 1, active = null, tap = 0;
 function handleButton(press, element) {
     const parts = element?.getAttribute('data')?.split('-').slice(1) || [];
     parts.forEach(part => press ? Main.buttonPress(part) : Main.buttonUnpress(part));
@@ -48,17 +48,24 @@ document.addEventListener("DOMContentLoaded", function() {
         lastTap = Date.now();
     };
     state.onpointerdown = () => {
-        if (Date.now() - lastTap < 300) {
-            const input = prompt("Format [shaderxx-data]");
-            input && local(...((() => { const [name, ...dataParts] = input.split('-'); return [name, dataParts.join('-')]; })()));
-        } else {
-            number = number % 5 + 1;
-            local("shader", number);
-            const shader = local(`shader0${number}`) || "0.0.0.1.0.0.1.0.0.1.0.0.1.0.0.0";
-            screen.style.setProperty("--shader", svgGen(window.devicePixelRatio, integer, shader)); 
-            message(`[0${number}] Matrix!`);
-        }
-        lastTap = Date.now();
+        tap++;
+        setTimeout(() => {
+            if (tap === 2) {
+                Main.pauseGame();
+                setTimeout(() => { 
+                    const input = prompt("Format [shaderxx-data]");
+                    input && local(...((() => { const [name, ...dataParts] = input.split('-'); return [name, dataParts.join('-')]; })()));
+                    Main.resumeGame();
+                }, 150);
+            } else if (tap === 1) {
+                number = number % 5 + 1;
+                local("shader", number);
+                const shader = local(`shader0${number}`) || "0.0.0.1.0.0.1.0.0.1.0.0.1.0.0.0";
+                screen.style.setProperty("--shader", svgGen(window.devicePixelRatio, integer, shader)); 
+                message(`[0${number}] Matrix!`);
+            }
+            tap = 0;
+        }, 300);
     };
     ['pointerup', 'pointercancel'].forEach(type => addEventListener(type, () => { setState(null); swiping = false; joy.style.opacity = "0"}));
     joy.onpointerdown = () => {joy.style.opacity = "1"};
