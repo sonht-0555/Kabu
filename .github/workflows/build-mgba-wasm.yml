@@ -75,7 +75,23 @@ jobs:
             "_retro_set_input_poll",
             "_retro_set_input_state"
           ]' \
-          -s EXPORTED_RUNTIME_METHODS='["FS","setValue","getValue","allocateUTF8"]' \
+          -s EXPORTED_RUNTIME_METHODS='[
+            "FS","setValue","getValue","allocateUTF8"
+            ]' \
+          -s EXPORTED_FUNCTIONS='[
+            "_retro_init",
+            "_retro_run",
+            "_retro_load_game",
+            "_retro_unload_game",
+            "_retro_set_environment",
+            "_retro_set_video_refresh",
+            "_retro_set_audio_sample",
+            "_retro_set_audio_sample_batch",
+            "_retro_set_input_poll",
+            "_retro_set_input_state",
+            "_malloc",
+            "_free"
+            ]' \
           -Wl,--whole-archive libmgba_libretro_emscripten.a -Wl,--no-whole-archive \
           -s USE_ZLIB=1 \
           -o mgba.js

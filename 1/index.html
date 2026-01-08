@@ -1,60 +1,115 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<title>mGBA WASM test</title>
+<meta charset="utf-8" />
+<title>mGBA libretro WASM test</title>
 <style>
-  body { background:#111; color:#eee; text-align:center; }
-  canvas { image-rendering: pixelated; }
+  body {
+    background: #111;
+    color: #eee;
+    text-align: center;
+    font-family: sans-serif;
+  }
+  canvas {
+    image-rendering: pixelated;
+    border: 1px solid #444;
+  }
 </style>
 </head>
 <body>
 
-<h2>mGBA libretro WASM</h2>
-<input type="file" id="rom" accept=".gba"><br><br>
+<h2>mGBA libretro (WASM)</h2>
+<input type="file" id="rom" accept=".gba" />
+<br><br>
 <canvas id="screen" width="240" height="160"></canvas>
 
 <script type="module">
-import ModuleFactory from './mgba.js';
+import ModuleFactory from "./mgba.js";
 
-const canvas = document.getElementById('screen');
-const ctx = canvas.getContext('2d');
-const img = ctx.createImageData(240, 160);
+const canvas = document.getElementById("screen");
+const ctx = canvas.getContext("2d");
+const image = ctx.createImageData(240, 160);
 
-function video_cb(data, width, height, pitch) {
-  const src = Module.HEAPU8.subarray(data, data + height * pitch);
-  let p = 0;
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width * 4; x++) {
-      img.data[p++] = src[y * pitch + x];
+let Module;
+
+/* ================= VIDEO CALLBACK ================= */
+function makeVideoCallback() {
+  return Module.addFunction((data, w, h, pitch) => {
+    const src = Module.HEAPU8.subarray(data, data + h * pitch);
+    let p = 0;
+    for (let y = 0; y < h; y++) {
+      let row = y * pitch;
+      for (let x = 0; x < w * 4; x++) {
+        image.data[p++] = src[row + x];
+      }
     }
-  }
-  ctx.putImageData(img, 0, 0);
+    ctx.putImageData(image, 0, 0);
+  }, "viiii");
 }
 
-const Module = await ModuleFactory({
-  canvas
-});
+/* ================= ENV CALLBACK ================= */
+function makeEnvCallback() {
+  return Module.addFunction((cmd, data) => {
+    // minimal stub – return false
+    return 0;
+  }, "iii");
+}
 
-/* === libretro callbacks === */
-Module._retro_set_environment(() => 1);
-Module._retro_set_video_refresh(video_cb);
-Module._retro_set_audio_sample(() => {});
-Module._retro_set_audio_sample_batch(() => 0);
-Module._retro_set_input_poll(() => {});
-Module._retro_set_input_state(() => 0);
+/* ================= INPUT CALLBACKS ================= */
+function makeInputPoll() {
+  return Module.addFunction(() => {}, "v");
+}
 
-Module._retro_init();
+function makeInputState() {
+  return Module.addFunction((port, device, index, id) => {
+    return 0;
+  }, "iiiii");
+}
 
-/* === Load ROM === */
-document.getElementById('rom').onchange = async e => {
+/* ================= AUDIO CALLBACKS (STUB) ================= */
+function makeAudioSample() {
+  return Module.addFunction((l, r) => {}, "vii");
+}
+
+function makeAudioBatch() {
+  return Module.addFunction((data, frames) => {
+    return frames;
+  }, "iii");
+}
+
+/* ================= INIT ================= */
+(async () => {
+  Module = await ModuleFactory({
+    canvas: canvas
+  });
+
+  const env_cb        = makeEnvCallback();
+  const video_cb      = makeVideoCallback();
+  const audio_cb      = makeAudioSample();
+  const audio_batch   = makeAudioBatch();
+  const input_poll_cb = makeInputPoll();
+  const input_state_cb= makeInputState();
+
+  Module._retro_set_environment(env_cb);
+  Module._retro_set_video_refresh(video_cb);
+  Module._retro_set_audio_sample(audio_cb);
+  Module._retro_set_audio_sample_batch(audio_batch);
+  Module._retro_set_input_poll(input_poll_cb);
+  Module._retro_set_input_state(input_state_cb);
+
+  Module._retro_init();
+})();
+
+/* ================= LOAD ROM ================= */
+document.getElementById("rom").addEventListener("change", async e => {
   const file = e.target.files[0];
-  const data = new Uint8Array(await file.arrayBuffer());
+  if (!file) return;
 
-  Module.FS_createDataFile('/', 'game.gba', data, true, true);
+  const rom = new Uint8Array(await file.arrayBuffer());
+  Module.FS_createDataFile("/", "game.gba", rom, true, true);
 
   const game = Module._malloc(8);
-  Module.setValue(game, Module.allocateUTF8('/game.gba'), '*');
+  Module.setValue(game, Module.allocateUTF8("/game.gba"), "*");
 
   Module._retro_load_game(game);
 
@@ -63,7 +118,7 @@ document.getElementById('rom').onchange = async e => {
     requestAnimationFrame(frame);
   }
   frame();
-};
+});
 </script>
 
 </body>
