@@ -44,7 +44,7 @@ jobs:
           HAVE_FFMPEG=0 \
           HAVE_MMAP=0 \
           HAVE_DYNAREC=0 \
-          HAVE_ZLIB=0
+          HAVE_ZLIB=1
 
     - name: Link WASM + JS
       run: |
@@ -77,6 +77,7 @@ jobs:
           ]' \
           -s EXPORTED_RUNTIME_METHODS='["FS","setValue","getValue","allocateUTF8"]' \
           -Wl,--whole-archive libmgba_libretro_emscripten.a -Wl,--no-whole-archive \
+          -s USE_ZLIB=1 \
           -o mgba.js
 
     - name: Upload WASM artifacts
