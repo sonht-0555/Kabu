@@ -50,8 +50,7 @@ jobs:
       run: |
         cd mgba
 
-        # Link BITCODE directly (KHÔNG đổi tên)
-        emcc mgba_libretro_emscripten.bc \
+        emcc libretro-build/libmgba_libretro.bc \
           -O3 \
           -s WASM=1 \
           -s MODULARIZE=1 \
