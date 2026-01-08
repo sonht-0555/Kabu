@@ -49,9 +49,11 @@ jobs:
     - name: Link WASM + JS
       run: |
         cd mgba
-        file mgba_libretro_emscripten.bc
-
-        emcc mgba_libretro_emscripten.bc \
+        # Extract the archive first
+        emar x mgba_libretro_emscripten.bc
+        
+        # Find all .o files and link them
+        emcc *.o \
           -O3 \
           -s WASM=1 \
           -s MODULARIZE=1 \
