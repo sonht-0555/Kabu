@@ -59,6 +59,7 @@ jobs:
         -s MODULARIZE=1 \
         -s EXPORT_ES6=1 \
         -s LEGACY_RUNTIME=1 \
+        -s WASM_TABLE_SIZE=2048 \
         -s ALLOW_MEMORY_GROWTH=1 \
         -s EXPORTED_RUNTIME_METHODS='[
           "addFunction",
