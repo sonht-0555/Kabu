@@ -49,42 +49,39 @@ jobs:
     - name: Link WASM + JS
       run: |
         cd mgba
-        # Rename to .a for linking
-        mv mgba_libretro_emscripten.bc libmgba_libretro_emscripten.a
-        
-        # Link archive directly with whole-archive flag
-        emcc \
-        -O3 \
-        -s WASM=1 \
-        -s MODULARIZE=1 \
-        -s EXPORT_ES6=1 \
-        -s LEGACY_RUNTIME=1 \
-        -s WASM_TABLE_SIZE=2048 \
-        -s ALLOW_TABLE_GROWTH=1 \
-        -s ALLOW_MEMORY_GROWTH=1 \
-        -s EXPORTED_RUNTIME_METHODS='[
-          "addFunction",
-          "removeFunction",
-          "cwrap",
-          "ccall",
-          "FS",
-          "HEAPU8"
-        ]' \
-        -s EXPORTED_FUNCTIONS='[
-          "_retro_init",
-          "_retro_run",
-          "_retro_load_game",
-          "_retro_unload_game",
-          "_retro_set_environment",
-          "_retro_set_video_refresh",
-          "_retro_set_audio_sample",
-          "_retro_set_audio_sample_batch",
-          "_retro_set_input_poll",
-          "_retro_set_input_state",
-          "_malloc",
-          "_free"
-        ]' \
-          -Wl,--whole-archive libmgba_libretro_emscripten.a -Wl,--no-whole-archive \
+
+        # Link BITCODE directly (KHÔNG đổi tên)
+        emcc mgba_libretro_emscripten.bc \
+          -O3 \
+          -s WASM=1 \
+          -s MODULARIZE=1 \
+          -s EXPORT_ES6=1 \
+          -s LEGACY_RUNTIME=1 \
+          -s ALLOW_TABLE_GROWTH=1 \
+          -s ALLOW_MEMORY_GROWTH=1 \
+          -s ENVIRONMENT=web \
+          -s EXPORTED_RUNTIME_METHODS='[
+            "addFunction",
+            "removeFunction",
+            "cwrap",
+            "ccall",
+            "FS",
+            "HEAPU8"
+          ]' \
+          -s EXPORTED_FUNCTIONS='[
+            "_retro_init",
+            "_retro_run",
+            "_retro_load_game",
+            "_retro_unload_game",
+            "_retro_set_environment",
+            "_retro_set_video_refresh",
+            "_retro_set_audio_sample",
+            "_retro_set_audio_sample_batch",
+            "_retro_set_input_poll",
+            "_retro_set_input_state",
+            "_malloc",
+            "_free"
+          ]' \
           -s USE_ZLIB=1 \
           -o mgba.js
 
