@@ -49,11 +49,8 @@ jobs:
     - name: Link WASM + JS
       run: |
         cd mgba
-        # Extract the archive first
-        emar x mgba_libretro_emscripten.bc
-        
-        # Find all .o files and link them
-        emcc *.o \
+        # Link the archive directly with zlib
+        emcc mgba_libretro_emscripten.bc \
           -O3 \
           -s WASM=1 \
           -s MODULARIZE=1 \
@@ -76,6 +73,7 @@ jobs:
             "_retro_set_input_state"
           ]' \
           -s EXPORTED_RUNTIME_METHODS='["FS","setValue","getValue","allocateUTF8"]' \
+          -lz \
           -o mgba.js
 
     - name: Upload WASM artifacts
