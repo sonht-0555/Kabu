@@ -44,7 +44,7 @@ jobs:
           HAVE_FFMPEG=0 \
           HAVE_MMAP=0 \
           HAVE_DYNAREC=0 \
-          HAVE_ZLIB=1
+          HAVE_ZLIB=0
 
     - name: Link WASM + JS
       run: |
@@ -79,7 +79,6 @@ jobs:
             "_retro_set_input_state"
           ]' \
           -s EXPORTED_RUNTIME_METHODS='["FS","setValue","getValue","allocateUTF8"]' \
-          -lz \
           -o mgba.js
 
     - name: Upload WASM artifacts
