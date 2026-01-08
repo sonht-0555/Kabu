@@ -10,21 +10,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # 1️⃣ Checkout
     - name: Checkout
       uses: actions/checkout@v4
 
+    # 2️⃣ Setup Emscripten
     - name: Setup Emscripten
       uses: mymindstorm/setup-emsdk@v14
       with:
         version: latest
         actions-cache-folder: emsdk-cache
 
+    # 3️⃣ Clone libretro mGBA
     - name: Clone libretro mGBA
       run: |
         git clone https://github.com/libretro/mgba.git
         cd mgba
         git submodule update --init --recursive
 
+    # 4️⃣ Build libretro core (emscripten)
     - name: Build libretro core (emscripten)
       run: |
         cd mgba
@@ -46,20 +50,26 @@ jobs:
           HAVE_DYNAREC=0 \
           HAVE_ZLIB=1
 
-    # 🔍 In ra đúng file core libretro tạo ra
+    # 5️⃣ Debug: xác nhận file core được tạo
     - name: Locate libretro output
       run: |
         cd mgba
-        echo "==== libretro outputs ===="
+        echo "==== Files in mgba ===="
         ls -lh
-        find . -type f | grep -E "libretro.*(bc|a)$"
+        echo "==== libretro core candidates ===="
+        find . -maxdepth 1 -type f | grep libretro || true
 
-    # 🔗 LINK WASM + JS (ĐÚNG CÁCH)
+    # 6️⃣ Link WASM + JS (CỰC KỲ QUAN TRỌNG)
     - name: Link WASM + JS
       run: |
         cd mgba
 
         CORE=mgba_libretro_emscripten.bc
+
+        if [ ! -f "$CORE" ]; then
+          echo "❌ Core file not found: $CORE"
+          exit 1
+        fi
 
         echo "Using core file: $CORE"
         head -c 8 "$CORE" || true
@@ -97,10 +107,12 @@ jobs:
             "_malloc",
             "_free"
           ]' \
-          -Wl,--whole-archive "$CORE" \
+          -Wl,--whole-archive \
+          "$CORE" \
           -Wl,--no-whole-archive \
           -o mgba.js
 
+    # 7️⃣ Upload artifacts
     - name: Upload WASM artifacts
       uses: actions/upload-artifact@v4
       with:
