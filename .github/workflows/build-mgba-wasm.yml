@@ -44,7 +44,8 @@ jobs:
     - name: Link WASM + JS
       run: |
         cd mgba
-        emcc mgba_libretro.a \
+        ls -lh
+        emcc *.a \
           -O3 \
           -s WASM=1 \
           -s MODULARIZE=1 \
