@@ -46,21 +46,15 @@ jobs:
           HAVE_DYNAREC=0 \
           HAVE_ZLIB=1
 
-    - name: Locate libretro output
-      run: |
-        cd mgba
-        echo "==== libretro outputs ===="
-        find . -maxdepth 2 -type f | grep mgba_libretro
-
-    - name: Link WASM + JS
+    - name: Link WASM + JS (FIXED)
       run: |
         cd mgba
 
-        CORE="mgba_libretro_emscripten.bc"
+        # 🔴 FILE NÀY LÀ ARCHIVE, KHÔNG PHẢI LLVM BC
+        mv mgba_libretro_emscripten.bc libmgba.a
 
-        echo "Using core file: $CORE"
-        file "$CORE"
-        head -c 8 "$CORE" || true
+        file libmgba.a
+        head -c 8 libmgba.a
 
         emcc \
           -O3 \
@@ -96,7 +90,7 @@ jobs:
             "_malloc",
             "_free"
           ]' \
-          -Wl,--whole-archive "$CORE" -Wl,--no-whole-archive \
+          -Wl,--whole-archive libmgba.a -Wl,--no-whole-archive \
           -o mgba.js
 
     - name: Upload WASM artifacts
