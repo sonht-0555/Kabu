@@ -1,68 +1,97 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>mGBA libretro WASM</title>
-  <style>
-    canvas {
-      image-rendering: pixelated;
-      width: 480px;
-      height: 320px;
-      border: 1px solid #000;
-    }
-  </style>
+<meta charset="utf-8">
+<title>mGBA WASM</title>
+<style>
+body { background:#111; color:#fff; text-align:center }
+canvas {
+  width:480px;
+  height:320px;
+  image-rendering: pixelated;
+  border:1px solid #555;
+}
+</style>
 </head>
 <body>
 
+<h3>mGBA WASM</h3>
+<canvas id="screen" width="240" height="160"></canvas><br><br>
 <input type="file" id="rom" accept=".gba">
-<br><br>
-<canvas id="screen" width="240" height="160"></canvas>
 
-<script src="mgba.js"></script>
 <script>
-const canvas = document.getElementById("screen");
-const ctx = canvas.getContext("2d");
-const imageData = ctx.createImageData(240, 160);
+var Module = {
+  canvas: document.getElementById("screen"),
 
-Module.onRuntimeInitialized = () => {
-  console.log("WASM ready");
+  onRuntimeInitialized() {
+    console.log("✅ runtime ready");
 
-  // === callbacks ===
-  const videoCb = Module.addFunction((data, w, h, pitch) => {
-    const src = Module.HEAPU8.subarray(data, data + h * pitch);
-    for (let y = 0; y < h; y++) {
-      imageData.data.set(
-        src.subarray(y * pitch, y * pitch + w * 4),
-        y * w * 4
-      );
-    }
-    ctx.putImageData(imageData, 0, 0);
-  }, "viiii");
+    const envPtr    = Module.addFunction(env_cb, "iii");
+    const videoPtr  = Module.addFunction(video_cb, "viiii");
+    const audioPtr  = Module.addFunction(audio_cb, "vii");
+    const audioBPtr = Module.addFunction(audio_batch_cb, "iii");
+    const pollPtr   = Module.addFunction(input_poll_cb, "v");
+    const statePtr  = Module.addFunction(input_state_cb, "iiiii");
 
-  Module._retro_set_video_refresh(videoCb);
-  Module._retro_init();
+    Module._retro_set_environment(envPtr);
+    Module._retro_set_video_refresh(videoPtr);
+    Module._retro_set_audio_sample(audioPtr);
+    Module._retro_set_audio_sample_batch(audioBPtr);
+    Module._retro_set_input_poll(pollPtr);
+    Module._retro_set_input_state(statePtr);
 
-  document.getElementById("rom").onchange = async e => {
-    const file = e.target.files[0];
-    const buf = new Uint8Array(await file.arrayBuffer());
+    Module._retro_init();
+    console.log("🎮 retro_init done");
+  }
+};
 
-    Module.FS_createDataFile("/", "game.gba", buf, true, true);
+// ===== libretro callbacks =====
 
-    const gameInfo = Module._malloc(12);
-    Module.HEAP32[gameInfo >> 2] = Module.allocateUTF8("/game.gba");
-    Module.HEAP32[(gameInfo >> 2) + 1] = 0;
-    Module.HEAP32[(gameInfo >> 2) + 2] = 0;
+function env_cb(cmd, data) { return 0; }
 
-    Module._retro_load_game(gameInfo);
+function video_cb(ptr, w, h, pitch) {
+  const ctx = Module.canvas.getContext("2d");
+  const img = ctx.getImageData(0, 0, w, h);
+  img.data.set(
+    new Uint8ClampedArray(Module.HEAPU8.buffer, ptr, w * h * 4)
+  );
+  ctx.putImageData(img, 0, 0);
+}
 
-    function frame() {
-      Module._retro_run();
-      requestAnimationFrame(frame);
-    }
-    frame();
-  };
+function audio_cb() {}
+function audio_batch_cb(data, frames) { return frames; }
+function input_poll_cb() {}
+function input_state_cb() { return 0; }
+
+// ===== ROM loader (DATA MODE) =====
+
+document.getElementById("rom").onchange = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const rom = new Uint8Array(await file.arrayBuffer());
+  const romPtr = Module._malloc(rom.length);
+  Module.HEAPU8.set(rom, romPtr);
+
+  // struct retro_game_info
+  // { path, data, size, meta }
+  const info = Module._malloc(16);
+  Module.HEAPU32[(info >> 2) + 0] = 0;
+  Module.HEAPU32[(info >> 2) + 1] = romPtr;
+  Module.HEAPU32[(info >> 2) + 2] = rom.length;
+  Module.HEAPU32[(info >> 2) + 3] = 0;
+
+  const ok = Module._retro_load_game(info);
+  console.log("🎯 load game:", ok);
+
+  function loop() {
+    Module._retro_run();
+    requestAnimationFrame(loop);
+  }
+  loop();
 };
 </script>
 
+<script src="./mgba.js"></script>
 </body>
 </html>
