@@ -1,64 +1,70 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>WASM Emulator</title>
-     <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin">
-    <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
-    
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="mobile-web-app-title" content="Kabu" />
-    <style>
-        body {
-        background-color: black;
-        color: white;        }
-        canvas {
-            display: block;
-            image-rendering: pixelated;
-            max-width: 95vw;
-            max-height: 95vh;
-        }
-    </style>
+<meta charset="utf-8">
+<title>mGBA WASM test</title>
+<style>
+  body { background:#111; color:#eee; text-align:center; }
+  canvas { image-rendering: pixelated; }
+</style>
 </head>
 <body>
-    <!-- Controls -->
-    <div id="controls">
-        <input type="file" id="gameFile"/>
-        <button id="playBtn" >Play</button>
-        <span id="status">Ready</span>
-    </div>
 
-    <!-- Game Canvas -->
-    <div id="ejs_parent">
-        <canvas id="canvas"></canvas>
-    </div>
+<h2>mGBA libretro WASM</h2>
+<input type="file" id="rom" accept=".gba"><br><br>
+<canvas id="screen" width="240" height="160"></canvas>
 
-    <script src="init-wasm.js"></script>
-    <script>
+<script type="module">
+import ModuleFactory from './mgba.js';
 
-        const emu = new WasmInitializer({
-            wasmPath: './snes9x_libretro.wasm',
-            jsRuntimePath: './snes9x_libretro.js'
-        });
-        emu.init();
+const canvas = document.getElementById('screen');
+const ctx = canvas.getContext('2d');
+const img = ctx.createImageData(240, 160);
 
-        let gameFile;
-        document.getElementById('gameFile').addEventListener('change', (e) => {
-            gameFile = e.target.files[0];
-        });
+function video_cb(data, width, height, pitch) {
+  const src = Module.HEAPU8.subarray(data, data + height * pitch);
+  let p = 0;
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width * 4; x++) {
+      img.data[p++] = src[y * pitch + x];
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+}
 
-        document.getElementById('playBtn').addEventListener('click', () => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const romData = new Uint8Array(e.target.result);
-                EM_FS.writeFile('/' + gameFile.name, romData);
-                emu.Module.callMain(['/' + gameFile.name]);
-                emu.Module.resumeMainLoop();
-            };
-            reader.readAsArrayBuffer(gameFile);
-        });
-    </script>
+const Module = await ModuleFactory({
+  canvas
+});
+
+/* === libretro callbacks === */
+Module._retro_set_environment(() => 1);
+Module._retro_set_video_refresh(video_cb);
+Module._retro_set_audio_sample(() => {});
+Module._retro_set_audio_sample_batch(() => 0);
+Module._retro_set_input_poll(() => {});
+Module._retro_set_input_state(() => 0);
+
+Module._retro_init();
+
+/* === Load ROM === */
+document.getElementById('rom').onchange = async e => {
+  const file = e.target.files[0];
+  const data = new Uint8Array(await file.arrayBuffer());
+
+  Module.FS_createDataFile('/', 'game.gba', data, true, true);
+
+  const game = Module._malloc(8);
+  Module.setValue(game, Module.allocateUTF8('/game.gba'), '*');
+
+  Module._retro_load_game(game);
+
+  function frame() {
+    Module._retro_run();
+    requestAnimationFrame(frame);
+  }
+  frame();
+};
+</script>
+
 </body>
 </html>

@@ -55,7 +55,20 @@ jobs:
           -s FORCE_FILESYSTEM=1 \
           -s NO_EXIT_RUNTIME=1 \
           -s ENVIRONMENT=web \
-          -s EXPORTED_RUNTIME_METHODS='["cwrap","getValue","setValue"]' \
+          -s EXPORTED_FUNCTIONS='[
+            "_retro_init",
+            "_retro_deinit",
+            "_retro_run",
+            "_retro_load_game",
+            "_retro_unload_game",
+            "_retro_set_environment",
+            "_retro_set_video_refresh",
+            "_retro_set_audio_sample",
+            "_retro_set_audio_sample_batch",
+            "_retro_set_input_poll",
+            "_retro_set_input_state"
+          ]' \
+          -s EXPORTED_RUNTIME_METHODS='["FS","cwrap","setValue","getValue","allocateUTF8"]' \
           -o mgba.js
 
     - name: Upload WASM artifacts
