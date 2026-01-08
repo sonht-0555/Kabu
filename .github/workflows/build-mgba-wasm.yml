@@ -46,11 +46,24 @@ jobs:
           HAVE_DYNAREC=0 \
           HAVE_ZLIB=1
 
+    # 🔍 BẮT BUỘC: in ra file build để biết chính xác output
+    - name: Locate libretro output
+      run: |
+        cd mgba
+        echo "==== libretro outputs ===="
+        find . -type f | grep -E "mgba.*(bc|a)$"
+
+    # 🔗 LINK WASM + JS (KHÔNG ĐOÁN TÊN FILE)
     - name: Link WASM + JS
       run: |
         cd mgba
 
-        emcc libretro-build/libmgba_libretro.bc \
+        # Tìm file libretro output đầu tiên (ưu tiên .a, fallback .bc)
+        CORE_FILE=$(find . -type f | grep -E "mgba.*(bc|a)$" | head -n 1)
+
+        echo "Using core file: $CORE_FILE"
+
+        emcc "$CORE_FILE" \
           -O3 \
           -s WASM=1 \
           -s MODULARIZE=1 \
