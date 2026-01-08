@@ -30,8 +30,13 @@ jobs:
         cd mgba
         make -f Makefile.libretro \
           platform=emscripten \
+          CC=emcc \
+          CXX=em++ \
+          AR=emar \
+          RANLIB=emranlib \
+          STRIP=llvm-strip \
           HAVE_OPENGL=0 \
-          HAVE_OPENGLES=1 \
+          HAVE_OPENGLES=0 \
           HAVE_SDL=0 \
           HAVE_THREADS=0 \
           HAVE_PTHREADS=0 \
@@ -44,9 +49,9 @@ jobs:
     - name: Link WASM + JS
       run: |
         cd mgba
-        mv mgba_libretro_emscripten.bc mgba_libretro.a
+        file mgba_libretro_emscripten.bc
 
-        emcc mgba_libretro.a \
+        emcc mgba_libretro_emscripten.bc \
           -O3 \
           -s WASM=1 \
           -s MODULARIZE=1 \
@@ -68,7 +73,7 @@ jobs:
             "_retro_set_input_poll",
             "_retro_set_input_state"
           ]' \
-          -s EXPORTED_RUNTIME_METHODS='["FS","cwrap","setValue","getValue","allocateUTF8"]' \
+          -s EXPORTED_RUNTIME_METHODS='["FS","setValue","getValue","allocateUTF8"]' \
           -o mgba.js
 
     - name: Upload WASM artifacts
