@@ -10,25 +10,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1️⃣ Checkout
     - name: Checkout
       uses: actions/checkout@v4
 
-    # 2️⃣ Setup Emscripten
     - name: Setup Emscripten
       uses: mymindstorm/setup-emsdk@v14
       with:
         version: latest
         actions-cache-folder: emsdk-cache
 
-    # 3️⃣ Clone libretro mGBA
     - name: Clone libretro mGBA
       run: |
         git clone https://github.com/libretro/mgba.git
         cd mgba
         git submodule update --init --recursive
 
-    # 4️⃣ Build libretro core (emscripten)
     - name: Build libretro core (emscripten)
       run: |
         cd mgba
@@ -50,29 +46,20 @@ jobs:
           HAVE_DYNAREC=0 \
           HAVE_ZLIB=1
 
-    # 5️⃣ Debug: xác nhận file core được tạo
-    - name: Locate libretro output
+    - name: Verify core file
       run: |
         cd mgba
-        echo "==== Files in mgba ===="
-        ls -lh
-        echo "==== libretro core candidates ===="
-        find . -maxdepth 1 -type f | grep libretro || true
+        ls -lh mgba_libretro_emscripten.bc
+        head -c 8 mgba_libretro_emscripten.bc
 
-    # 6️⃣ Link WASM + JS (CỰC KỲ QUAN TRỌNG)
-    - name: Link WASM + JS
+    - name: Link WASM + JS (CORRECT WAY)
       run: |
         cd mgba
 
         CORE=mgba_libretro_emscripten.bc
 
-        if [ ! -f "$CORE" ]; then
-          echo "❌ Core file not found: $CORE"
-          exit 1
-        fi
-
-        echo "Using core file: $CORE"
-        head -c 8 "$CORE" || true
+        # rename để emcc coi như archive
+        cp "$CORE" libmgba.a
 
         emcc \
           -O3 \
@@ -83,6 +70,8 @@ jobs:
           -s ALLOW_MEMORY_GROWTH=1 \
           -s ALLOW_TABLE_GROWTH=1 \
           -s ENVIRONMENT=web \
+          --no-entry \
+          -Wl,--whole-archive libmgba.a -Wl,--no-whole-archive \
           -s EXPORTED_RUNTIME_METHODS='[
             "addFunction",
             "removeFunction",
@@ -107,12 +96,8 @@ jobs:
             "_malloc",
             "_free"
           ]' \
-          -Wl,--whole-archive \
-          "$CORE" \
-          -Wl,--no-whole-archive \
           -o mgba.js
 
-    # 7️⃣ Upload artifacts
     - name: Upload WASM artifacts
       uses: actions/upload-artifact@v4
       with:
