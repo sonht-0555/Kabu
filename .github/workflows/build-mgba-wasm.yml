@@ -1,0 +1,65 @@
+name: Build libretro mGBA WASM
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Emscripten
+      uses: mymindstorm/setup-emsdk@v14
+      with:
+        version: latest
+        actions-cache-folder: emsdk-cache
+
+    - name: Clone libretro mGBA
+      run: |
+        git clone https://github.com/libretro/mgba.git
+        cd mgba
+        git submodule update --init --recursive
+
+    - name: Build libretro core (emscripten)
+      run: |
+        cd mgba
+        make -f Makefile.libretro \
+          platform=emscripten \
+          HAVE_OPENGL=0 \
+          HAVE_OPENGLES=1 \
+          HAVE_SDL=0 \
+          HAVE_THREADS=0 \
+          HAVE_PTHREADS=0 \
+          HAVE_NETWORKING=0 \
+          HAVE_FFMPEG=0 \
+          HAVE_MMAP=0 \
+          HAVE_DYNAREC=0 \
+          HAVE_ZLIB=1
+
+    - name: Link WASM + JS
+      run: |
+        cd mgba
+        emcc mgba_libretro.a \
+          -O3 \
+          -s WASM=1 \
+          -s MODULARIZE=1 \
+          -s EXPORT_ES6=1 \
+          -s ALLOW_MEMORY_GROWTH=1 \
+          -s FORCE_FILESYSTEM=1 \
+          -s NO_EXIT_RUNTIME=1 \
+          -s ENVIRONMENT=web \
+          -s EXPORTED_RUNTIME_METHODS='["cwrap","getValue","setValue"]' \
+          -o mgba.js
+
+    - name: Upload WASM artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: mgba-wasm
+        path: |
+          mgba/mgba.js
+          mgba/mgba.wasm
