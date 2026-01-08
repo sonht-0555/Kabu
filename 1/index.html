@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<title>mGBA libretro WASM test</title>
-<style>
-  body {
-    background: #111;
-    color: #eee;
-    text-align: center;
-    font-family: sans-serif;
-  }
-  canvas {
-    image-rendering: pixelated;
-    border: 1px solid #444;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <title>mGBA libretro WASM test</title>
+  <style>
+    body {
+      background: #111;
+      color: #eee;
+      font-family: sans-serif;
+    }
+    canvas {
+      image-rendering: pixelated;
+      border: 1px solid #555;
+    }
+  </style>
 </head>
 <body>
 
@@ -24,94 +23,122 @@
 <canvas id="screen" width="240" height="160"></canvas>
 
 <script type="module">
-import ModuleFactory from "./mgba.js";
+import createModule from "./mgba.js";
 
 const canvas = document.getElementById("screen");
 const ctx = canvas.getContext("2d");
-const image = ctx.createImageData(240, 160);
+const imageData = ctx.createImageData(240, 160);
 
 let Module;
+let videoPtr = 0;
 
-/* ================= VIDEO CALLBACK ================= */
-function makeVideoCallback() {
-  return Module.addFunction((data, w, h, pitch) => {
-    const src = Module.HEAPU8.subarray(data, data + h * pitch);
-    let p = 0;
-    for (let y = 0; y < h; y++) {
-      let row = y * pitch;
-      for (let x = 0; x < w * 4; x++) {
-        image.data[p++] = src[row + x];
+/* =========================
+   libretro ENVIRONMENT
+   ========================= */
+function retro_environment(cmd, data) {
+  // IMPORTANT: data MAY BE 0
+  const RETRO_ENVIRONMENT_SET_PIXEL_FORMAT = 10;
+  const RETRO_PIXEL_FORMAT_XRGB8888 = 1;
+
+  switch (cmd) {
+    case RETRO_ENVIRONMENT_SET_PIXEL_FORMAT:
+      if (data !== 0) {
+        Module.HEAP32[data >> 2] = RETRO_PIXEL_FORMAT_XRGB8888;
+        return 1;
       }
+      return 0;
+
+    default:
+      return 0;
+  }
+}
+
+/* =========================
+   VIDEO CALLBACK
+   ========================= */
+function retro_video_refresh(data, width, height, pitch) {
+  if (!data) return;
+
+  const src = Module.HEAPU8.subarray(
+    data,
+    data + height * pitch
+  );
+
+  // Copy line by line (pitch aware)
+  let dst = imageData.data;
+  let di = 0;
+
+  for (let y = 0; y < height; y++) {
+    let si = y * pitch;
+    for (let x = 0; x < width; x++) {
+      dst[di++] = src[si + 2]; // R
+      dst[di++] = src[si + 1]; // G
+      dst[di++] = src[si + 0]; // B
+      dst[di++] = 255;
+      si += 4;
     }
-    ctx.putImageData(image, 0, 0);
-  }, "viiii");
+  }
+
+  ctx.putImageData(imageData, 0, 0);
 }
 
-/* ================= ENV CALLBACK ================= */
-function makeEnvCallback() {
-  return Module.addFunction((cmd, data) => {
-    // minimal stub – return false
-    return 0;
-  }, "iii");
-}
+/* =========================
+   AUDIO CALLBACKS (stub)
+   ========================= */
+function retro_audio_sample() {}
+function retro_audio_sample_batch() { return 0; }
 
-/* ================= INPUT CALLBACKS ================= */
-function makeInputPoll() {
-  return Module.addFunction(() => {}, "v");
-}
+/* =========================
+   INPUT CALLBACKS (stub)
+   ========================= */
+function retro_input_poll() {}
+function retro_input_state() { return 0; }
 
-function makeInputState() {
-  return Module.addFunction((port, device, index, id) => {
-    return 0;
-  }, "iiiii");
-}
+/* =========================
+   INIT MODULE
+   ========================= */
+Module = await createModule({
+  canvas,
+  onRuntimeInitialized() {
+    // Register callbacks
+    const envCb = Module.addFunction(retro_environment, "iii");
+    const videoCb = Module.addFunction(retro_video_refresh, "viiii");
+    const audioCb = Module.addFunction(retro_audio_sample, "vii");
+    const audioBatchCb = Module.addFunction(retro_audio_sample_batch, "iii");
+    const inputPollCb = Module.addFunction(retro_input_poll, "v");
+    const inputStateCb = Module.addFunction(retro_input_state, "iiii");
 
-/* ================= AUDIO CALLBACKS (STUB) ================= */
-function makeAudioSample() {
-  return Module.addFunction((l, r) => {}, "vii");
-}
+    Module._retro_set_environment(envCb);
+    Module._retro_set_video_refresh(videoCb);
+    Module._retro_set_audio_sample(audioCb);
+    Module._retro_set_audio_sample_batch(audioBatchCb);
+    Module._retro_set_input_poll(inputPollCb);
+    Module._retro_set_input_state(inputStateCb);
 
-function makeAudioBatch() {
-  return Module.addFunction((data, frames) => {
-    return frames;
-  }, "iii");
-}
+    Module._retro_init();
+    console.log("retro_init OK");
+  }
+});
 
-/* ================= INIT ================= */
-(async () => {
-  Module = await ModuleFactory({
-    canvas: canvas
-  });
-
-  const env_cb        = makeEnvCallback();
-  const video_cb      = makeVideoCallback();
-  const audio_cb      = makeAudioSample();
-  const audio_batch   = makeAudioBatch();
-  const input_poll_cb = makeInputPoll();
-  const input_state_cb= makeInputState();
-
-  Module._retro_set_environment(env_cb);
-  Module._retro_set_video_refresh(video_cb);
-  Module._retro_set_audio_sample(audio_cb);
-  Module._retro_set_audio_sample_batch(audio_batch);
-  Module._retro_set_input_poll(input_poll_cb);
-  Module._retro_set_input_state(input_state_cb);
-
-  Module._retro_init();
-})();
-
-/* ================= LOAD ROM ================= */
-document.getElementById("rom").addEventListener("change", async e => {
+/* =========================
+   LOAD ROM
+   ========================= */
+document.getElementById("rom").addEventListener("change", async (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  const rom = new Uint8Array(await file.arrayBuffer());
-  Module.FS_createDataFile("/", "game.gba", rom, true, true);
+  const buf = new Uint8Array(await file.arrayBuffer());
 
-  const game = Module._malloc(8);
-  Module.setValue(game, Module.allocateUTF8("/game.gba"), "*");
+  const romPtr = Module._malloc(buf.length);
+  Module.HEAPU8.set(buf, romPtr);
 
-  Module._retro_load_game(game);
+  const gameInfo = Module._malloc(12);
+  Module.HEAP32[gameInfo >> 2] = romPtr;
+  Module.HEAP32[(gameInfo + 4) >> 2] = buf.length;
+  Module.HEAP32[(gameInfo + 8) >> 2] = 0;
+
+  const ok = Module._retro_load_game(gameInfo);
+  console.log("retro_load_game:", ok);
 
   function frame() {
     Module._retro_run();

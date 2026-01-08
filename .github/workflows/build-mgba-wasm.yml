@@ -66,40 +66,40 @@ jobs:
         # rename đúng bản chất
         mv "$CORE" libmgba.a
 
-        emcc \
-          -O3 \
-          -s WASM=1 \
-          -s MODULARIZE=1 \
-          -s EXPORT_ES6=1 \
-          -s LEGACY_RUNTIME=1 \
-          -s ALLOW_TABLE_GROWTH=1 \
-          -s ALLOW_MEMORY_GROWTH=1 \
-          -s ENVIRONMENT=web \
-          -s EXPORTED_RUNTIME_METHODS='[
-            "addFunction",
-            "removeFunction",
-            "cwrap",
-            "ccall",
-            "FS",
-            "HEAPU8"
-          ]' \
-          -s EXPORTED_FUNCTIONS='[
-            "_retro_init",
-            "_retro_run",
-            "_retro_load_game",
-            "_retro_unload_game",
-            "_retro_set_environment",
-            "_retro_set_video_refresh",
-            "_retro_set_audio_sample",
-            "_retro_set_audio_sample_batch",
-            "_retro_set_input_poll",
-            "_retro_set_input_state",
-            "_malloc",
-            "_free"
-          ]' \
-          -s USE_ZLIB=1 \
-          -Wl,--whole-archive libmgba.a -Wl,--no-whole-archive \
-          -o mgba.js
+        emcc mgba_libretro_emscripten.bc \
+        -O3 \
+        -s WASM=1 \
+        -s MODULARIZE=1 \
+        -s EXPORT_ES6=1 \
+        -s LEGACY_RUNTIME=1 \
+        -s ALLOW_MEMORY_GROWTH=1 \
+        -s ALLOW_TABLE_GROWTH=1 \
+        -s ENVIRONMENT=web \
+        -s EXPORTED_RUNTIME_METHODS='[
+          "addFunction",
+          "removeFunction",
+          "cwrap",
+          "ccall",
+          "FS",
+          "HEAPU8",
+          "HEAP32"
+        ]' \
+        -s EXPORTED_FUNCTIONS='[
+          "_retro_init",
+          "_retro_deinit",
+          "_retro_run",
+          "_retro_load_game",
+          "_retro_unload_game",
+          "_retro_set_environment",
+          "_retro_set_video_refresh",
+          "_retro_set_audio_sample",
+          "_retro_set_audio_sample_batch",
+          "_retro_set_input_poll",
+          "_retro_set_input_state",
+          "_malloc",
+          "_free"
+        ]' \
+        -o mgba.js
 
     - name: Upload WASM artifacts
       uses: actions/upload-artifact@v4
