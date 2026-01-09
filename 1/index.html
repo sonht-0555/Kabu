@@ -22,12 +22,23 @@ canvas {
 // ===== Audio =====
 var audioCtx, processor, isRunning = false;
 var fifoL = new Int16Array(8192), fifoR = new Int16Array(8192), fifoHead = 0, fifoCnt = 0;
-const RATIO = 65760 / 48000; // mGBA 65760Hz → browser 48000Hz
+const RATIO = 65760 / 48000;
+// const RATIO = 32000 / 48000;  // ~0.67 SNES9x
+// const RATIO = 44100 / 48000;  // ~0.92 NES
 
 function initAudio() {
   if (audioCtx) { audioCtx.resume(); return; }
   audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
   processor = audioCtx.createScriptProcessor(1024, 0, 2);
+  
+  // iOS: resume audio when returning from sleep/background
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && audioCtx.state === 'suspended') audioCtx.resume();
+  });
+  // iOS: also resume on touch (needs user gesture)
+  document.addEventListener('touchstart', () => {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+  }, { once: false });
   processor.onaudioprocess = function(e) {
     var L = e.outputBuffer.getChannelData(0), R = e.outputBuffer.getChannelData(1);
     if (!isRunning) { L.fill(0); R.fill(0); return; }
@@ -155,8 +166,6 @@ document.getElementById("rom").onchange = async (e) => {
   console.log("🎯 load game:", ok);
 
   isRunning = true;
-  lastDebugTime = performance.now();
-  // Game loop is audio-driven via processAudio
 };
 </script>
 
