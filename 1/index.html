@@ -14,7 +14,7 @@ canvas {
 </head>
 <body>
 
-<h3>mGBA WASM 1.2</h3>
+<h3>mGBA WASM 1.3</h3>
 <canvas id="screen" width="240" height="160"></canvas><br><br>
 <input type="file" id="rom" accept=".gba">
 
@@ -27,18 +27,30 @@ const RATIO = 65760 / 48000;
 // const RATIO = 44100 / 48000;  // ~0.92 NES
 
 function initAudio() {
-  if (audioCtx) { audioCtx.resume(); return; }
+  if (audioCtx) { 
+    // iOS: force reconnect if suspended too long
+    if (audioCtx.state === 'suspended') {
+      processor.disconnect();
+      processor.connect(audioCtx.destination);
+      audioCtx.resume();
+    }
+    return; 
+  }
   audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
   processor = audioCtx.createScriptProcessor(1024, 0, 2);
   
-  // iOS: resume audio when returning from sleep/background
-  document.addEventListener('visibilitychange', () => {
-    if (!document.hidden && audioCtx.state === 'suspended') audioCtx.resume();
-  });
-  // iOS: also resume on touch (needs user gesture)
-  document.addEventListener('touchstart', () => {
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-  }, { once: false });
+  // iOS: resume on visibility/touch/click
+  const tryResume = () => {
+    if (audioCtx && audioCtx.state === 'suspended') {
+      processor.disconnect();
+      processor.connect(audioCtx.destination);
+      audioCtx.resume();
+    }
+  };
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) tryResume(); });
+  document.addEventListener('touchstart', tryResume, { passive: true });
+  document.addEventListener('click', tryResume);
+  
   processor.onaudioprocess = function(e) {
     var L = e.outputBuffer.getChannelData(0), R = e.outputBuffer.getChannelData(1);
     if (!isRunning) { L.fill(0); R.fill(0); return; }
