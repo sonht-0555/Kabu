@@ -163,6 +163,15 @@ function loadCore(core) {
     canvas.width = cfg.width;
     canvas.height = cfg.height;
     RATIO = cfg.ratio;
+    // Remove previous core script if exists
+    const prevScript = document.getElementById('core-script');
+    if (prevScript) {
+      prevScript.remove();
+      // Also cleanup global Module
+      window.Module = undefined;
+      coreLoaded = null;
+      console.log('[loadCore] Removed previous core script');
+    }
     // Reset Module for new core
     window.Module = {
       canvas: canvas,
@@ -188,6 +197,7 @@ function loadCore(core) {
     };
     const script = document.createElement('script');
     script.src = cfg.script;
+    script.id = 'core-script';
     script.onerror = (e) => { console.error(`[loadCore] Failed to load script: ${cfg.script}`); reject(e); };
     script.onload = () => { console.log(`[loadCore] Script loaded: ${cfg.script}`); };
     document.body.appendChild(script);
