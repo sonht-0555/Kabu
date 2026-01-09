@@ -14,7 +14,7 @@ canvas {
 </head>
 <body>
 
-<h3>mGBA WASM 1.3</h3>
+<h3>mGBA WASM 1.4</h3>
 <canvas id="screen" width="240" height="160"></canvas><br><br>
 <input type="file" id="rom" accept=".gba">
 
@@ -27,27 +27,24 @@ const RATIO = 65760 / 48000;
 // const RATIO = 44100 / 48000;  // ~0.92 NES
 
 function initAudio() {
-  if (audioCtx) { 
-    // iOS: force reconnect if suspended too long
-    if (audioCtx.state === 'suspended') {
-      processor.disconnect();
-      processor.connect(audioCtx.destination);
-      audioCtx.resume();
-    }
-    return; 
-  }
+  if (audioCtx) { audioCtx.resume(); return; }
   audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
   processor = audioCtx.createScriptProcessor(1024, 0, 2);
   
-  // iOS: resume on visibility/touch/click
-  const tryResume = () => {
-    if (audioCtx && audioCtx.state === 'suspended') {
-      processor.disconnect();
-      processor.connect(audioCtx.destination);
+  // Pause/Resume with visibility
+  var wasRunning = false;
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      wasRunning = isRunning;
+      isRunning = false;
+      audioCtx.suspend();
+    } else if (wasRunning) {
       audioCtx.resume();
+      isRunning = true;
     }
-  };
-  document.addEventListener('visibilitychange', () => { if (!document.hidden) tryResume(); });
+  });
+  // iOS: resume on touch/click
+  const tryResume = () => { if (audioCtx.state === 'suspended' && wasRunning) { audioCtx.resume(); isRunning = true; } };
   document.addEventListener('touchstart', tryResume, { passive: true });
   document.addEventListener('click', tryResume);
   
@@ -178,6 +175,8 @@ document.getElementById("rom").onchange = async (e) => {
   console.log("🎯 load game:", ok);
 
   isRunning = true;
+  lastDebugTime = performance.now();
+  // Game loop is audio-driven via processAudio
 };
 </script>
 
