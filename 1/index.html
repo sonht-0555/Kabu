@@ -14,15 +14,16 @@ canvas {
 </head>
 <body>
 
-<h3>mGBA WASM 1.6</h3>
+<h3>mGBA WASM 1.1</h3>
 <canvas id="screen" width="240" height="160"></canvas><br><br>
 <input type="file" id="rom" accept=".gba">
+<button id="resume">Resume Audio</button>
 
 <script>
 // ===== Audio =====
 var audioCtx, processor, isRunning = false;
 var fifoL = new Int16Array(8192), fifoR = new Int16Array(8192), fifoHead = 0, fifoCnt = 0;
-const RATIO = 65760 / 48000;
+const RATIO = 65760 / 48000; // mGBA 65760Hz → browser 48000Hz
 // const RATIO = 32000 / 48000;  // ~0.67 SNES9x
 // const RATIO = 44100 / 48000;  // ~0.92 NES
 
@@ -30,13 +31,6 @@ function initAudio() {
   if (audioCtx) { audioCtx.resume(); return; }
   audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
   processor = audioCtx.createScriptProcessor(1024, 0, 2);
-  
-  // Resume audio when returning from background (iOS/mobile)
-  const tryResume = () => { if (audioCtx.state === 'suspended') audioCtx.resume(); };
-  document.addEventListener('visibilitychange', () => { if (!document.hidden) tryResume(); });
-  document.addEventListener('touchstart', tryResume, { passive: true });
-  document.addEventListener('click', tryResume);
-  
   processor.onaudioprocess = function(e) {
     var L = e.outputBuffer.getChannelData(0), R = e.outputBuffer.getChannelData(1);
     if (!isRunning) { L.fill(0); R.fill(0); return; }
@@ -140,6 +134,10 @@ function input_poll_cb() {}
 function input_state_cb() { return 0; }
 
 // ===== ROM loader (DATA MODE) =====
+
+document.getElementById("resume").onclick = () => {
+  if (audioCtx) audioCtx.resume();
+};
 
 document.getElementById("rom").onchange = async (e) => {
   const file = e.target.files[0];
