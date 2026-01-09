@@ -19,120 +19,105 @@ canvas {
 <input type="file" id="rom" accept=".gba">
 
 <script>
-// ===== Audio - AudioBufferSourceNode Scheduling =====
+// ===== Audio - ScriptProcessor + FIFO (audio-driven) =====
 var audioContext = null;
-var nextPlayTime = 0;
+var scriptProcessor = null;
+var isRunning = false;
 
-// Sample rate calibration
-var coreSampleRate = 32768; // Will be measured
-var sampleRateCalibrated = false;
-const BATCH_SIZE = 2048;
+const AUDIO_BLOCK_SIZE = 1024;
+const AUDIO_FIFO_MAXLEN = 8192;
+var audioFifo0 = new Int16Array(AUDIO_FIFO_MAXLEN);
+var audioFifo1 = new Int16Array(AUDIO_FIFO_MAXLEN);
+var audioFifoHead = 0;
+var audioFifoCnt = 0;
 
-// Pre-allocated buffers
-var bufferL = new Float32Array(BATCH_SIZE);
-var bufferR = new Float32Array(BATCH_SIZE);
-var bufferPos = 0;
+// Core outputs ~1096 samples/frame at 65760 Hz effective rate
+// Browser wants 48000 Hz
+// Resample ratio: consume more samples from core to match browser rate
+const CORE_RATE = 65760; // 1096 * 60
+const BROWSER_RATE = 48000;
+const RESAMPLE_RATIO = CORE_RATE / BROWSER_RATE; // ~1.37
+
+// Debug
+var frameCnt = 0;
+var lastDebugTime = 0;
+var samplesPerFrame = 0;
 
 function initAudio() {
   if (audioContext) {
-    // iOS needs resume on every user gesture
-    if (audioContext.state === 'suspended') {
-      audioContext.resume();
+    if (audioContext.state != 'running') audioContext.resume();
+    return;
+  }
+  audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
+  console.log('🔊 sampleRate:', audioContext.sampleRate);
+  scriptProcessor = audioContext.createScriptProcessor(AUDIO_BLOCK_SIZE, 0, 2);
+  scriptProcessor.onaudioprocess = processAudio;
+  scriptProcessor.connect(audioContext.destination);
+  audioContext.resume();
+  lastDebugTime = performance.now();
+}
+
+function processAudio(event) {
+  var audioData0 = event.outputBuffer.getChannelData(0);
+  var audioData1 = event.outputBuffer.getChannelData(1);
+
+  if (!isRunning) {
+    for (var i = 0; i < AUDIO_BLOCK_SIZE; i++) {
+      audioData0[i] = 0;
+      audioData1[i] = 0;
     }
     return;
   }
   
-  try {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    
-    // iOS: unlock audio with silent buffer
-    var silentBuffer = audioContext.createBuffer(1, 1, audioContext.sampleRate);
-    var source = audioContext.createBufferSource();
-    source.buffer = silentBuffer;
-    source.connect(audioContext.destination);
-    source.start(0);
-    
-    audioContext.resume();
-    nextPlayTime = audioContext.currentTime;
-    console.log("🔊 Audio initialized: " + audioContext.sampleRate + "Hz");
-  } catch (e) {
-    console.error("Audio init error:", e);
+  // Need more samples from core to resample down
+  var neededSamples = Math.ceil(AUDIO_BLOCK_SIZE * RESAMPLE_RATIO); // ~1403
+  
+  // Audio-driven: run frames until we have enough audio
+  while (audioFifoCnt < neededSamples) {
+    Module._retro_run();
+    frameCnt++;
   }
-}
+  
+  // Log every 60 frames
+  if (frameCnt % 60 === 0) {
+    var now = performance.now();
+    var fps = 60000 / (now - lastDebugTime);
+    console.log(`📊 FPS: ${fps.toFixed(1)}, FIFO: ${audioFifoCnt}, samples/frame: ${samplesPerFrame}`);
+    lastDebugTime = now;
+  }
 
-function flushAudio() {
-  if (!audioContext || bufferPos === 0) return;
-  if (audioContext.state === 'suspended') {
-    audioContext.resume();
-  }
-  
-  // Use browser's sample rate and let it handle resampling
-  // coreSampleRate may be non-standard (like 61630Hz) which iOS doesn't support
-  var outputRate = audioContext.sampleRate;
-  var ratio = coreSampleRate / outputRate;
-  var outputLen = Math.ceil(bufferPos / ratio);
-  
-  var buffer = audioContext.createBuffer(2, outputLen, outputRate);
-  var outL = buffer.getChannelData(0);
-  var outR = buffer.getChannelData(1);
-  
-  // Simple linear interpolation resample
-  for (var i = 0; i < outputLen; i++) {
-    var srcPos = i * ratio;
+  // Resample from 65760Hz to 48000Hz (downsample)
+  for (var i = 0; i < AUDIO_BLOCK_SIZE; i++) {
+    var srcPos = i * RESAMPLE_RATIO;
     var srcIdx = Math.floor(srcPos);
     var frac = srcPos - srcIdx;
+    var idx = (audioFifoHead + srcIdx) % AUDIO_FIFO_MAXLEN;
+    var idx2 = (audioFifoHead + srcIdx + 1) % AUDIO_FIFO_MAXLEN;
     
-    if (srcIdx + 1 < bufferPos) {
-      outL[i] = bufferL[srcIdx] * (1 - frac) + bufferL[srcIdx + 1] * frac;
-      outR[i] = bufferR[srcIdx] * (1 - frac) + bufferR[srcIdx + 1] * frac;
-    } else if (srcIdx < bufferPos) {
-      outL[i] = bufferL[srcIdx];
-      outR[i] = bufferR[srcIdx];
-    }
+    audioData0[i] = (audioFifo0[idx] * (1 - frac) + audioFifo0[idx2] * frac) / 32768.0;
+    audioData1[i] = (audioFifo1[idx] * (1 - frac) + audioFifo1[idx2] * frac) / 32768.0;
   }
   
-  var source = audioContext.createBufferSource();
-  source.buffer = buffer;
-  source.connect(audioContext.destination);
-  
-  var now = audioContext.currentTime;
-  if (nextPlayTime < now) nextPlayTime = now;
-  
-  source.start(nextPlayTime);
-  nextPlayTime += buffer.duration;
-  
-  bufferPos = 0;
+  // Consume resampled samples
+  var consumed = Math.floor(AUDIO_BLOCK_SIZE * RESAMPLE_RATIO);
+  audioFifoHead = (audioFifoHead + consumed) % AUDIO_FIFO_MAXLEN;
+  audioFifoCnt -= consumed;
 }
 
 function writeAudio(ptr, frames) {
+  samplesPerFrame = frames; // Track for debug
   if (!audioContext) return frames;
+  var data = new Int16Array(Module.HEAPU8.buffer, ptr, frames * 2);
+  var tail = (audioFifoHead + audioFifoCnt) % AUDIO_FIFO_MAXLEN;
   
-  var int16Data = new Int16Array(Module.HEAPU8.buffer, ptr, frames * 2);
-  
-  // Calibrate sample rate after 1 second
-  if (!sampleRateCalibrated) {
-    if (!writeAudio.count) {
-      writeAudio.count = 0;
-      writeAudio.startTime = performance.now();
-    }
-    writeAudio.count += frames;
-    var elapsed = (performance.now() - writeAudio.startTime) / 1000;
-    if (elapsed >= 1) {
-      coreSampleRate = Math.round(writeAudio.count / elapsed);
-      sampleRateCalibrated = true;
-    }
-  }
+  if (audioFifoCnt + frames >= AUDIO_FIFO_MAXLEN) return frames;
   
   for (var i = 0; i < frames; i++) {
-    bufferL[bufferPos] = int16Data[i * 2] / 32768.0;
-    bufferR[bufferPos] = int16Data[i * 2 + 1] / 32768.0;
-    bufferPos++;
-    
-    if (bufferPos >= BATCH_SIZE) {
-      flushAudio();
-    }
+    audioFifo0[tail] = data[i * 2];
+    audioFifo1[tail] = data[i * 2 + 1];
+    tail = (tail + 1) % AUDIO_FIFO_MAXLEN;
   }
-  
+  audioFifoCnt += frames;
   return frames;
 }
 
@@ -233,23 +218,9 @@ document.getElementById("rom").onchange = async (e) => {
   const ok = Module._retro_load_game(info);
   console.log("🎯 load game:", ok);
 
-  // GBA runs at 59.7275 fps
-  const TARGET_FPS = 59.7275;
-  const FRAME_TIME = 1000 / TARGET_FPS;
-  var lastFrameTime = performance.now();
-
-  function loop() {
-    var now = performance.now();
-    var elapsed = now - lastFrameTime;
-    
-    if (elapsed >= FRAME_TIME) {
-      lastFrameTime = now - (elapsed % FRAME_TIME);
-      Module._retro_run();
-    }
-    
-    requestAnimationFrame(loop);
-  }
-  requestAnimationFrame(loop);
+  isRunning = true;
+  lastDebugTime = performance.now();
+  // Game loop is audio-driven via processAudio
 };
 </script>
 

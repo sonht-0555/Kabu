@@ -1,4 +1,4 @@
-let revision = 'Ver_2.46';
+let revision = 'Ver_2.47';
 var urlsToCache = [
     '/',
     './README.md',
