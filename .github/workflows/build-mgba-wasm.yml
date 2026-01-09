@@ -1,0 +1,101 @@
+name: Build libretro mGBA WASM
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Emscripten
+      uses: mymindstorm/setup-emsdk@v14
+      with:
+        version: latest
+        actions-cache-folder: emsdk-cache
+
+    - name: Clone libretro mGBA
+      run: |
+        git clone https://github.com/libretro/mgba.git
+        cd mgba
+        git submodule update --init --recursive
+
+    - name: Build libretro core (emscripten)
+      run: |
+        cd mgba
+        make -f Makefile.libretro \
+          platform=emscripten \
+          CC=emcc \
+          CXX=em++ \
+          AR=emar \
+          RANLIB=emranlib \
+          STRIP=llvm-strip \
+          HAVE_OPENGL=0 \
+          HAVE_OPENGLES=0 \
+          HAVE_SDL=0 \
+          HAVE_THREADS=0 \
+          HAVE_PTHREADS=0 \
+          HAVE_NETWORKING=0 \
+          HAVE_FFMPEG=0 \
+          HAVE_MMAP=0 \
+          HAVE_DYNAREC=0 \
+          HAVE_ZLIB=1
+
+    - name: Link WASM + JS (FIXED)
+      run: |
+        cd mgba
+
+        # 🔴 FILE NÀY LÀ ARCHIVE, KHÔNG PHẢI LLVM BC
+        mv mgba_libretro_emscripten.bc libmgba.a
+
+        file libmgba.a
+        head -c 8 libmgba.a
+
+        emcc \
+        -O3 \
+        -s WASM=1 \
+        -s LEGACY_RUNTIME=1 \
+        -s ALLOW_MEMORY_GROWTH=1 \
+        -s ALLOW_TABLE_GROWTH=1 \
+        -s ENVIRONMENT=web \
+        -s USE_ZLIB=1 \
+        -s EXPORTED_RUNTIME_METHODS='[
+          "addFunction",
+          "removeFunction",
+          "cwrap",
+          "ccall",
+          "FS",
+          "HEAPU8",
+          "HEAPU32",
+          "HEAP32"
+        ]' \
+        -s EXPORTED_FUNCTIONS='[
+          "_retro_init",
+          "_retro_deinit",
+          "_retro_run",
+          "_retro_load_game",
+          "_retro_unload_game",
+          "_retro_set_environment",
+          "_retro_set_video_refresh",
+          "_retro_set_audio_sample",
+          "_retro_set_audio_sample_batch",
+          "_retro_set_input_poll",
+          "_retro_set_input_state",
+          "_malloc",
+          "_free"
+        ]' \
+        -Wl,--whole-archive libmgba.a -Wl,--no-whole-archive \
+        -o mgba.js
+
+    - name: Upload WASM artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: mgba-wasm
+        path: |
+          mgba/mgba.js
+          mgba/mgba.wasm

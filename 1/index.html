@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+<title>mGBA WASM</title>
+<link rel="manifest" href="/1/manifest.json"/>
+<style>
+body { background:#111; color:#fff; text-align:center }
+canvas {
+  image-rendering: pixelated;
+}
+</style>
+</head>
+<body>
+
+<h3>Retro WASM 1.7</h3>
+<canvas id="screen" width="256" height="224"></canvas><br><br>
+<select id="core">
+  <option value="snes">SNES (Snes9x)</option>
+  <option value="gba">GBA (mGBA)</option>
+</select>
+<input type="file" id="rom" accept=".gba,.smc,.sfc">
+<button id="resume">Resume Audio</button>
+
+<script>
+// ===== Core Config =====
+var currentCore = 'snes';
+var RATIO = 65760 / 48000; // default GBA
+const CORE_CONFIG = {
+  gba:  { ratio: 65760 / 48000, width: 240, height: 160, ext: '.gba', script: './mgba.js' },
+  snes: { ratio: 32040 / 48000, width: 256, height: 224, ext: '.smc,.sfc', script: './snes9x.js' }
+};
+
+// ===== Audio =====
+var audioCtx, processor, isRunning = false;
+var fifoL = new Int16Array(8192), fifoR = new Int16Array(8192), fifoHead = 0, fifoCnt = 0;
+
+function initAudio() {
+  if (audioCtx) { audioCtx.resume(); return; }
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
+  processor = audioCtx.createScriptProcessor(1024, 0, 2);
+  processor.onaudioprocess = function(e) {
+    var L = e.outputBuffer.getChannelData(0), R = e.outputBuffer.getChannelData(1);
+    if (!isRunning) { L.fill(0); R.fill(0); return; }
+    
+    var r = RATIO;
+    while (fifoCnt < 1024 * r) Module._retro_run();
+    
+    for (var i = 0; i < 1024; i++) {
+      var pos = i * r, idx = (fifoHead + (pos | 0)) % 8192, frac = pos % 1;
+      L[i] = (fifoL[idx] * (1 - frac) + fifoL[(idx + 1) % 8192] * frac) / 32768;
+      R[i] = (fifoR[idx] * (1 - frac) + fifoR[(idx + 1) % 8192] * frac) / 32768;
+    }
+    fifoHead = (fifoHead + (1024 * r | 0)) % 8192;
+    fifoCnt -= 1024 * r | 0;
+  };
+  processor.connect(audioCtx.destination);
+  audioCtx.resume();
+}
+
+function writeAudio(ptr, frames) {
+  if (!audioCtx || fifoCnt + frames >= 8192) return frames;
+  var data = new Int16Array(Module.HEAPU8.buffer, ptr, frames * 2);
+  var tail = (fifoHead + fifoCnt) % 8192;
+  for (var i = 0; i < frames; i++) {
+    fifoL[tail] = data[i * 2];
+    fifoR[tail] = data[i * 2 + 1];
+    tail = (tail + 1) % 8192;
+  }
+  fifoCnt += frames;
+  return frames;
+}
+
+// ===== Module =====
+var Module = {
+  canvas: document.getElementById("screen"),
+
+  onRuntimeInitialized() {
+    console.log("✅ runtime ready");
+
+    const envPtr    = Module.addFunction(env_cb, "iii");
+    const videoPtr  = Module.addFunction(video_cb, "viiii");
+    const audioPtr  = Module.addFunction(audio_cb, "vii");
+    const audioBPtr = Module.addFunction(audio_batch_cb, "iii");
+    const pollPtr   = Module.addFunction(input_poll_cb, "v");
+    const statePtr  = Module.addFunction(input_state_cb, "iiiii");
+
+    Module._retro_set_environment(envPtr);
+    Module._retro_set_video_refresh(videoPtr);
+    Module._retro_set_audio_sample(audioPtr);
+    Module._retro_set_audio_sample_batch(audioBPtr);
+    Module._retro_set_input_poll(pollPtr);
+    Module._retro_set_input_state(statePtr);
+
+    Module._retro_init();
+    console.log("🎮 retro_init done");
+  }
+};
+
+// ===== libretro callbacks =====
+
+function env_cb(cmd, data) { return 0; }
+
+function video_cb(ptr, w, h, pitch) {
+  console.log(`[video_cb] called: w=${w}, h=${h}, pitch=${pitch}`);
+  const ctx = Module.canvas.getContext("2d");
+  const img = ctx.getImageData(0, 0, w, h);
+  const imageData = img.data;
+  const pixelData = new Uint16Array(Module.HEAPU8.buffer, ptr, (pitch / 2) * h);
+  const gameStride = pitch / 2;
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const srcIndex = y * gameStride + x;
+      const destIndex = (y * w + x) * 4;
+      const color = pixelData[srcIndex];
+      // mGBA outputs RGB565 format (16-bit color)
+      const r = (color >> 11) & 0x1F;
+      const g = (color >> 5) & 0x3F;
+      const b = color & 0x1F;
+      // Convert to 8-bit RGB
+      imageData[destIndex] = (r << 3) | (r >> 2);
+      imageData[destIndex + 1] = (g << 2) | (g >> 4);
+      imageData[destIndex + 2] = (b << 3) | (b >> 2);
+      imageData[destIndex + 3] = 255;
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+}
+
+function audio_cb(left, right) {
+  // Disabled - using audio_batch_cb only
+}
+
+function audio_batch_cb(ptr, frames) {
+  return writeAudio(ptr, frames);
+}
+
+function input_poll_cb() {}
+function input_state_cb() { return 0; }
+
+// ===== ROM loader (DATA MODE) =====
+
+document.getElementById("resume").onclick = () => {
+  if (audioCtx) audioCtx.resume();
+};
+
+document.getElementById("core").onchange = (e) => {
+  currentCore = e.target.value;
+  const cfg = CORE_CONFIG[currentCore];
+  document.getElementById("rom").accept = cfg.ext;
+  console.log("🎮 Core switched to:", currentCore);
+};
+
+var coreLoaded = null;
+
+function loadCore(core) {
+  return new Promise((resolve, reject) => {
+    console.log(`[loadCore] Switching to core: ${core}`);
+    if (coreLoaded === core) { console.log(`[loadCore] Core already loaded: ${core}`); resolve(); return; }
+    const cfg = CORE_CONFIG[core];
+    const canvas = document.getElementById("screen");
+    canvas.width = cfg.width;
+    canvas.height = cfg.height;
+    RATIO = cfg.ratio;
+    // Reset Module for new core
+    window.Module = {
+      canvas: canvas,
+      onRuntimeInitialized() {
+        console.log(`[Module] ${core} runtime ready`);
+        const envPtr    = Module.addFunction(env_cb, "iii");
+        const videoPtr  = Module.addFunction(video_cb, "viiii");
+        const audioPtr  = Module.addFunction(audio_cb, "vii");
+        const audioBPtr = Module.addFunction(audio_batch_cb, "iii");
+        const pollPtr   = Module.addFunction(input_poll_cb, "v");
+        const statePtr  = Module.addFunction(input_state_cb, "iiiii");
+        Module._retro_set_environment(envPtr);
+        Module._retro_set_video_refresh(videoPtr);
+        Module._retro_set_audio_sample(audioPtr);
+        Module._retro_set_audio_sample_batch(audioBPtr);
+        Module._retro_set_input_poll(pollPtr);
+        Module._retro_set_input_state(statePtr);
+        Module._retro_init();
+        console.log(`[Module] retro_init done`);
+        coreLoaded = core;
+        resolve();
+      }
+    };
+    const script = document.createElement('script');
+    script.src = cfg.script;
+    script.onerror = (e) => { console.error(`[loadCore] Failed to load script: ${cfg.script}`); reject(e); };
+    script.onload = () => { console.log(`[loadCore] Script loaded: ${cfg.script}`); };
+    document.body.appendChild(script);
+  });
+}
+
+document.getElementById("rom").onchange = async (e) => {
+  const file = e.target.files[0];
+  if (!file) { console.warn('[rom.onchange] No file selected'); return; }
+  console.log(`[rom.onchange] File selected: ${file.name}`);
+  // Init audio on user gesture
+  initAudio();
+  // Load core if needed
+  await loadCore(currentCore);
+  const rom = new Uint8Array(await file.arrayBuffer());
+  const romPtr = Module._malloc(rom.length);
+  Module.HEAPU8.set(rom, romPtr);
+  // struct retro_game_info
+  // { path, data, size, meta }
+  const info = Module._malloc(16);
+  Module.HEAPU32[(info >> 2) + 0] = 0;
+  Module.HEAPU32[(info >> 2) + 1] = romPtr;
+  Module.HEAPU32[(info >> 2) + 2] = rom.length;
+  Module.HEAPU32[(info >> 2) + 3] = 0;
+  const ok = Module._retro_load_game(info);
+  console.log(`[rom.onchange] retro_load_game returned: ${ok}`);
+  isRunning = true;
+  // Game loop is audio-driven via processAudio
+};
+</script>
+</body>
+</html>

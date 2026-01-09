@@ -23,15 +23,26 @@ async function romList() {
     });
     romlist.innerHTML = "";
     sortedGameList.forEach(gameName => {
-        const div = document.createElement("div");
-        div.classList.add("flex-1", "game-item");
-        div.textContent = gameName;
-        div.onclick = () => {
+        const sList = document.createElement("div");
+        sList.classList.add("s-rom_list", "br", "bg");
+        romlist.appendChild(sList);
+
+        const sRomeName = document.createElement("div");
+        sRomeName.classList.add("s-rom_name", "flex-1", "bgp");
+        sRomeName.textContent = gameName;
+        sRomeName.onclick = () => {
             updateRecentGames(gameName);
             Main.loadGame(gameName);
             romList();
         };
-        romlist.appendChild(div);
+        sList.appendChild(sRomeName);
+        const sRomDot = document.createElement("div");
+        sRomDot.classList.add("s-rom_dot");
+        sRomDot.onclick = () => {
+            fileInputLable.classList.add("disable");
+            sBack.classList.remove("disable");
+        };
+        sList.appendChild(sRomDot);
     });
 }
 function updateRecentGames(gameName) {
@@ -52,6 +63,9 @@ document.addEventListener("DOMContentLoaded", function() {
     setTimeout(() => {
         romList();
     },2000);
+    setTimeout(() => {
+        darkMode();
+    },2200);
     romInput.addEventListener("change", function() {
         inputGame(romInput);
     })

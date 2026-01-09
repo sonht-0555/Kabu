@@ -1,369 +1,96 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="vi">
+<head>
+  <title>Kabu</title>
     <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin">
     <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
     
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Kabu" />
-    
-    <link rel="stylesheet" type="text/css" href="/src/css/main.css" />
-    <link rel="apple-touch-icon" href="/src/img/icon.png" />
-    <link rel="icon" href="/src/img/icon.png" type="image/png" />
-    <link rel="manifest" href="/manifest.json" />
-    
-    <script src="/src/library/interact.js"></script>
-    <script src="/src/library/nip.js"></script>
-    
-    <title>Kabu</title>
-    <script>
-    let gameVer = 'V6.93';
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js')
-                .then(registration => {
-                    console.log('Service Worker registered!', registration.scope);
-                })
-                .catch(error => {
-                    console.log('Service Worker registration failed:', error);
-                });
-        });
-        navigator.serviceWorker.addEventListener('message', function (event) {
-        console.log('Received message from Service Worker:', event.data);
-        if (event.data.msg === "Updating...") {
-            lockNoti("", event.data.msg, 1600);
-            setTimeout(() => { 
-                window.location.hash = `#t=${gameVer}`;
-                const version = location.hash.includes('t=') ? location.hash.split('=')[1] : 'default';
-            }, 1400);
-            }
-        });
-    }
-    </script>
-  </head>
-<body>
-    <!-- Layer Ingame -->
-    <div class="errorLog column"></div>
-    <div class="gap-15 column in-game disable" id="in-game">
-        <div class="target-boxes" id="target-boxes"></div>
-        <div class="gap-8 emu-display cw hw">
-            <div class="column">
-                <div class="bc canvas-top shu Gt-5"></div>
-                <div class="flex-1 cw">
-                    <div class="canvas-container cw hw" id="canvas-container">
-                        <div class="textured" id="textured" style="position: absolute;"></div>
-                        <canvas width="240" height="160" class="canvas visible" id="canvas"></canvas>
-                        <div class="message-container loading-icon visible" id="loading-icon">
-                            <img src="data:image/svg+xml,%3Csvg width='51' height='7' viewBox='0 0 51 7' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M51 0V6H50V7H0V1H1V0H51Z' fill='%23252525' fill-opacity='0.5'/%3E%3Cpath d='M3 6H2V5H3V6Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M9 6H8V5H9V6Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M13 6H12V5H13V6Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M25 6H24V5H25V6Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M35 6H34V5H35V6Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M39 6H38V5H39V6Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M43 6H42V5H43V6Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M15 5H14V4H15V5Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M41 5H40V4H41V5Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M9 3H8V2H9V3Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M13 3H12V2H13V3Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M16 2V3H15V2H16Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M35 3H34V2H35V3Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M39 3H38V2H39V3Z' fill='%23F5E8D1' fill-opacity='0.5'/%3E%3Cpath d='M7 6H3V5H7V6Z' fill='%23F5E8D1'/%3E%3Cpath d='M12 6H9V5H12V6Z' fill='%23F5E8D1'/%3E%3Cpath d='M15 6H14V5H15V6Z' fill='%23F5E8D1'/%3E%3Cpath d='M19 6H18V5H15V3H16V4H18V3H16V2H19V6Z' fill='%23F5E8D1'/%3E%3Cpath d='M23 3H21V5H24V6H20V2H23V3Z' fill='%23F5E8D1'/%3E%3Cpath d='M31 3H29V5H31V6H26V5H28V3H26V2H31V3Z' fill='%23F5E8D1'/%3E%3Cpath d='M34 3H33V6H32V2H34V3Z' fill='%23F5E8D1'/%3E%3Cpath d='M37 6H35V5H36V2H37V6Z' fill='%23F5E8D1'/%3E%3Cpath d='M43 5H42V6H39V5H41V4H43V5Z' fill='%23F5E8D1'/%3E%3Cpath d='M45 6H44V5H45V6Z' fill='%23F5E8D1'/%3E%3Cpath d='M47 6H46V5H47V6Z' fill='%23F5E8D1'/%3E%3Cpath d='M3 5H2V2H3V5Z' fill='%23F5E8D1'/%3E%3Cpath d='M9 5H8V3H9V5Z' fill='%23F5E8D1'/%3E%3Cpath d='M13 5H12V3H13V5Z' fill='%23F5E8D1'/%3E%3Cpath d='M25 5H24V4H25V5Z' fill='%23F5E8D1'/%3E%3Cpath d='M35 5H34V3H35V5Z' fill='%23F5E8D1'/%3E%3Cpath d='M39 5H38V3H39V5Z' fill='%23F5E8D1'/%3E%3Cpath d='M24 4H23V3H24V4Z' fill='%23F5E8D1'/%3E%3Cpath d='M12 3H9V2H12V3Z' fill='%23F5E8D1'/%3E%3Cpath d='M43 2V3H39V2H43Z' fill='%23F5E8D1'/%3E%3Cpath d='M49 6H48V5H49V6Z' fill='%23F5E8D1'/%3E%3C/svg%3E%0A" alt="img">                        </div>
-                        <div class="message-container column visible" id="stateList">
-                            <div class="flex-1"></div>
-                            <div class="flex-1 state-container" id ="state-container">
-                                <div class="flex-1 stateDiv" id="stateDiv01">
-                                    <div class="flex-1 stateInfo column cw">
-                                        <div class="stateTitle">[01]</div>
-                                        <div class="stateDate" id="dateState01"></div>
-                                    </div>
-                                </div>
-                                <div class="flex-1 stateDiv" id="stateDiv02">
-                                    <div class="flex-1 stateInfo column cw">
-                                        <div class="stateTitle">[02]</div>
-                                        <div class="stateDate" id="dateState02"></div>
-                                    </div>
-                                </div>
-                                <div class="flex-1 stateDiv" id="stateDiv03">
-                                    <div class="flex-1 stateInfo column cw">
-                                        <div class="stateTitle">[03]</div>
-                                        <div class="stateDate" id="dateState03"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="sha" id="img-shader" style="z-index: 23; pointer-events: none; position: absolute;"></div>
-                    </div>
-                    <div class="column message-container" id="">
-                        <div class="flex-1" id="areaSet"></div>
-                        <div class="flex-1" id="">
-                            <div class="flex-1" id="loadStateButton"></div>
-                            <div class="flex-1" id="saveStateButton"></div>
-                        </div>
-                    </div>
-                    <div class="setting-container visible" id="control-setting">
-                        <div class="flex-1 column control-setting shu Gt-5">
-                            <div class="flex-1">
-                                <div class="flex-1 cs-name">Q.Reload</div>
-                                <div class="flex-1 cs-detail">
-                                    <div class="cs-blank"></div>
-                                    <div id="box0" class="flex-1 box">G.Now!</div>
-                                    <div class="cs-next"></div>
-                                </div>
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex-1 cs-name">Power</div>
-                                <div class="flex-1 cs-detail">
-                                    <div class="cs-blank"></div>
-                                    <div id="box1" class="flex-1 box">Reboot</div>
-                                    <div class="cs-next"></div>
-                                </div>
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex-1 cs-name">Auto Sav</div>
-                                <div class="flex-1 cs-detail">
-                                    <div class="cs-minus"></div>
-                                    <div id="box2" class="flex-1 box"></div>
-                                    <div class="cs-plus"></div>
-                                </div>
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex-1 cs-name">Shader</div>
-                                <div class="flex-1 cs-detail">
-                                    <div class="cs-minus"></div>
-                                    <div id="box3" class="flex-1 box"></div>
-                                    <div class="cs-plus"></div>
-                                </div>
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex-1 cs-name">Shader Op</div>
-                                <div class="flex-1 cs-detail">
-                                    <div class="cs-minus"></div>
-                                    <div id="box4" class="flex-1 box"></div>
-                                    <div class="cs-plus"></div>
-                                </div>
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex-1 cs-name">Cheat</div>
-                                <div class="flex-1 cs-detail">
-                                    <div class="cs-blank"></div>
-                                    <div id="box5" class="flex-1 box" contenteditable="false">Off</div>
-                                    <div class="cs-next"></div>
-                                </div>
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex-1 cs-name">Grayscale</div>
-                                <div class="flex-1 cs-detail">
-                                    <div class="cs-minus"></div>
-                                    <div id="box6" class="flex-1 box"></div>
-                                    <div class="cs-plus"></div>
-                                </div>
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex-1 cs-name">Brightness</div>
-                                <div class="flex-1 cs-detail">
-                                    <div class="cs-minus"></div>
-                                    <div id="box7" class="flex-1 box"></div>
-                                    <div class="cs-plus"></div>
-                                </div>
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex-1 cs-name">Contrast</div>
-                                <div class="flex-1 cs-detail">
-                                    <div class="cs-minus"></div>
-                                    <div id="box8" class="flex-1 box"></div>
-                                    <div class="cs-plus"></div>
-                                </div>
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex-1 cs-name">Saturate</div>
-                                <div class="flex-1 cs-detail">
-                                    <div class="cs-minus"></div>
-                                    <div id="box9" class="flex-1 box"></div>
-                                    <div class="cs-plus"></div>
-                                </div>
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex-1 cs-name">Sepia</div>
-                                <div class="flex-1 cs-detail">
-                                    <div class="cs-minus"></div>
-                                    <div id="box10" class="flex-1 box"></div>
-                                    <div class="cs-plus"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex-1"></div>
-                    </div>
-                    <div class="setting-container column visible" id="areaTrans">
-                        <div id="resizable-draggable">
-                            <div class="resizer bottom-right"></div>
-                            <div class="resizer top-left"></div> 
-                          </div>
-                    </div>
-                </div>
-                <div class="bc canvas-bot shu Gt-5 gap-4">
-                    <div class="flex-1 status" id="status-1">                    
-                        <svg width="49" height="8" viewBox="0 0 49 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect id ="led01" x="06" y="5" width="2" height="3" fill="rgba(245, 232, 209, 0.14)"/>
-                            <rect id ="led02" x="11" y="5" width="2" height="3" fill="rgba(245, 232, 209, 0.14)"/>
-                            <rect id ="led03" x="16" y="5" width="2" height="3" fill="rgba(245, 232, 209, 0.14)"/>
-                            </svg>
-                    </div>
-                    <div class="flex-1 status" id="status-2"></div>
-                    <div class="flex-1 status" id="status-3"></div>
-
-
-                </div>
-            </div>
-        </div>
-        <div class="between column bc emu-control gap-8" id="emu-control">
-            <div class="notification-container bc shu Gt-5"> 
-                <span id="noti-mess" style="position: absolute;">[_]...</span>
-                <div class="flex-1 inputContainer" style="height:20px;">
-                    <div id="inputText" class="inputText"></div>
-                </div> 
-                <span class="timer" id="timer">...</span>
-            </div>
-            <div class="flex-1 gap-22">
-                <div class="column gap-8" id="dpadContainer">
-                    <div class="gap-8" style="position:relative; height: 26px;">
-                        <div class="bc1 dpad-state" id="statePageButton"></div>
-                        <div class="bc1 flex-1 dpad-l" id="L"></div>
-                    </div>
-                    <div class="flex-1 bc1 ch cw dpad">
-                        <div class="d-pad">
-                            <div class="ch">
-                                <div class="pad-ul" id="Up-left"></div>
-                            </div>
-                            <div class="flex-1 column">
-                                <div class="pad-ur" id="Up-right"></div>
-                                <div class="flex-1 column">
-                                    <div class="flex-1">
-                                        <div class="flex-1 ch cw pad-u" id="Up"></div>
-                                        <div class="flex-1 ch cw pad-r" id="Right"></div>
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="flex-1 ch cw pad-l" id="Left"></div>
-                                        <div class="flex-1 ch cw pad-d" id="Down"></div>
-                                    </div>
-                                </div>
-                                <div class="pad-dl" id="Down-left"></div>
-                            </div>
-                            <div class="ch">
-                                <div class="pad-dr" id="Down-right"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex-1 column gap-8">
-                    <div class="gap-8" style="position: relative; height: 26px;">
-                        <div class="bc1 flex-1 dpad-r" id="R"></div>
-                        <div class="bc1 dpad-menu" id="menu-pad"></div>
-                    </div>
-                    <div class="flex-1" style="position: relative">
-                        <div class="flex-1 gap-8 bc1" id="A">
-                            <div class="flex-1 dpad-a"></div>
-                            <div class="dpad-blank"></div>
-                        </div>
-                        <div class="rewind" id="rewind"></div>
-                    </div>
-                    <div class="flex-1 gap-8">
-                        <div class="flex-1 bc1 dpad-b" id="B"></div>
-                        <div class="bc1 dpad-turbo" id="turbo"></div>
-                    </div>
-                    <div class="gap-8">
-                        <div class="flex-1 bc1 dpad-select" id="Select"></div>
-                        <div class="flex-1 bc1 dpad-start" id="Start"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="dynamic" id="dynamic">
-
-        </div>
-    </div>
-
-    <div class="between column localStorage disable" id="storage">
-        <div class="storage gap-10">
-            <div class="flex-1 home bc" id="backToHome"></div>
-            <label class="flex-1 upload-file bc" for="upLoadFile"></label>
-            <div class="flex-1 gap-10">
-                <div class="flex-1 cloud-restore" id="dropboxRestore"></div>
-                <div class="flex-1 cloud-backup" id="dropboxBackup"></div>
-            </div>
-            <div class="flex-1 cloud-dropbox" id="dropboxCloud"></div>
-            <input type="file" id="upLoadFile" hidden />
-        
-        </div>
-        <div class="column flex-disable mgba-storage" id="mgba-storage" style="overflow: auto;">
-            <div class="flex-1 rom-item">
-                <span class="flex-1" id="grapMode">ROM file.</span>
-                <span class="" id="GBAver">...</span>
-            </div>
-            <div id="romsFile" class="column"></div>
-            <div class="flex-1 rom-item">STATE file.</div>
-            <div id="statesFile" class="column"></div>
-            <div class="flex-1 rom-item">SAVE file.</div>
-            <div id="savesFile" class="column"></div>
-            <div class="flex-1 rom-item">CHEAT file.</div>
-            <div id="cheatsFile" class="column"></div>
-            <div class="flex-1 rom-item">SSHOT file.</div>
-            <div id="screenshotsFile" class="column"></div>
-        </div>
-        <div class="flex-1"></div>
-    </div>
-
-    <div class="between column intro" id="intro">
-        <div class="target-boxes" id="target-boxes"></div>
-        <div class="flex-1 ch column gap-8">
-            <label class="logo bc" id="openLocalStorage"></label>
-            <div class="gap-8 file-section">
-                <div class="flex-1 bc">
-                    <svg id="setAdjustment" width="46" height="100" viewBox="0 0 46 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="46" height="100" fill="" />
-                        <rect id="rect1" x="16" y="16" width="14" height="4" rx="0.6" fill="#F5E8D1" />
-                        <rect id="rect2" x="16" y="24" width="14" height="4" rx="0.6" fill="#F5E8D1" />
-                        <rect id="rect3" x="16" y="32" width="14" height="4" rx="0.6" fill="#F5E8D1" />
-                        <path d="M22 68H14V58H22V68ZM16 60V66H20V60H16Z" fill="#F5E8D1" />
-                        <path id="G0" opacity="0" d="M32 68H24V58H32V68ZM26 60V66H30V60H26Z" fill="#F5E8D1" />
-                        <path id="G1" opacity="0" d="M26 68V60H24V58H28V68H26Z" fill="#F5E8D1" />
-                        <path id="G2" opacity="0" d="M24 58H32V64H26V66H32V68H24V62H30V60H24V58Z" fill="#F5E8D1" />
-                        <path id="G3" opacity="1", d="M32 68H24V66H30V64H24V62H30V60H24V58H32V68Z" fill="#F5E8D1" />
-                        <g opacity="0.4">
-                            <path d="M14 76H22V84H16V86H14V76ZM20 82V78H16V82H20Z" fill="#F5E8D1" />
-                            <path d="M28 86H24V78H26V80H28V82H26V84H28V86Z" fill="#F5E8D1" />
-                            <path d="M30 86V84H32V86H30Z" fill="#F5E8D1" />
-                        </g>
-                    </svg>
-                </div>
-                <label for="fileInput" class="flex-1 bc select-file" id="fileInputLable"></label>
-                <input type="file" id="fileInput" hidden />
-            </div>
-        </div>
-        <div class="column rom-list flex-disable" id="rom-list"></div>
-    </div>
-
-    <div class="firstLoading column cw ch">
-        <div class="flex-1"></div>
-        <span class=""></span></br>
-        <div class="">
-            <span style="opacity: 0.4" id="appVer"></span>
-            <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path id="path-1" opacity="0.4" d="M0 12V10H2V12H0Z" fill="#F5E8D1"/>
-                <path id="path-2" opacity="0.4" d="M4 12V10H6V12H4Z" fill="#F5E8D1"/>
-                <path id="path-3" opacity="0.4" d="M8 12V10H10V12H8Z" fill="#F5E8D1"/>
-            </svg>
-        </div>
-        <div class="flex-1">                        
-            <canvas width="240" height="160" class="canvas display-none" id="canvas-1"></canvas>
-        </div>
-    </div>
-
-    <div class="lockNoti column cw ch visible" id="lockNoti">
-        <div class="flex-1"></div>
-        <span class="" id="notiTitle"></span></br>
-        <span class="" id="notiDetail" style="opacity: 0.4"></span>
-        <div class="flex-1"></div>
-    </div>
-    <script type="" src="./src/js/global.js"></script> 
-    <script type="module" src="./src/js/main.js"></script> 
-    <script type="module" src="./src/js/welcome.js"></script> 
-    <script type="module" src="./src/js/gamepad.js"></script> 
-    <script type="module" src="./src/js/ocr.js"></script>
-    <script type="module" src="./src/js/setting.js"></script> 
-    <script type="module" src="./src/js/state.js"></script> 
-    <script type="module" src="./src/js/storage.js"></script> 
-    <script type="module" src="./src/js/cloud.js"></script>  
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="mobile-web-app-title" content="Kabu" />
+  <link rel="icon" href="/src/img/icon.png" type="image/png" />
+  <link rel="stylesheet" type="text/css" href="./src/css/main.css" />
+  <link rel="manifest" href="/manifest.json" />
+</head>
+<script>let gameVer = 'Ver_2.64';</script>
+<body hide>
+  <page00 hidden>
+    <divide></divide>
+    <title0>&nbsp<green0></green0><white0></white0></title0>
+    <message0></message0>
+    <divide></divide>
+  </page00>
+  <page01>
+    <list02 hidden>
+      <cont><opti>Cloud</opti><opti>Restore</opti><opti>Backup</opti></cont>
+      <titl>Dropbox Cloud.</titl>
+      <cont><opti>Lated</opti><opti>New</opti><opti>Old</opti></cont>
+      <titl>Core setting.</titl>
+    </list02>
+    <list01 hidden></list01>
+    <list><rom><ver op4></ver></rom></list>
+    <cta>
+      <logo></logo>
+      <setting></setting>
+      <vertical>
+        <svg width="50" height="50" viewBox="0 0 50 50" fill="none">
+          <path id="k6"   d="M22 19H28" stroke="var(--profile-4)" stroke-width="2"/>
+          <path id="k80"  d="M22 25H28" stroke="var(--profile-4)" stroke-width="2"/>
+          <path id="k160" d="M22 31H28" stroke="var(--profile-4)" stroke-width="2"/>
+        </svg>
+      </vertical>
+      <input type="file" id="romInput" hidden />
+      <label for="romInput" id="fileInputLable"></label>
+    </cta>
+  </page01>
+  <page02 hidden>
+    <display>
+      <screen><canvas fil id="canvas"></canvas></screen>
+      <notification>
+        <title1>...</title1>
+        <time1>0h00.00</time1>
+      </notification>
+    </display>
+    <divide></divide>
+    <gamepad>
+      <state-button id="state"></state-button>
+      <l-button data="func-l"></l-button>
+      <r-button data="func-r"></r-button>
+      <menu-button id="menu"></menu-button>
+      <dpad-section id="dpad">
+        <svg width="100%" height="100%" viewBox="0 0 100 100" fill-opacity="0">
+          <polygon points="50 50, 100 100, 100 0"   fill="transparent" data="btn-right"/>
+          <polygon points="0 0, 0 100, 50 50"       fill="transparent" data="btn-left"/>
+          <polygon points="0 0, 100 0, 50 50"       fill="transparent" data="btn-up"/>
+          <polygon points="0 100, 100 100, 50 50"   fill="transparent" data="btn-down"/>
+          <polygon points="0 0, 25 0, 0 25"         fill="transparent" data="btn-up-left"/>
+          <polygon points="75 0, 100 0, 100 25"     fill="transparent" data="btn-up-right"/>
+          <polygon points="0 75, 25 100, 0 100"     fill="transparent" data="btn-down-left"/>
+          <polygon points="100 75, 100 100, 75 100" fill="transparent" data="btn-down-right"/>
+        </svg>
+      </dpad-section>
+      <a-button data="func-a"></a-button>
+      <wrap-button></wrap-button>
+      <b-button data="func-b"></b-button>
+      <f-button id="f"></f-button>
+      <select-button data="func-select"></select-button>
+      <start-button data="func-start"></start-button>
+    </gamepad>
+    <joypad>
+      <svg id="joy" style="height:auto; width:auto" viewBox="0 0 100 100" fill-opacity="0">
+        <polygon points="50 50, 100 100, 100 0"   fill="transparent" data="btn-right"/>
+        <polygon points="0 0, 0 100, 50 50"       fill="transparent" data="btn-left"/>
+        <polygon points="0 0, 100 0, 50 50"       fill="transparent" data="btn-up"/>
+        <polygon points="0 100, 100 100, 50 50"   fill="transparent" data="btn-down"/>
+      </svg>
+    </joypad>
+    <invis></invis>
+  </page02>
 </body>
-
-</html> 
+<script type="" src="./src/js/global.js"></script>
+<script type="module" src="./src/js/main.js"></script>
+<script type="module" src="./src/js/page01.js"></script> 
+<script type="module" src="./src/js/page02.js"></script> 
+</html>

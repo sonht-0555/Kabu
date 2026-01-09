@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>CSS Partial Text Shadow</title>
+    <style>
+        body {
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial Black', sans-serif;
+        }
+
+        .shader-text {
+            font-size: 100px;
+            color: #333;
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Lớp giả chứa text-shadow */
+        .shader-text::before {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            
+            /* Màu chữ của lớp này phải trùng với màu gốc hoặc trong suốt */
+            color: #333; 
+
+            /* Đổ bóng nét cứng (shader) */
+            text-shadow: 6px 6px 0px #ff0055;
+
+            /* MẶT NẠ: Chỉ cho phép hiển thị nội dung trong khoảng 12px đầu tiên */
+            /* Phần ngoài 12px sẽ bị ẩn hoàn toàn (kể cả shadow) */
+            -webkit-mask-image: linear-gradient(
+                to right, 
+                black 0px, 
+                black 12px, 
+                transparent 12px
+            );
+            mask-image: linear-gradient(
+                to right, 
+                black 0px, 
+                black 12px, 
+                transparent 12px
+            );
+
+            pointer-events: none;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 class="shader-text" data-text="GEMINI">
+        GEMINI
+    </h1>
+
+</body>
+</html>
