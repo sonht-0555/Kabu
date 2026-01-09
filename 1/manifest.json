@@ -1,0 +1,16 @@
+{
+  "name": "Test",
+  "short_name": "Test",
+  "start_url": "/?source=pwa",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "description": "Kabu",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
