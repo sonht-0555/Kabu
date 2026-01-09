@@ -23,10 +23,10 @@ canvas {
 var audioContext = null;
 var nextPlayTime = 0;
 
-// Will be calibrated after 1 second of audio data
-var coreSampleRate = 32768; // Initial guess
+// Sample rate calibration
+var coreSampleRate = 32768; // Will be measured
 var sampleRateCalibrated = false;
-const BATCH_SIZE = 1024;
+const BATCH_SIZE = 2048;
 
 // Pre-allocated buffers
 var bufferL = new Float32Array(BATCH_SIZE);
@@ -35,7 +35,8 @@ var bufferPos = 0;
 
 function initAudio() {
   if (audioContext) {
-    if (audioContext.state !== 'running') {
+    // iOS needs resume on every user gesture
+    if (audioContext.state === 'suspended') {
       audioContext.resume();
     }
     return;
@@ -43,6 +44,14 @@ function initAudio() {
   
   try {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+    // iOS: unlock audio with silent buffer
+    var silentBuffer = audioContext.createBuffer(1, 1, audioContext.sampleRate);
+    var source = audioContext.createBufferSource();
+    source.buffer = silentBuffer;
+    source.connect(audioContext.destination);
+    source.start(0);
+    
     audioContext.resume();
     nextPlayTime = audioContext.currentTime;
     console.log("🔊 Audio initialized: " + audioContext.sampleRate + "Hz");
@@ -53,11 +62,34 @@ function initAudio() {
 
 function flushAudio() {
   if (!audioContext || bufferPos === 0) return;
+  if (audioContext.state === 'suspended') {
+    audioContext.resume();
+  }
   
-  // Create buffer with calibrated sample rate
-  var buffer = audioContext.createBuffer(2, bufferPos, coreSampleRate);
-  buffer.getChannelData(0).set(bufferL.subarray(0, bufferPos));
-  buffer.getChannelData(1).set(bufferR.subarray(0, bufferPos));
+  // Use browser's sample rate and let it handle resampling
+  // coreSampleRate may be non-standard (like 61630Hz) which iOS doesn't support
+  var outputRate = audioContext.sampleRate;
+  var ratio = coreSampleRate / outputRate;
+  var outputLen = Math.ceil(bufferPos / ratio);
+  
+  var buffer = audioContext.createBuffer(2, outputLen, outputRate);
+  var outL = buffer.getChannelData(0);
+  var outR = buffer.getChannelData(1);
+  
+  // Simple linear interpolation resample
+  for (var i = 0; i < outputLen; i++) {
+    var srcPos = i * ratio;
+    var srcIdx = Math.floor(srcPos);
+    var frac = srcPos - srcIdx;
+    
+    if (srcIdx + 1 < bufferPos) {
+      outL[i] = bufferL[srcIdx] * (1 - frac) + bufferL[srcIdx + 1] * frac;
+      outR[i] = bufferR[srcIdx] * (1 - frac) + bufferR[srcIdx + 1] * frac;
+    } else if (srcIdx < bufferPos) {
+      outL[i] = bufferL[srcIdx];
+      outR[i] = bufferR[srcIdx];
+    }
+  }
   
   var source = audioContext.createBufferSource();
   source.buffer = buffer;
