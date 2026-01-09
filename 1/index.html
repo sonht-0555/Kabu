@@ -19,6 +19,93 @@ canvas {
 <input type="file" id="rom" accept=".gba">
 
 <script>
+// ===== Audio - AudioBufferSourceNode Scheduling =====
+var audioContext = null;
+var nextPlayTime = 0;
+
+const CORE_SAMPLE_RATE = 32768;
+const BATCH_SIZE = 1024;
+
+// Pre-allocated buffers
+var bufferL = new Float32Array(BATCH_SIZE);
+var bufferR = new Float32Array(BATCH_SIZE);
+var bufferPos = 0;
+
+function initAudio() {
+  if (audioContext) {
+    if (audioContext.state !== 'running') {
+      audioContext.resume();
+    }
+    return;
+  }
+  
+  try {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    audioContext.resume();
+    nextPlayTime = audioContext.currentTime;
+    console.log("🔊 Audio initialized: " + audioContext.sampleRate + "Hz");
+  } catch (e) {
+    console.error("Audio init error:", e);
+  }
+}
+
+function flushAudio() {
+  if (!audioContext || bufferPos === 0) return;
+  
+  // Create buffer with core sample rate (48000Hz)
+  var buffer = audioContext.createBuffer(2, bufferPos, CORE_SAMPLE_RATE);
+  buffer.getChannelData(0).set(bufferL.subarray(0, bufferPos));
+  buffer.getChannelData(1).set(bufferR.subarray(0, bufferPos));
+  
+  // Schedule playback
+  var source = audioContext.createBufferSource();
+  source.buffer = buffer;
+  source.connect(audioContext.destination);
+  
+  var now = audioContext.currentTime;
+  
+  // Reset if too far behind OR too far ahead
+  if (nextPlayTime < now || nextPlayTime > now + 0.1) {
+    nextPlayTime = now;
+  }
+  
+  source.start(nextPlayTime);
+  nextPlayTime += buffer.duration;
+  
+  bufferPos = 0;
+}
+
+function writeAudio(ptr, frames) {
+  if (!audioContext) return frames;
+  
+  var int16Data = new Int16Array(Module.HEAPU8.buffer, ptr, frames * 2);
+  
+  // Debug: count samples per second
+  if (!writeAudio.count) {
+    writeAudio.count = 0;
+    writeAudio.startTime = performance.now();
+  }
+  writeAudio.count += frames;
+  var elapsed = (performance.now() - writeAudio.startTime) / 1000;
+  if (elapsed >= 1 && !writeAudio.logged) {
+    writeAudio.logged = true;
+    console.log("🎵 Sample rate measured: " + Math.round(writeAudio.count / elapsed) + " Hz");
+  }
+  
+  for (var i = 0; i < frames; i++) {
+    bufferL[bufferPos] = int16Data[i * 2] / 32768.0;
+    bufferR[bufferPos] = int16Data[i * 2 + 1] / 32768.0;
+    bufferPos++;
+    
+    if (bufferPos >= BATCH_SIZE) {
+      flushAudio();
+    }
+  }
+  
+  return frames;
+}
+
+// ===== Module =====
 var Module = {
   canvas: document.getElementById("screen"),
 
@@ -80,8 +167,14 @@ function video_cb(ptr, w, h, pitch) {
   ctx.putImageData(img, 0, 0);
 }
 
-function audio_cb() {}
-function audio_batch_cb(data, frames) { return frames; }
+function audio_cb(left, right) {
+  // Disabled - using audio_batch_cb only
+}
+
+function audio_batch_cb(ptr, frames) {
+  return writeAudio(ptr, frames);
+}
+
 function input_poll_cb() {}
 function input_state_cb() { return 0; }
 
@@ -90,6 +183,9 @@ function input_state_cb() { return 0; }
 document.getElementById("rom").onchange = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
+
+  // Init audio on user gesture
+  initAudio();
 
   const rom = new Uint8Array(await file.arrayBuffer());
   const romPtr = Module._malloc(rom.length);
@@ -106,11 +202,34 @@ document.getElementById("rom").onchange = async (e) => {
   const ok = Module._retro_load_game(info);
   console.log("🎯 load game:", ok);
 
+  // GBA runs at 59.7275 fps
+  const TARGET_FPS = 59.7275;
+  const FRAME_TIME = 1000 / TARGET_FPS;
+  var lastFrameTime = performance.now();
+  var frameCount = 0;
+  var fpsStartTime = performance.now();
+
   function loop() {
-    Module._retro_run();
+    var now = performance.now();
+    var elapsed = now - lastFrameTime;
+    
+    if (elapsed >= FRAME_TIME) {
+      lastFrameTime = now - (elapsed % FRAME_TIME);
+      Module._retro_run();
+      
+      // Measure actual FPS
+      frameCount++;
+      var fpsElapsed = (now - fpsStartTime) / 1000;
+      if (fpsElapsed >= 1 && frameCount > 0) {
+        console.log("🎮 Actual FPS: " + (frameCount / fpsElapsed).toFixed(1));
+        frameCount = 0;
+        fpsStartTime = now;
+      }
+    }
+    
     requestAnimationFrame(loop);
   }
-  loop();
+  requestAnimationFrame(loop);
 };
 </script>
 
