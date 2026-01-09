@@ -14,7 +14,7 @@ canvas {
 </head>
 <body>
 
-<h3>mGBA WASM 1.4</h3>
+<h3>mGBA WASM 1.5</h3>
 <canvas id="screen" width="240" height="160"></canvas><br><br>
 <input type="file" id="rom" accept=".gba">
 
@@ -43,8 +43,13 @@ function initAudio() {
       isRunning = true;
     }
   });
-  // iOS: resume on touch/click
-  const tryResume = () => { if (audioCtx.state === 'suspended' && wasRunning) { audioCtx.resume(); isRunning = true; } };
+  // iOS: resume on touch/click (manual resume anytime)
+  const tryResume = () => { 
+    if (audioCtx.state === 'suspended') { 
+      audioCtx.resume(); 
+      if (wasRunning) isRunning = true; // Auto-resume game if it was running
+    }
+  };
   document.addEventListener('touchstart', tryResume, { passive: true });
   document.addEventListener('click', tryResume);
   
