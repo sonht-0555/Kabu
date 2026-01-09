@@ -14,7 +14,7 @@ canvas {
 </head>
 <body>
 
-<h3>mGBA WASM 1.5</h3>
+<h3>mGBA WASM 1.6</h3>
 <canvas id="screen" width="240" height="160"></canvas><br><br>
 <input type="file" id="rom" accept=".gba">
 
@@ -31,25 +31,9 @@ function initAudio() {
   audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
   processor = audioCtx.createScriptProcessor(1024, 0, 2);
   
-  // Pause/Resume with visibility
-  var wasRunning = false;
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      wasRunning = isRunning;
-      isRunning = false;
-      audioCtx.suspend();
-    } else if (wasRunning) {
-      audioCtx.resume();
-      isRunning = true;
-    }
-  });
-  // iOS: resume on touch/click (manual resume anytime)
-  const tryResume = () => { 
-    if (audioCtx.state === 'suspended') { 
-      audioCtx.resume(); 
-      if (wasRunning) isRunning = true; // Auto-resume game if it was running
-    }
-  };
+  // Resume audio when returning from background (iOS/mobile)
+  const tryResume = () => { if (audioCtx.state === 'suspended') audioCtx.resume(); };
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) tryResume(); });
   document.addEventListener('touchstart', tryResume, { passive: true });
   document.addEventListener('click', tryResume);
   
