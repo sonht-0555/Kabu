@@ -23,7 +23,9 @@ canvas {
 var audioContext = null;
 var nextPlayTime = 0;
 
-const CORE_SAMPLE_RATE = 32768;
+// Will be calibrated after 1 second of audio data
+var coreSampleRate = 32768; // Initial guess
+var sampleRateCalibrated = false;
 const BATCH_SIZE = 1024;
 
 // Pre-allocated buffers
@@ -52,22 +54,17 @@ function initAudio() {
 function flushAudio() {
   if (!audioContext || bufferPos === 0) return;
   
-  // Create buffer with core sample rate (48000Hz)
-  var buffer = audioContext.createBuffer(2, bufferPos, CORE_SAMPLE_RATE);
+  // Create buffer with calibrated sample rate
+  var buffer = audioContext.createBuffer(2, bufferPos, coreSampleRate);
   buffer.getChannelData(0).set(bufferL.subarray(0, bufferPos));
   buffer.getChannelData(1).set(bufferR.subarray(0, bufferPos));
   
-  // Schedule playback
   var source = audioContext.createBufferSource();
   source.buffer = buffer;
   source.connect(audioContext.destination);
   
   var now = audioContext.currentTime;
-  
-  // Reset if too far behind OR too far ahead
-  if (nextPlayTime < now || nextPlayTime > now + 0.1) {
-    nextPlayTime = now;
-  }
+  if (nextPlayTime < now) nextPlayTime = now;
   
   source.start(nextPlayTime);
   nextPlayTime += buffer.duration;
@@ -80,16 +77,18 @@ function writeAudio(ptr, frames) {
   
   var int16Data = new Int16Array(Module.HEAPU8.buffer, ptr, frames * 2);
   
-  // Debug: count samples per second
-  if (!writeAudio.count) {
-    writeAudio.count = 0;
-    writeAudio.startTime = performance.now();
-  }
-  writeAudio.count += frames;
-  var elapsed = (performance.now() - writeAudio.startTime) / 1000;
-  if (elapsed >= 1 && !writeAudio.logged) {
-    writeAudio.logged = true;
-    console.log("🎵 Sample rate measured: " + Math.round(writeAudio.count / elapsed) + " Hz");
+  // Calibrate sample rate after 1 second
+  if (!sampleRateCalibrated) {
+    if (!writeAudio.count) {
+      writeAudio.count = 0;
+      writeAudio.startTime = performance.now();
+    }
+    writeAudio.count += frames;
+    var elapsed = (performance.now() - writeAudio.startTime) / 1000;
+    if (elapsed >= 1) {
+      coreSampleRate = Math.round(writeAudio.count / elapsed);
+      sampleRateCalibrated = true;
+    }
   }
   
   for (var i = 0; i < frames; i++) {
@@ -206,8 +205,6 @@ document.getElementById("rom").onchange = async (e) => {
   const TARGET_FPS = 59.7275;
   const FRAME_TIME = 1000 / TARGET_FPS;
   var lastFrameTime = performance.now();
-  var frameCount = 0;
-  var fpsStartTime = performance.now();
 
   function loop() {
     var now = performance.now();
@@ -216,15 +213,6 @@ document.getElementById("rom").onchange = async (e) => {
     if (elapsed >= FRAME_TIME) {
       lastFrameTime = now - (elapsed % FRAME_TIME);
       Module._retro_run();
-      
-      // Measure actual FPS
-      frameCount++;
-      var fpsElapsed = (now - fpsStartTime) / 1000;
-      if (fpsElapsed >= 1 && frameCount > 0) {
-        console.log("🎮 Actual FPS: " + (frameCount / fpsElapsed).toFixed(1));
-        frameCount = 0;
-        fpsStartTime = now;
-      }
     }
     
     requestAnimationFrame(loop);
