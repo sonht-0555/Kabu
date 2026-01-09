@@ -14,110 +14,48 @@ canvas {
 </head>
 <body>
 
-<h3>mGBA WASM</h3>
+<h3>mGBA WASM 1.1</h3>
 <canvas id="screen" width="240" height="160"></canvas><br><br>
 <input type="file" id="rom" accept=".gba">
 
 <script>
-// ===== Audio - ScriptProcessor + FIFO (audio-driven) =====
-var audioContext = null;
-var scriptProcessor = null;
-var isRunning = false;
-
-const AUDIO_BLOCK_SIZE = 1024;
-const AUDIO_FIFO_MAXLEN = 8192;
-var audioFifo0 = new Int16Array(AUDIO_FIFO_MAXLEN);
-var audioFifo1 = new Int16Array(AUDIO_FIFO_MAXLEN);
-var audioFifoHead = 0;
-var audioFifoCnt = 0;
-
-// Core outputs ~1096 samples/frame at 65760 Hz effective rate
-// Browser wants 48000 Hz
-// Resample ratio: consume more samples from core to match browser rate
-const CORE_RATE = 65760; // 1096 * 60
-const BROWSER_RATE = 48000;
-const RESAMPLE_RATIO = CORE_RATE / BROWSER_RATE; // ~1.37
-
-// Debug
-var frameCnt = 0;
-var lastDebugTime = 0;
-var samplesPerFrame = 0;
+// ===== Audio =====
+var audioCtx, processor, isRunning = false;
+var fifoL = new Int16Array(8192), fifoR = new Int16Array(8192), fifoHead = 0, fifoCnt = 0;
+const RATIO = 65760 / 48000; // mGBA 65760Hz → browser 48000Hz
 
 function initAudio() {
-  if (audioContext) {
-    if (audioContext.state != 'running') audioContext.resume();
-    return;
-  }
-  audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
-  console.log('🔊 sampleRate:', audioContext.sampleRate);
-  scriptProcessor = audioContext.createScriptProcessor(AUDIO_BLOCK_SIZE, 0, 2);
-  scriptProcessor.onaudioprocess = processAudio;
-  scriptProcessor.connect(audioContext.destination);
-  audioContext.resume();
-  lastDebugTime = performance.now();
-}
-
-function processAudio(event) {
-  var audioData0 = event.outputBuffer.getChannelData(0);
-  var audioData1 = event.outputBuffer.getChannelData(1);
-
-  if (!isRunning) {
-    for (var i = 0; i < AUDIO_BLOCK_SIZE; i++) {
-      audioData0[i] = 0;
-      audioData1[i] = 0;
-    }
-    return;
-  }
-  
-  // Need more samples from core to resample down
-  var neededSamples = Math.ceil(AUDIO_BLOCK_SIZE * RESAMPLE_RATIO); // ~1403
-  
-  // Audio-driven: run frames until we have enough audio
-  while (audioFifoCnt < neededSamples) {
-    Module._retro_run();
-    frameCnt++;
-  }
-  
-  // Log every 60 frames
-  if (frameCnt % 60 === 0) {
-    var now = performance.now();
-    var fps = 60000 / (now - lastDebugTime);
-    console.log(`📊 FPS: ${fps.toFixed(1)}, FIFO: ${audioFifoCnt}, samples/frame: ${samplesPerFrame}`);
-    lastDebugTime = now;
-  }
-
-  // Resample from 65760Hz to 48000Hz (downsample)
-  for (var i = 0; i < AUDIO_BLOCK_SIZE; i++) {
-    var srcPos = i * RESAMPLE_RATIO;
-    var srcIdx = Math.floor(srcPos);
-    var frac = srcPos - srcIdx;
-    var idx = (audioFifoHead + srcIdx) % AUDIO_FIFO_MAXLEN;
-    var idx2 = (audioFifoHead + srcIdx + 1) % AUDIO_FIFO_MAXLEN;
+  if (audioCtx) { audioCtx.resume(); return; }
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 48000 });
+  processor = audioCtx.createScriptProcessor(1024, 0, 2);
+  processor.onaudioprocess = function(e) {
+    var L = e.outputBuffer.getChannelData(0), R = e.outputBuffer.getChannelData(1);
+    if (!isRunning) { L.fill(0); R.fill(0); return; }
     
-    audioData0[i] = (audioFifo0[idx] * (1 - frac) + audioFifo0[idx2] * frac) / 32768.0;
-    audioData1[i] = (audioFifo1[idx] * (1 - frac) + audioFifo1[idx2] * frac) / 32768.0;
-  }
-  
-  // Consume resampled samples
-  var consumed = Math.floor(AUDIO_BLOCK_SIZE * RESAMPLE_RATIO);
-  audioFifoHead = (audioFifoHead + consumed) % AUDIO_FIFO_MAXLEN;
-  audioFifoCnt -= consumed;
+    while (fifoCnt < 1024 * RATIO) Module._retro_run();
+    
+    for (var i = 0; i < 1024; i++) {
+      var pos = i * RATIO, idx = (fifoHead + (pos | 0)) % 8192, frac = pos % 1;
+      L[i] = (fifoL[idx] * (1 - frac) + fifoL[(idx + 1) % 8192] * frac) / 32768;
+      R[i] = (fifoR[idx] * (1 - frac) + fifoR[(idx + 1) % 8192] * frac) / 32768;
+    }
+    fifoHead = (fifoHead + (1024 * RATIO | 0)) % 8192;
+    fifoCnt -= 1024 * RATIO | 0;
+  };
+  processor.connect(audioCtx.destination);
+  audioCtx.resume();
 }
 
 function writeAudio(ptr, frames) {
-  samplesPerFrame = frames; // Track for debug
-  if (!audioContext) return frames;
+  if (!audioCtx || fifoCnt + frames >= 8192) return frames;
   var data = new Int16Array(Module.HEAPU8.buffer, ptr, frames * 2);
-  var tail = (audioFifoHead + audioFifoCnt) % AUDIO_FIFO_MAXLEN;
-  
-  if (audioFifoCnt + frames >= AUDIO_FIFO_MAXLEN) return frames;
-  
+  var tail = (fifoHead + fifoCnt) % 8192;
   for (var i = 0; i < frames; i++) {
-    audioFifo0[tail] = data[i * 2];
-    audioFifo1[tail] = data[i * 2 + 1];
-    tail = (tail + 1) % AUDIO_FIFO_MAXLEN;
+    fifoL[tail] = data[i * 2];
+    fifoR[tail] = data[i * 2 + 1];
+    tail = (tail + 1) % 8192;
   }
-  audioFifoCnt += frames;
+  fifoCnt += frames;
   return frames;
 }
 
@@ -156,8 +94,6 @@ function video_cb(ptr, w, h, pitch) {
   const img = ctx.getImageData(0, 0, w, h);
   const imageData = img.data;
   
-  console.log(`video_cb: w=${w}, h=${h}, pitch=${pitch}`);
-  
   const pixelData = new Uint16Array(Module.HEAPU8.buffer, ptr, (pitch / 2) * h);
   const gameStride = pitch / 2;
   
@@ -168,15 +104,15 @@ function video_cb(ptr, w, h, pitch) {
       const color = pixelData[srcIndex];
       
       // mGBA outputs RGB565 format (16-bit color)
-      const r = (color >> 11) & 0x1F;  // 5 bits red (bits 15-11)
-      const g = (color >> 5) & 0x3F;   // 6 bits green (bits 10-5)  
-      const b = color & 0x1F;          // 5 bits blue (bits 4-0)
+      const r = (color >> 11) & 0x1F;
+      const g = (color >> 5) & 0x3F;
+      const b = color & 0x1F;
       
       // Convert to 8-bit RGB
-      imageData[destIndex] = (r << 3) | (r >> 2);     // Red 5→8 bit
-      imageData[destIndex + 1] = (g << 2) | (g >> 4); // Green 6→8 bit
-      imageData[destIndex + 2] = (b << 3) | (b >> 2); // Blue 5→8 bit
-      imageData[destIndex + 3] = 255;                  // Alpha
+      imageData[destIndex] = (r << 3) | (r >> 2);
+      imageData[destIndex + 1] = (g << 2) | (g >> 4);
+      imageData[destIndex + 2] = (b << 3) | (b >> 2);
+      imageData[destIndex + 3] = 255;
     }
   }
   
